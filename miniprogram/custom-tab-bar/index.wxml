@@ -1,0 +1,13 @@
+<view class="custom-bar">
+  <view
+    wx:for="{{list}}"
+    wx:key="*this"
+    bindtap="changeTabBar"
+    data-index="{{index}}"
+    data-url="{{item.url}}"
+    class="custom-bar-item {{selected == index ? 'active' : ''}}">
+    <text class="custom-bar-badge" wx:if="{{item.count}}">{{item.count}}</text>
+    <image src="{{selected == index ? item.iconActiveUrl : item.iconUrl}}" />
+    <view>{{item.name}}</view>
+  </view>
+</view>

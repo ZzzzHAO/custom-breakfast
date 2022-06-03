@@ -1,0 +1,1 @@
+"D:\Program Files\微信web开发者工具\cli.bat" cloud functions deploy --e cloud1-3g1ptrnzda536c06 --n quickstartFunctions --r --project "D:\workspace-personal\custom-breakfast" --report_first --report

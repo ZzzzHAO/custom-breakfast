@@ -1,0 +1,42 @@
+.custom-bar {
+  box-sizing: content-box;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
+  padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
+  color: #999;
+  text-align: center;
+  height: 100rpx;
+  background: #fff;
+  font-size: 22rpx;
+  &-item {
+    flex: 1;
+    position: relative;
+    padding-top: 10rpx;
+    &.active {
+      color: #00bee6;
+    }
+  }
+  image {
+    width: 48rpx;
+    height: 48rpx;
+    display: block;
+    margin: 0 auto 2rpx;
+  }
+  &-badge {
+    font-size: 22rpx;
+    background: #f00;
+    color: #fff;
+    position: absolute;
+    top: 6rpx;
+    left: 50%;
+    transform: translateX(4rpx);
+    min-width: 30rpx;
+    line-height: 28rpx;
+    border-radius: 28rpx;
+    padding: 0 4rpx;
+  }
+}

@@ -1,0 +1,24 @@
+<!--pages/home/index.wxml-->
+<view class="home-wrap">
+  <view class="banner-wrap" wx:if="{{banner.length}}">
+    <banner class="banner" data="{{banner}}" />
+  </view>
+  <!-- 首页tab标签 -->
+  <van-tabs color="#00BEE6" offset-top="{{40}}" z-index="{{1}}" bind:change="tabChange" animated ellipsis lazy-render sticky>
+    <van-tab wx:for="{{tabs}}" wx:for-item="tab" wx:key="id" title="{{tab.name}}" name="{{tab.id}}">
+      <!-- tab标签 内容区域 -->
+      <scroll-view wx:if="{{tab.id === 1}}" scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" bindscrolltolower="loadProduct" enhanced="{{true}}" show-scrollbar="{{false}}">
+        <button class="btn" bindtap="uploadBanner">上传banner</button>
+        <button class="btn" bindtap="getBanner">获取banner</button>
+        <button class="btn" open-type="getPhoneNumber" bindgetphonenumber="createStore">创建门店</button>
+        <button class="btn" bindtap="uploadProduct">上架商品</button>
+        <button class="btn" bindtap="downloadProduct">下架商品</button>
+        <button class="btn" bindtap="uploadPackage">上架套餐</button>
+        <button class="btn" bindtap="downloadPackage">下架套餐</button>
+      </scroll-view>
+      <scroll-view wx:else scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" bindscrolltolower="loadProduct" enhanced="{{true}}" show-scrollbar="{{false}}">
+
+      </scroll-view>
+    </van-tab>
+  </van-tabs>
+</view>

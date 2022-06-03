@@ -1,0 +1,15 @@
+<!--pages/admin/index.wxml-->
+<view class="admin-wrap">
+  <button class="btn" bindtap="uploadBanner">上传banner</button>
+  <button class="btn" bindtap="getBanner">获取banner</button>
+  <button class="btn" open-type="getPhoneNumber" bindgetphonenumber="createStore">创建门店</button>
+  <button class="btn" bindtap="getStoreList">获取门店列表</button>
+  <button class="btn" bindtap="uploadProduct">上架商品</button>
+  <button class="btn" bindtap="downloadProduct">下架商品</button>
+  <button class="btn" bindtap="getProductList">获取商品列表</button>
+  <button class="btn" bindtap="getProductDetail">获取商品详情</button>
+  <button class="btn" bindtap="uploadPackage">上架套餐</button>
+  <button class="btn" bindtap="downloadPackage">下架套餐</button>
+  <button class="btn" bindtap="getPackageList">获取套餐列表</button>
+  <button class="btn" bindtap="getPackageDetail">获取套餐详情</button>
+</view>

@@ -1,0 +1,24 @@
+[
+  {
+    "name": "",
+    "value": {
+      "url": "product/getPackgeDetail",
+      "id": "1"
+    }
+  },
+  {
+    "name": "getPackgeDetail",
+    "value": {
+      "_path": "product/getPackageDetail",
+      "id": "1"
+    }
+  },
+  {
+    "name": "getPackageList",
+    "value": {
+      "_path": "product/getPackageList",
+      "pageNo": 3,
+      "pageSize": 2
+    }
+  }
+]

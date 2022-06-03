@@ -1,0 +1,18 @@
+<!--components/banner/index.wxml-->
+<view class="banner-wrap">
+	<swiper
+	 autoplay
+	 indicator-dots
+	 circular
+	 indicator-color="rgba(255, 255, 255, 0.5)"
+	 indicator-active-color="rgba(255, 255, 255, 1)"
+	 class="banner"
+	>
+		<block wx:for="{{banner}}" wx:key="index">
+			<swiper-item bind:tap="jumpUrl" data-url="{{item.jumpUrl}}" class="img-wrap">
+				<image class="banner-item" mode="heightFix" src="{{item.image}}" />
+			</swiper-item>
+		</block>
+	</swiper>
+</view>
+
