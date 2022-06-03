@@ -21,7 +21,6 @@ Page({
    */
   onLoad(options) {
     this.init()
-    console.log(products)
   },
 
   init() {},
