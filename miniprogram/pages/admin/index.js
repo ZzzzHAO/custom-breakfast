@@ -53,9 +53,25 @@ Page({
       console.log(res)
     })
   },
+  switchProductSaleStatus(e) {
+    ajax.request('product/switchProductSaleStatus', {
+      onSale: true,
+      products: ['0ab5303b629a2d18078b86ae2e341643']
+    }).then(res => {
+      console.log(res)
+    })
+  },
   uploadPackage(e) {
     ajax.request('product/uploadPackage', {
       packages: packages.packages
+    }).then(res => {
+      console.log(res)
+    })
+  },
+  switchPackageSaleStatus(e) {
+    ajax.request('product/switchPackageSaleStatus', {
+      onSale: true,
+      packages: ['0a4ec1f9629a3950087bf95708fbd43a']
     }).then(res => {
       console.log(res)
     })

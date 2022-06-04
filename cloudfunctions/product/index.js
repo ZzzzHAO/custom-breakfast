@@ -7,6 +7,8 @@ const getProductDetail = require('./getProductDetail/index')
 const getProductList = require('./getProductList/index')
 const uploadPackage = require('./uploadPackage/index')
 const uploadProduct = require('./uploadProduct/index')
+const switchProductSaleStatus = require('./switchProductSaleStatus/index')
+const switchPackageSaleStatus = require('./switchPackageSaleStatus/index')
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -27,12 +29,16 @@ exports.main = async (event, context) => {
       return await uploadPackage.main(event, context);
     case 'uploadProduct':
       return await uploadProduct.main(event, context);
+    case 'switchProductSaleStatus':
+      return await switchProductSaleStatus.main(event, context);
+    case 'switchPackageSaleStatus':
+      return await switchPackageSaleStatus.main(event, context);
     default:
       return {
         success: false,
-          error: {
-            message: '系统异常，请稍后再试(1001)'
-          }
+        error: {
+          message: '系统异常，请稍后再试(1001)'
+        }
       }
   }
 }

@@ -11,18 +11,22 @@ exports.main = async (event, context) => {
   let {
     products
   } = event
-  if (products.length) {
+  const length = products.length
+  if (length) {
     try {
       const {
         OPENID
       } = cloud.getWXContext()
-      const storeInfo = (await db.collection('store').where({
+      let storeRes = await db.collection('store').where({
         creator: OPENID,
-      }).get()).data[0]
-      if (storeInfo) {
-        const storeId = storeInfo._id
-        products.forEach(async item => {
-          await db.collection('product').add({
+      }).get()
+      storeRes = storeRes.data && storeRes.data[0]
+      if (storeRes) {
+        const transaction = await db.startTransaction()
+        const storeId = storeRes._id
+        for (let index = 0; index < length; index++) {
+          const item = products[index]
+          await transaction.collection('product').add({
             data: {
               amount: +item.amount,
               image: item.image,
@@ -30,21 +34,25 @@ exports.main = async (event, context) => {
               price: +item.price,
               category: +item.category,
               stock: +item.stock,
+              onSale: false, // 默认不上架
               uploadTime: db.serverDate(),
               store: storeId,
               creator: OPENID
             }
           })
-        })
-        return {
-          success: true,
-          data: {}
+          if (index === length - 1) {
+            await transaction.commit()
+            return {
+              success: true,
+              data: {}
+            }
+          }
         }
       } else {
         return {
           success: false,
           error: {
-            message: '未找到门店信息'
+            message: '未找到您的门店信息'
           }
         }
       }

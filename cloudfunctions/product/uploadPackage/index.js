@@ -58,6 +58,7 @@ exports.main = async (event, context) => {
                 desc: package.desc,
                 price: +package.price,
                 products: package.products,
+                onSale: false,
                 uploadTime: db.serverDate(),
                 store: storeId,
                 creator: OPENID
@@ -78,7 +79,7 @@ exports.main = async (event, context) => {
         return {
           success: false,
           error: {
-            message: '未找到门店信息'
+            message: '未找到您的门店信息'
           }
         }
       }
