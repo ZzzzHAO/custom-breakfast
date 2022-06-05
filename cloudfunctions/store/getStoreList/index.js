@@ -5,7 +5,7 @@ cloud.init({
 });
 
 const db = cloud.database()
-// 获取banner云函数入口函数
+// 获取店铺list
 exports.main = async (event, context) => {
   const {
     pageNo,

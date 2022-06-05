@@ -8,7 +8,7 @@ const db = cloud.database({
   throwOnNotFound: false,
 })
 const _ = db.command
-// 上架商品
+// 录入套餐
 exports.main = async (event, context) => {
   let {
     packages

@@ -6,7 +6,7 @@ cloud.init({
 
 const db = cloud.database()
 const _ = db.command
-// 上架商品
+// 录入商品
 exports.main = async (event, context) => {
   let {
     products

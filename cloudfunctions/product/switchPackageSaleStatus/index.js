@@ -5,7 +5,7 @@ cloud.init({
 });
 
 const db = cloud.database()
-// 上架商品
+// 上、下架套餐
 exports.main = async (event, context) => {
   let {
     packages,

@@ -5,7 +5,7 @@ cloud.init({
 });
 
 const db = cloud.database()
-// 获取banner云函数入口函数
+// 获取套餐详情
 exports.main = async (event, context) => {
   const {
     packageId

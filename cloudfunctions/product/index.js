@@ -1,22 +1,22 @@
 // 云函数入口文件
-const downloadPackage = require('./downloadPackage/index')
-const downloadProduct = require('./downloadProduct/index')
+const deletePackage = require('./deletePackage/index')
+const deleteProduct = require('./deleteProduct/index')
 const getPackageDetail = require('./getPackageDetail/index')
 const getPackageList = require('./getPackageList/index')
 const getProductDetail = require('./getProductDetail/index')
 const getProductList = require('./getProductList/index')
-const uploadPackage = require('./uploadPackage/index')
-const uploadProduct = require('./uploadProduct/index')
+const addPackage = require('./addPackage/index')
+const addProduct = require('./addProduct/index')
 const switchProductSaleStatus = require('./switchProductSaleStatus/index')
 const switchPackageSaleStatus = require('./switchPackageSaleStatus/index')
 
 // 云函数入口函数
 exports.main = async (event, context) => {
   switch (event._path) {
-    case 'downloadPackage':
-      return await downloadPackage.main(event, context);
-    case 'downloadProduct':
-      return await downloadProduct.main(event, context);
+    case 'deletePackage':
+      return await deletePackage.main(event, context);
+    case 'deleteProduct':
+      return await deleteProduct.main(event, context);
     case 'getPackageDetail':
       return await getPackageDetail.main(event, context);
     case 'getPackageList':
@@ -25,10 +25,10 @@ exports.main = async (event, context) => {
       return await getProductDetail.main(event, context);
     case 'getProductList':
       return await getProductList.main(event, context);
-    case 'uploadPackage':
-      return await uploadPackage.main(event, context);
-    case 'uploadProduct':
-      return await uploadProduct.main(event, context);
+    case 'addPackage':
+      return await addPackage.main(event, context);
+    case 'addProduct':
+      return await addProduct.main(event, context);
     case 'switchProductSaleStatus':
       return await switchProductSaleStatus.main(event, context);
     case 'switchPackageSaleStatus':

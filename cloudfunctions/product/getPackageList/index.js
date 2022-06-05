@@ -5,7 +5,7 @@ cloud.init({
 });
 
 const db = cloud.database()
-// 获取banner云函数入口函数
+// 获取套餐list
 exports.main = async (event, context) => {
   const {
     storeId,
@@ -14,8 +14,8 @@ exports.main = async (event, context) => {
   } = event
   try {
     const packageRes = await db.collection('package').where({
-        store: storeId || '0a4ec1f96297164707fbcd7a39751170'
-      }).skip(pageSize * (pageNo - 1))
+      store: storeId || '0a4ec1f96297164707fbcd7a39751170'
+    }).skip(pageSize * (pageNo - 1))
       .limit(pageSize) // 限制返回数量为 10 条
       .get()
     return {

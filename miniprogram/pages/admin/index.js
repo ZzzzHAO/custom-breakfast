@@ -46,31 +46,45 @@ Page({
       })
     })
   },
-  uploadProduct(e) {
-    ajax.request('product/uploadProduct', {
+  addProduct(e) {
+    ajax.request('product/addProduct', {
       products: products.products
+    }).then(res => {
+      console.log(res)
+    })
+  },
+  deleteProduct(e) {
+    ajax.request('product/deleteProduct', {
+      products: ['0ab5303b629a2d19078b86c769e6cb7b']
     }).then(res => {
       console.log(res)
     })
   },
   switchProductSaleStatus(e) {
     ajax.request('product/switchProductSaleStatus', {
-      onSale: true,
+      onSale: true, // 上架
       products: ['0ab5303b629a2d18078b86ae2e341643']
     }).then(res => {
       console.log(res)
     })
   },
-  uploadPackage(e) {
-    ajax.request('product/uploadPackage', {
+  addPackage(e) {
+    ajax.request('product/addPackage', {
       packages: packages.packages
+    }).then(res => {
+      console.log(res)
+    })
+  },
+  deletePackage(e) {
+    ajax.request('product/deletePackage', {
+      packages: ['0a4ec1f9629a3950087bf95708fbd43a']
     }).then(res => {
       console.log(res)
     })
   },
   switchPackageSaleStatus(e) {
     ajax.request('product/switchPackageSaleStatus', {
-      onSale: true,
+      onSale: true, // 上架
       packages: ['0a4ec1f9629a3950087bf95708fbd43a']
     }).then(res => {
       console.log(res)
@@ -90,10 +104,24 @@ Page({
       })
     }
   },
+  deleteStore(e) {
+    ajax.request('store/deleteStore', {
+      stores: ['0a4ec1f96297164707fbcd7a39751170']
+    }).then(res => {
+      console.log(res)
+    })
+  },
   getStoreList(e) {
     ajax.request('store/getStoreList', {
       pageNo: 1,
       pageSize: 10
+    }).then(res => {
+      console.log(res)
+    })
+  },
+  getStoreDetail(e) {
+    ajax.request('store/getStoreDetail', {
+      storeId: '0a4ec1f96297164707fbcd7a39751170'
     }).then(res => {
       console.log(res)
     })
@@ -127,5 +155,29 @@ Page({
     }).then(res => {
       console.log(res)
     })
+  },
+  pay(e) {
+    const code = e.detail.code
+    if (code) {
+      wx.getLocalIPAddress({
+        success(res) {
+          const ip = res.localip
+          ajax.request('order/createOrder', {
+            amount: 1,
+            ip,
+            code,
+            packages: [{ id: '8f75309d629cb8c2072baed713629e52' }]
+          }).then(res => {
+            console.log(res)
+            wx.requestPayment({
+              ...res,
+              success(res) {
+                console.log('pay success', res)
+              },
+            })
+          })
+        }
+      })
+    }
   }
 })

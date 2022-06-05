@@ -1,20 +1,27 @@
 <!--pages/admin/index.wxml-->
 <view class="admin-wrap">
-  <button class="btn" bindtap="uploadBanner">上传banner</button>
-  <button class="btn" bindtap="getBanner">获取banner</button>
-  <button class="btn" open-type="getPhoneNumber" bindgetphonenumber="createStore">创建门店</button>
-  <button class="btn" bindtap="getStoreList">获取门店列表</button>
-  <button class="btn" bindtap="uploadProduct">录入商品</button>
-  <button class="btn" bindtap="switchProductSaleStatus">上/下架商品</button>
-  <button class="btn" bindtap="downloadProduct">删除商品</button>
-  <button class="btn" bindtap="getProductList">获取商品列表</button>
-  <button class="btn" bindtap="getProductDetail">获取商品详情</button>
-  <button class="btn" bindtap="uploadPackage">录入套餐</button>
-  <button class="btn" bindtap="switchPackageSaleStatus">上/下架套餐</button>
-  <button class="btn" bindtap="downloadPackage">删除套餐</button>
-  <button class="btn" bindtap="getPackageList">获取套餐列表</button>
-  <button class="btn" bindtap="getPackageDetail">获取套餐详情</button>
+  <button class="btn" bindtap="uploadBanner">上传banner ✓</button>
+  <button class="btn" bindtap="getBanner">获取banner ✓</button>
+  <button class="btn" open-type="getPhoneNumber" bindgetphonenumber="createStore">创建门店 ✓</button>
+  <button class="btn" bindtap="deleteStore">删除门店 ✓</button>
+  <button class="btn" bindtap="deleteStore">更新门店信息</button>
+  <button class="btn" bindtap="getStoreList">获取门店列表 ✓</button>
+  <button class="btn" bindtap="getStoreDetail">获取门店详情 ✓</button>
+  <button class="btn" bindtap="addProduct">录入商品 ✓</button>
+  <button class="btn" bindtap="deleteProduct">删除商品 ✓</button>
+  <button class="btn" bindtap="updateProduct">更新商品信息</button>
+  <button class="btn" bindtap="switchProductSaleStatus">上/下架商品 ✓</button>
+  <button class="btn" bindtap="getProductList">获取商品列表 ✓</button>
+  <button class="btn" bindtap="getProductDetail">获取商品详情 ✓</button>
+  <button class="btn" bindtap="addPackage">录入套餐 ✓</button>
+  <button class="btn" bindtap="deletePackage">删除套餐 ✓</button>
+  <button class="btn" bindtap="updatePackage">更新套餐信息</button>
+  <button class="btn" bindtap="switchPackageSaleStatus">上/下架套餐 ✓</button>
+  <button class="btn" bindtap="getPackageList">获取套餐列表 ✓</button>
+  <button class="btn" bindtap="getPackageDetail">获取套餐详情 ✓</button>
+  <button class="btn" open-type="getPhoneNumber" bindgetphonenumber="pay">支付</button>
   <button class="btn" bindtap="createOrder">创建订单</button>
+  <button class="btn" bindtap="cancelOrder">取消订单</button>
   <button class="btn" bindtap="pay">支付订单</button>
   <button class="btn" bindtap="refund">退款</button>
   <button class="btn" bindtap="getOrderList">获取订单列表</button>
