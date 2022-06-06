@@ -2,6 +2,7 @@
 import ajax from '../../common/ajax'
 import products from './products'
 import packages from './packages'
+const moment = require('moment')
 Page({
 
   /**
@@ -15,7 +16,15 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-
+    console.log([{
+      id: '8f75309d629cb8c2072baed713629e52',
+      date: moment(new Date()).format('YYYY-MM-DD'),
+      day: moment(new Date()).day()
+    }, {
+      id: '8f75309d629cb8c2072baed713629e52',
+      date: moment(new Date()).add(1, 'd').format('YYYY-MM-DD'),
+      day: moment(new Date()).add(1, 'd').day()
+    }])
   },
   uploadBanner(e) {
     ajax.request('config/banner/setBanner', {
@@ -161,12 +170,18 @@ Page({
     if (code) {
       wx.getLocalIPAddress({
         success(res) {
-          const ip = res.localip
+          const ip = res.localip // ip地址
           ajax.request('order/createOrder', {
-            amount: 1,
+            amount: 2,
             ip,
             code,
-            packages: [{ id: '8f75309d629cb8c2072baed713629e52' }]
+            packages: [{
+              id: '8f75309d629cb8c2072baed713629e52',
+              date: moment(new Date()).format('YYYY-MM-DD')
+            }, {
+              id: '8f75309d629cb8c2072baed713629e52',
+              date: moment(new Date()).add(1, 'd').format('YYYY-MM-DD')
+            }]
           }).then(res => {
             console.log(res)
             wx.requestPayment({
