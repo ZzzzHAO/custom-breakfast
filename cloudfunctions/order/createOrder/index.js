@@ -103,11 +103,12 @@ exports.main = async (event, context) => {
                   // 添加 微信总订单
                   await transaction.collection('wx-order').add({
                     data: {
-                      _id: outTradeNo, // 订单号
+                      _id: outTradeNo, // 商户订单号
                       creator: OPENID, // 创建者
                       phone, // 下单人手机号
                       store: storeId, // 门店id
                       price, // 价格
+                      orders: [], // 子订单号数组
                       product: packageRes, // 订单商品
                       createTime: db.serverDate(), // 创建时间
                       status: 0 // 0 创建中 1 创建成功 2 创建失败 3
@@ -116,32 +117,65 @@ exports.main = async (event, context) => {
                   // 调用微信统一下单
                   const res = await cloud.cloudPay.unifiedOrder(params)
                   if (res.returnCode === 'SUCCESS' && res.resultCode === 'SUCCESS') {
+                    // 更新父订单状态
+                    await transaction.collection('wx-order').where({
+                      _id: outTradeNo
+                    }).update({
+                      data: {
+                        status: 1, // 0 创建中 1 创建成功 2 创建失败
+                        res // 微信订单 创建成功信息
+                      }
+                    })
                     // 拆分订单
                     for (let i = 0; i < length; i++) {
                       const package = packageRes[i]
+                      // 获取套餐商品快照
+                      const packageProducts = package.products // 套餐内 具体商品
+                      const tasks = [] // promise 异步数组
+                      packageProducts.forEach(item => {
+                        const promise = transaction.collection('product').where({
+                          _id: item.id
+                        }).get()
+                        tasks.push(promise)
+                      })
+                      let packageProductsRes = await Promise.all(tasks)
+                      packageProductsRes = packageProductsRes.map(item => item.data[0])
+                      // 保存下单时 商品信息的快照 防止之后商品信息变化
+                      packageProducts.forEach(item => {
+                        for (let j = 0; j < packageProductsRes.length; j++) {
+                          const snapshot = packageProductsRes[j]
+                          if (snapshot) {
+                            if (item.id === snapshot._id) {
+                              item.snapshot = snapshot
+                            }
+                          } else {
+                            item.snapshot = undefined
+                          }
+                        }
+                      })
                       const orderNo = uuid() // uuid 作为子订单号
                       await transaction.collection('order').add({
                         data: {
                           _id: orderNo, // 子订单号
+                          distributeDate: moment(packages[i].date).toDate(),
                           outTradeNo, // 父订单号
                           creator: OPENID, // 创建者
                           phone, // 下单人手机号
                           store: storeId, // 门店号
                           createTime: db.serverDate(), // 创建时间
-                          status: 0, // 0 待支付 1 支付成功 2 待配送 3 已配送 4已取消 5 支付失败
-                          product: package // 套餐信息
+                          status: 0, // 0 待支付 1 支付成功 2 支付失败 3 待配送 4 已配送 5 已取消 
+                          product: package, // 套餐信息
                         },
                       })
+                      // 往父订单追加子订单信息
+                      await transaction.collection('wx-order').where({
+                        _id: outTradeNo
+                      }).update({
+                        data: {
+                          orders: _.push([orderNo])
+                        }
+                      })
                       if (i === length - 1) {
-                        // 更新
-                        await transaction.collection('wx-order').where({
-                          _id: outTradeNo
-                        }).update({
-                          data: {
-                            status: 1, // 0 创建中 1 创建成功 2 创建失败
-                            res // 微信订单 创建成功信息
-                          }
-                        })
                         return {
                           success: true,
                           data: {

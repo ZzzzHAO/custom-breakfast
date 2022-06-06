@@ -16,15 +16,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    console.log([{
-      id: '8f75309d629cb8c2072baed713629e52',
-      date: moment(new Date()).format('YYYY-MM-DD'),
-      day: moment(new Date()).day()
-    }, {
-      id: '8f75309d629cb8c2072baed713629e52',
-      date: moment(new Date()).add(1, 'd').format('YYYY-MM-DD'),
-      day: moment(new Date()).add(1, 'd').day()
-    }])
   },
   uploadBanner(e) {
     ajax.request('config/banner/setBanner', {
