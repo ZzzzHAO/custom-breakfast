@@ -19,10 +19,10 @@
   <button class="btn" bindtap="switchPackageSaleStatus">上/下架套餐 ✓</button>
   <button class="btn" bindtap="getPackageList">获取套餐列表 ✓</button>
   <button class="btn" bindtap="getPackageDetail">获取套餐详情 ✓</button>
-  <button class="btn" open-type="getPhoneNumber" bindgetphonenumber="pay">支付</button>
-  <button class="btn" bindtap="createOrder">创建订单</button>
+  <button class="btn" open-type="getPhoneNumber" bindgetphonenumber="pay">支付 ✓</button>
+  <button class="btn" bindtap="createOrder">创建订单 ✓</button>
   <button class="btn" bindtap="cancelOrder">取消订单</button>
-  <button class="btn" bindtap="pay">支付订单</button>
+  <button class="btn" bindtap="pay">支付订单 ✓</button>
   <button class="btn" bindtap="refund">退款</button>
   <button class="btn" bindtap="getOrderList">获取订单列表</button>
   <button class="btn" bindtap="getOrderDetail">获取订单详情</button>

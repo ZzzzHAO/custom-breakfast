@@ -10,13 +10,22 @@ const db = cloud.database({
 const _ = db.command
 // 录入商品
 exports.main = async (event, context) => {
+  const {
+    outTradeNo,
+    resultCode,
+    returnCode
+  } = event
   const transaction = await db.startTransaction()
+  let status = 2 // 支付失败
+  if (returnCode === 'SUCCESS' && resultCode === 'SUCCESS') {
+    status = 1 // 支付成功
+  }
   await transaction.collection('order').where({
-    _id: event.outTradeNo,
+    outTradeNo
   }).update({
     data: {
-      status: 1,
-      payResult: event
+      status, // 支付状态翻转
+      result: event
     }
   })
   await transaction.commit()
