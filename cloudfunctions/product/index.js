@@ -9,6 +9,8 @@ const addPackage = require('./addPackage/index')
 const addProduct = require('./addProduct/index')
 const switchProductSaleStatus = require('./switchProductSaleStatus/index')
 const switchPackageSaleStatus = require('./switchPackageSaleStatus/index')
+const updateProduct = require('./updateProduct/index')
+const updateProductStock = require('./updateProductStock/index')
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -17,6 +19,8 @@ exports.main = async (event, context) => {
       return await deletePackage.main(event, context);
     case 'deleteProduct':
       return await deleteProduct.main(event, context);
+    case 'updateProduct':
+      return await updateProduct.main(event, context);
     case 'getPackageDetail':
       return await getPackageDetail.main(event, context);
     case 'getPackageList':
@@ -33,6 +37,8 @@ exports.main = async (event, context) => {
       return await switchProductSaleStatus.main(event, context);
     case 'switchPackageSaleStatus':
       return await switchPackageSaleStatus.main(event, context);
+    case 'updateProductStock':
+      return await updateProductStock.main(event, context);
     default:
       return {
         success: false,

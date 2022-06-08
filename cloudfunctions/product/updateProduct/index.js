@@ -6,41 +6,59 @@ cloud.init({
 
 const db = cloud.database()
 const _ = db.command
-// 录入商品
+// 更新商品信息
 exports.main = async (event, context) => {
   let {
-    porductId,
-    updteInfo
+    productId,
+    ...updteInfo
   } = event
   try {
-    if (porductId) {
+    if (productId) {
       const {
         OPENID
       } = cloud.getWXContext()
       const productRes = await db.collection('product').where({
-        _id: porductId
-      }).count()
-      const total = productRes.total
-      if (total === 1) {
-        const transaction = await db.startTransaction()
-        await transaction.collection('product').where({
-          _id: porductId
-        }).update({
-          data: {
-            amount: +updteInfo.amount,
-            image: updteInfo.image,
-            name: updteInfo.name,
-            price: +updteInfo.price,
-            category: +updteInfo.category,
-            stock: +updteInfo.stock,
+        _id: productId
+      }).get()
+      const product = productRes.data && productRes.data[0]
+      if (product) {
+        const storeRes = await db.collection('store').where({
+          _id: product.store
+        }).get()
+        const store = storeRes.data && storeRes.data[0]
+        // 是否是店主
+        if (store.creator === OPENID) {
+          const transaction = await db.startTransaction()
+          await transaction.collection('product').where({
+            _id: productId
+          }).update({
+            data: {
+              amount: +updteInfo.amount || +product.amount,
+              image: updteInfo.image || product.image,
+              name: updteInfo.name || product.name,
+              price: +updteInfo.price || +product.price,
+              category: +updteInfo.category || +product.category,
+              stock: +updteInfo.stock || +product.stock,
+            }
+          })
+          await transaction.commit()
+          return {
+            success: true,
+            data: {}
           }
-        })
-        await transaction.commit()
+        } else {
+          return {
+            success: false,
+            error: {
+              message: '您没有权限更新商品信息'
+            }
+          }
+        }
       } else {
         return {
           success: false,
           error: {
-            message: total ? '商品信息有误请联系管理员' : '未找到该商品'
+            message: '未找到该商品'
           }
         }
       }

@@ -9,7 +9,8 @@ const _ = db.command
 // 删除套餐
 exports.main = async (event, context) => {
   let {
-    phone
+    phone,
+    store
   } = event
   const openId = cloud.getWXContext().OPENID;
   try {
@@ -20,11 +21,17 @@ exports.main = async (event, context) => {
       userRes = userRes.data && userRes.data[0]
       console.log(userRes)
       if (!userRes) {
+        const data = {
+          phone,
+          openId,
+          createTime: db.serverDate()
+        }
+        // 如果是店铺员工 则追加店铺信息
+        if (store) {
+          data.store = store
+        }
         await transaction.collection('user').add({
-          data: {
-            phone,
-            openId
-          }
+          data
         })
         return {
           success: true,
@@ -32,13 +39,13 @@ exports.main = async (event, context) => {
         }
       } else {
         await transaction.rollback(-100)
+        // TODO 验证
         return {
           success: false,
           error: {
             message: '您已完成注册'
           }
         }
-
       }
     })
     return {

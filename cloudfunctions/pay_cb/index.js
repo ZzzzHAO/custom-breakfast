@@ -8,19 +8,25 @@ const db = cloud.database({
   throwOnNotFound: false,
 })
 const _ = db.command
-// 录入商品
+// 微信支付回调
 exports.main = async (event, context) => {
   const {
     outTradeNo,
     resultCode,
     returnCode
   } = event
-  const transaction = await db.startTransaction()
   let status = 2 // 支付失败
   if (returnCode === 'SUCCESS' && resultCode === 'SUCCESS') {
     status = 1 // 支付成功
-    // TODO 更新商品库存
+    await cloud.callFunction({
+      name: 'product',
+      data: {
+        _path: 'updateProductStock',
+        outTradeNo
+      }
+    })
   }
+  const transaction = await db.startTransaction()
   await transaction.collection('order').where({
     outTradeNo
   }).update({

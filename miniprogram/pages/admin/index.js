@@ -61,6 +61,21 @@ Page({
       console.log(res)
     })
   },
+  updateProduct(e) {
+    ajax.request('product/updateProduct', {
+      productId: '0ab5303b629a2d17078b869c4b62f87c',
+      stock: 10000
+    }).then(res => {
+      console.log(res)
+    })
+  },
+  updateProductStock(e) {
+    ajax.request('product/updateProductStock', {
+      outTradeNo: '317f3e0f38a14dd8ff7add1f71e0824f',
+    }).then(res => {
+      console.log(res)
+    })
+  },
   switchProductSaleStatus(e) {
     ajax.request('product/switchProductSaleStatus', {
       onSale: true, // 上架
@@ -164,6 +179,13 @@ Page({
         id: '8f75309d629cb8c2072baed713629e52',
         date: moment(new Date()).format('YYYY-MM-DD')
       }]
+      // packages: [{
+      //   id: '8f75309d629cb8c2072baed713629e52',
+      //   date: moment(new Date()).format('YYYY-MM-DD')
+      // }, {
+      //   id: '8f75309d629cb8c2072baed965ff21f5',
+      //   date: moment(new Date()).add(1, 'd').format('YYYY-MM-DD')
+      // }]
     }
     if (this.data.isNewCustomer) {
       const code = e.detail.code

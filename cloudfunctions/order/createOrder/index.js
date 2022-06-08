@@ -1,5 +1,8 @@
 const cloud = require('wx-server-sdk');
 const moment = require('moment')
+const {
+  uuid
+} = require('../util')
 
 const DAY_ENUM = {
   1: '周一',
@@ -11,9 +14,6 @@ const DAY_ENUM = {
   0: '周日',
 }
 
-const {
-  uuid
-} = require('../util')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
@@ -52,6 +52,7 @@ exports.main = async (event, context) => {
         })
         phone = phoneRes.phoneInfo && phoneRes.phoneInfo.phoneNumber // 下单人手机号
         // 新增用户
+        // TODO 调用创建用户接口
         const userTransaction = await db.startTransaction()
         await userTransaction.collection('user').add({
           data: {
