@@ -9,13 +9,14 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    isNewCustomer: true
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    this.getUser()
   },
   uploadBanner(e) {
     ajax.request('config/banner/setBanner', {
@@ -157,30 +158,45 @@ Page({
     })
   },
   pay(e) {
-    const code = e.detail.code
-    if (code) {
-      wx.getLocalIPAddress({
-        success(res) {
-          const ip = res.localip // ip地址
-          ajax.request('order/createOrder', {
-            amount: 1,
-            ip,
-            code,
-            packages: [{
-              id: '8f75309d629cb8c2072baed713629e52',
-              date: moment(new Date()).format('YYYY-MM-DD')
-            }]
-          }).then(res => {
-            console.log(res)
-            wx.requestPayment({
-              ...res,
-              success(res) {
-                console.log('pay success', res)
-              },
-            })
-          })
-        }
-      })
+    const params = {
+      amount: 1,
+      packages: [{
+        id: '8f75309d629cb8c2072baed713629e52',
+        date: moment(new Date()).format('YYYY-MM-DD')
+      }]
     }
+    if (this.data.isNewCustomer) {
+      const code = e.detail.code
+      if (code) {
+        params.code = e.detail.code
+      } else {
+        return
+      }
+    }
+    wx.getLocalIPAddress({
+      success(res) {
+        params.ip = res.localip // ip地址
+        ajax.request('order/createOrder', params).then(res => {
+          console.log(res)
+          wx.requestPayment({
+            ...res,
+            success(res) {
+              console.log('pay success', res)
+            },
+          })
+        })
+      }
+    })
   },
+  getUser(e) {
+    ajax.request('user/getUser').then(res => {
+      let isNewCustomer = true
+      if (res.userInfo) {
+        isNewCustomer = false
+      }
+      this.setData({
+        isNewCustomer
+      })
+    })
+  }
 })

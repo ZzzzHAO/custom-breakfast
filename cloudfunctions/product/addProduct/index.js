@@ -35,7 +35,7 @@ exports.main = async (event, context) => {
               category: +item.category,
               stock: +item.stock,
               onSale: false, // 默认不上架
-              uploadTime: db.serverDate(),
+              createTime: db.serverDate(),
               store: storeId,
               creator: OPENID
             }

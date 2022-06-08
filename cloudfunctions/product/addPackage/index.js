@@ -59,7 +59,7 @@ exports.main = async (event, context) => {
                 price: +package.price,
                 products: package.products,
                 onSale: false,
-                uploadTime: db.serverDate(),
+                createTime: db.serverDate(),
                 store: storeId,
                 creator: OPENID
               }

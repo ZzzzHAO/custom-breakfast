@@ -19,6 +19,7 @@ exports.main = async (event, context) => {
   let status = 2 // 支付失败
   if (returnCode === 'SUCCESS' && resultCode === 'SUCCESS') {
     status = 1 // 支付成功
+    // TODO 更新商品库存
   }
   await transaction.collection('order').where({
     outTradeNo
