@@ -36,7 +36,7 @@ const ajax = {
           if (res.result.success) {
             resolve(res.result.data)
           } else {
-            const msg = res.result.error && res.result.error.message
+            const msg = res.result.error && (res.result.error.message || res.result.error.errMsg)
             if (msg) {
               wx.showToast({
                 icon: 'none',

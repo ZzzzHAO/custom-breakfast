@@ -32,22 +32,45 @@ exports.main = async (event, context) => {
     code
   } = event
   try {
-    const length = packages.length
-    // 新用户
-    if (code) {
-      // 获取用户手机号
-      const phoneRes = await cloud.openapi.phonenumber.getPhoneNumber({
-        code
-      })
-      const phone = phoneRes.phoneInfo && phoneRes.phoneInfo.phoneNumber// 下单人手机号
-      // TODO 新增用户
+    const {
+      OPENID
+    } = cloud.getWXContext()
+    let phone = '' // 用户手机号
+    // 获取用户信息
+    let userRes = await db.collection('user').where({
+      openId: OPENID
+    }).get()
+    userRes = userRes.data && userRes.data[0]
+    if (userRes) {
+      phone = userRes.phone
+    } else {
+      // 新用户
+      if (code) {
+        // 获取用户手机号
+        const phoneRes = await cloud.openapi.phonenumber.getPhoneNumber({
+          code
+        })
+        phone = phoneRes.phoneInfo && phoneRes.phoneInfo.phoneNumber // 下单人手机号
+        // 新增用户
+        const userTransaction = await db.startTransaction()
+        await userTransaction.collection('user').add({
+          data: {
+            phone,
+            openId: OPENID
+          }
+        })
+        await userTransaction.commit()
+      } else {
+        return {
+          success: false,
+          error: {
+            message: '获取用户信息失败'
+          }
+        }
+      }
     }
+    const length = packages.length // 购买套餐数组
     if (length) {
-      const userTransaction = await db.startTransaction()
-      userTransaction.collection('user')
-      const {
-        OPENID
-      } = cloud.getWXContext()
       // 查找套餐信息
       const tasks = [] // 查询商品信息任务队列
       packages.forEach(item => {
