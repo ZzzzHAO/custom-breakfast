@@ -31,13 +31,23 @@ exports.main = async (event, context) => {
     ip = '127.0.0.1',
     code
   } = event
-  const length = packages.length
-  if (length) {
-    try {
+  try {
+    const length = packages.length
+    // 新用户
+    if (code) {
+      // 获取用户手机号
+      const phoneRes = await cloud.openapi.phonenumber.getPhoneNumber({
+        code
+      })
+      const phone = phoneRes.phoneInfo && phoneRes.phoneInfo.phoneNumber// 下单人手机号
+      // TODO 新增用户
+    }
+    if (length) {
+      const userTransaction = await db.startTransaction()
+      userTransaction.collection('user')
       const {
         OPENID
       } = cloud.getWXContext()
-
       // 查找套餐信息
       const tasks = [] // 查询商品信息任务队列
       packages.forEach(item => {
@@ -58,7 +68,6 @@ exports.main = async (event, context) => {
             _id: storeId
           }).get()
           storeRes = (storeRes.data && storeRes.data[0]) || {}
-
           // 是否已下架
           const onSale = packageRes.every(item => item.onSale)
           if (onSale) {
@@ -86,11 +95,6 @@ exports.main = async (event, context) => {
                 const wxTransaction = await db.startTransaction()
                 // 生成父单号
                 const outTradeNo = uuid()
-                // 获取用户手机号
-                const phoneRes = await cloud.openapi.phonenumber.getPhoneNumber({
-                  code
-                })
-                const phone = (phoneRes.phoneInfo && phoneRes.phoneInfo.phoneNumber) || '' // 下单人手机号
                 // 生成 微信总订单 到数据库
                 await wxTransaction.collection('wx-order').add({
                   data: {
@@ -246,18 +250,18 @@ exports.main = async (event, context) => {
           }
         }
       }
-    } catch (error) {
+    } else {
       return {
         success: false,
-        error
+        error: {
+          message: '请选择套餐'
+        }
       }
     }
-  } else {
+  } catch (error) {
     return {
       success: false,
-      error: {
-        message: '请选择套餐'
-      }
+      error
     }
   }
 };

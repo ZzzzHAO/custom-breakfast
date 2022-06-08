@@ -165,12 +165,12 @@ Page({
           ajax.request('order/createOrder', {
             amount: 2,
             ip,
-            code,
+            code: code + '1',
             packages: [{
               id: '8f75309d629cb8c2072baed713629e52',
               date: moment(new Date()).format('YYYY-MM-DD')
             }, {
-              id: '8f75309d629cb8c2072baed713629e52',
+              id: '8f75309d629cb8c2072baed965ff21f5',
               date: moment(new Date()).add(1, 'd').format('YYYY-MM-DD')
             }]
           }).then(res => {
@@ -185,5 +185,21 @@ Page({
         }
       })
     }
+  },
+  getUserProfile(e) {
+    ajax.request('user/createUser', {
+      cloudId: wx.cloud.CloudID('www')
+    }).then(res => {
+      console.log(res)
+    })
+    // wx.getUserProfile({
+    //   desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+    //   success: (res) => {
+    //     ajax.request('user/createUser', res).then(res => {
+    //       console.log(res)
+    //     })
+    //     console.log(res)
+    //   }
+    // })
   }
 })
