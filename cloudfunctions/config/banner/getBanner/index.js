@@ -5,33 +5,14 @@ cloud.init({
 });
 
 const db = cloud.database()
-const MAX_LIMIT = 10
 // 获取banner
 exports.main = async (event, context) => {
   try {
-    const countResult = await db.collection('banner').count()
-    const total = countResult.total
-    // 计算需分几次取
-    const batchTimes = Math.ceil(total / MAX_LIMIT)
-    // 承载所有读操作的 promise 的数组
-    const tasks = []
-    for (let i = 0; i < batchTimes; i++) {
-      const promise = db.collection('banner').skip(i * MAX_LIMIT).limit(MAX_LIMIT).get()
-      tasks.push(promise)
-    }
-    // 等待所有
-    let banner = []
-    await Promise.all(tasks).then(res => {
-      banner = res.reduce((acc, cur) => {
-        return acc.data.concat(cur.data)
-      }, {
-        data: []
-      })
-    })
+    const bannerRes = await db.collection('banner').get()
     return {
       success: true,
       data: {
-        banner
+        banner: bannerRes.data.slice(0, 5)
       }
     }
   } catch (e) {

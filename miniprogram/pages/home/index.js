@@ -23,11 +23,29 @@ Page({
     this.init()
   },
 
-  init() {},
+  init() {
+    this.getBanner()
+    this.getPackageList()
+  },
+  // 获取banner
   getBanner() {
     ajax.request('config/banner/getBanner').then(res => {
+      console.log(res)
       this.setData({
         banner: res.banner
+      })
+    })
+  },
+  // 获取套餐list
+  getPackageList(e) {
+    ajax.request('product/getPackageList', {
+      storeId: '6d85a2b962a0adae0981cf6e396616d2',
+      pageNo: 1,
+      pageSize: 10
+    }).then(res => {
+      console.log(res)
+      this.setData({
+        packages: res.packageList || []
       })
     })
   },

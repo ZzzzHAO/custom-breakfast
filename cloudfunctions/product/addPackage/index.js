@@ -19,6 +19,7 @@ exports.main = async (event, context) => {
       const {
         OPENID
       } = cloud.getWXContext()
+      // 只有门店拥有者才能上传套餐
       let storeRes = await db.collection('store').where({
         creator: OPENID,
       }).get()

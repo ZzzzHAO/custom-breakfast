@@ -8,13 +8,21 @@
     <van-tab wx:for="{{tabs}}" wx:for-item="tab" wx:key="id" title="{{tab.name}}" name="{{tab.id}}">
       <!-- tab标签 内容区域 -->
       <scroll-view wx:if="{{tab.id === 1}}" scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" bindscrolltolower="loadProduct" enhanced="{{true}}" show-scrollbar="{{false}}">
-        <button class="btn" bindtap="uploadBanner">上传banner</button>
-        <button class="btn" bindtap="getBanner">获取banner</button>
-        <button class="btn" open-type="getPhoneNumber" bindgetphonenumber="createStore">创建门店</button>
-        <button class="btn" bindtap="uploadProduct">上架商品</button>
-        <button class="btn" bindtap="downloadProduct">下架商品</button>
-        <button class="btn" bindtap="uploadPackage">上架套餐</button>
-        <button class="btn" bindtap="downloadPackage">下架套餐</button>
+        <view class="package" wx:for="{{packages}}" wx:key="_id">
+          <view class="image-wrap">
+            <image class="image" mode="aspectFit" src="{{item.image}}" />
+          </view>
+          <view class="content">
+            <view class="title">{{item.name}}</view>
+            <view class="composition">
+              <view class="product" wx:for="{{item.products}}" wx:for-item="product">
+                {{product.name}}*{{product.count}}
+              </view>
+            </view>
+            <view class="price">item.price</view>
+            <view class="sales">item.sales</view>
+          </view>
+        </view>
       </scroll-view>
       <scroll-view wx:else scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" bindscrolltolower="loadProduct" enhanced="{{true}}" show-scrollbar="{{false}}">
 

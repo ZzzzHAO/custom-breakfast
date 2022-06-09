@@ -52,15 +52,13 @@ exports.main = async (event, context) => {
         })
         phone = phoneRes.phoneInfo && phoneRes.phoneInfo.phoneNumber // 下单人手机号
         // 新增用户
-        // TODO 调用创建用户接口
-        const userTransaction = await db.startTransaction()
-        await userTransaction.collection('user').add({
+        await cloud.callFunction({
+          name: 'user',
           data: {
-            phone,
-            openId: OPENID
+            _path: 'createUser',
+            phone
           }
         })
-        await userTransaction.commit()
       } else {
         return {
           success: false,
@@ -160,32 +158,16 @@ exports.main = async (event, context) => {
                   })
                   // 拆分订单
                   for (let i = 0; i < length; i++) {
-                    const package = packageRes[i]
+                    let package = packageRes[i]
                     // 获取套餐内商品快照
-                    const products = package.products // 套餐内 具体商品
-                    const tasks = [] // promise 异步数组
-                    products.forEach(item => {
-                      const promise = db.collection('product').where({
-                        _id: item.id
-                      }).get()
-                      tasks.push(promise)
-                    })
-                    let productsRes = await Promise.all(tasks)
-                    productsRes = productsRes.map(item => item.data[0])
-                    // 保存下单时 商品信息的快照 防止之后商品信息变化
-                    products.forEach(item => {
-                      for (let j = 0; j < productsRes.length; j++) {
-                        const snapshot = productsRes[j]
-                        // 如果有就保存快照 没有 则保存undefined
-                        if (snapshot) {
-                          if (item.id === snapshot._id) {
-                            item.snapshot = snapshot
-                          }
-                        } else {
-                          item.snapshot = undefined
-                        }
+                    package = await cloud.callFunction({
+                      name: 'product',
+                      data: {
+                        _path: 'getProductDetailByPackage',
+                        package
                       }
                     })
+                    package = package.result.data
                     const orderNo = uuid() // uuid 作为子订单号
                     await transaction.collection('order').add({
                       data: {

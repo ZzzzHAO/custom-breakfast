@@ -1,15 +1,35 @@
 /* pages/home/index.wxss */
 .home-wrap {
   height: calc(100vh - (100rpx + env(safe-area-inset-bottom)));
+
   .banner-wrap {
     width: 100%;
     padding: 0 24rpx;
     padding-top: 24rpx;
+    background-color: #fff;
 
     .banner {
       width: 100%;
     }
   }
+  .package {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    .image-wrap {
+      background-color: #fff;
+      margin-right: 20rpx;
+      .image {
+        width: 250rpx;
+        height: 250rpx;
+      }
+      .content {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+
   .btn {
     width: 500rpx;
     margin: 20rpx auto;
