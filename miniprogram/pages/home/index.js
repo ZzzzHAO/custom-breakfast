@@ -1,5 +1,6 @@
 // pages/home/index.js
 import ajax from '../../common/ajax'
+import { px2rpx, rpx2px } from '../../common/util'
 const moment = require('moment')
 const DAY_ENUM = {
   1: '周一',
@@ -26,14 +27,17 @@ Page({
       name: '预约一周',
       refresh: false,
     }], // 首页标签数组
-    disabled: true,
     amountStr: '', // 按钮金额文案
     singleAmountStr: '', // 单天金额文案 缓存
     weekAmountStr: '', // 一周金额文案 缓存
     isNewCustomer: true,
     currentTab: 1, // 当前tab
     renderedList: [], // 已渲染tab
-    showMenu: false // 是否展示菜单
+    showMenu: false, // 是否展示菜单
+    checkedItem: {}, // 清空勾选项
+    weekPackages: [], // 清空周套餐数组
+    weekAmount: 0, // 周套餐价格
+    scrollEnable: false,
   },
 
   /**
@@ -41,15 +45,19 @@ Page({
    */
   onLoad(options) {
     this.init() // 初始化
-    const headerHeight = getApp().globalData.navPos.headerHeight; // 获取自定义头部高度
+    const headerHeight = px2rpx(getApp().globalData.navPos.headerHeight) + 'rpx'; // 获取自定义头部高度
+    const bannerHeight = '288rpx'
+    const tabsHeight = px2rpx(44) + 'rpx'
+    const safeHeight = 'env(safe-area-inset-bottom)'
     this.setData({
-      // 缓存
-      headerHeight,
-      // 内部滚动区高度： (屏幕高度:100vh - (底部安全距离:env(safe-area-inset-bottom) + banner高度:260rpx + tab标签高度:44px + 自定义头部高度:headerHeight))
-      scrollStyle: `height: calc(100vh - (env(safe-area-inset-bottom) + 260rpx + 44px + ${headerHeight}px))`,
-      // 外部滚动区 内边距：自定义头部高度
-      wrapStyle: `padding-top: ${headerHeight}px`,
+      scrollStyle: `height: calc(100vh - ${bannerHeight} - ${tabsHeight} - ${headerHeight} - ${safeHeight})`,
+      wrapStyle: `padding-top: ${headerHeight}`,
     });
+    setTimeout(() => {
+      this.setData({
+        scrollEnable: true
+      })
+    }, 900)
   },
 
   init() {
@@ -86,13 +94,11 @@ Page({
       pageSize: 10
     })
     const packages = res.packageList || []
-    this.setData({
-      packages
-    })
     return packages
   },
   // 下啦刷新
   async refresh(e) {
+    console.log(e)
     const tabId = e.currentTarget.dataset.id;
     const refreshTab = this.data.tabs.find((tab) => tab.id === tabId);
     if (!refreshTab.refresh) {
@@ -127,28 +133,44 @@ Page({
   },
   tabChange(e) {
     const tabId = e.detail.name;
+    console.log(33333)
     // 设为当前tab
     this.setData({
       currentTab: tabId,
       amountStr: tabId === 1 ? this.data.singleAmountStr : this.data.weekAmountStr,
-      disabled: tabId === 1 ? (this.data.checkedItem ? false : true) : false
     });
     // 如未渲染过 则render
     if (!this.data.renderedList.includes(tabId)) {
       this.renderTab(tabId);
     }
   },
-  async renderTab(tabId) {
+  async renderTab(tabId, isRefresh) {
     // 将此pageId设置为已渲染
-    this.setData({
-      renderedList: [...this.data.renderedList, tabId], // 已渲染列表
-      currentTab: tabId, // 当前page
-      isLoading: true,
-      amountStr: ''
-    });
+    if (!isRefresh) {
+      this.setData({
+        renderedList: [...this.data.renderedList, tabId], // 已渲染列表
+        currentTab: tabId, // 当前page
+      })
+    }
     if (tabId === 1) {
-      await this.getPackageList()
+      console.log(4444)
+      this.setData({
+        isLoading: true,
+        amountStr: '', // 文案清空
+        checkedItem: {}, // 清空勾选项
+      });
+      const packages = await this.getPackageList()
+      this.setData({
+        packages,
+      })
     } else if (tabId === 2) {
+      console.log(55555)
+      this.setData({
+        isLoading: true,
+        amountStr: '', // 文案清空
+        weekPackages: [], // 清空周套餐数组
+        weekAmount: 0
+      });
       let packages = await this.getPackageList()
       const length = packages.length
       if (length) {
@@ -170,11 +192,12 @@ Page({
           amount += packages[i].price
         }
         const amountStr = `    ${amount / 100}元`
+        console.log(222222)
         this.setData({
           weekPackages: dateArr,
           weekAmount: amount,
+          weekAmountStr: amountStr,
           amountStr,
-          weekAmountStr: amountStr
         })
       }
     }
@@ -205,58 +228,51 @@ Page({
       weekPackages
     })
   },
-  moveDown(e) {
-    const { index } = e.currentTarget.dataset
-    let { weekPackages } = this.data
-    if (index !== weekPackages.length - 1) {
-      const currentPackage = weekPackages[index].package
-      const nextPackage = weekPackages[index + 1].package
-      weekPackages = weekPackages.map((v, i) => {
-        if (i === index) {
-          return {
-            ...v,
-            package: nextPackage
-          }
-        } else if (i === index + 1) {
-          return {
-            ...v,
-            package: currentPackage
-          }
-        } else {
-          return v
-        }
-      })
-    }
-    this.setData({
-      weekPackages
-    })
-  },
   // 勾选套餐
   check(e) {
     const checkedItem = e.currentTarget.dataset.package
     const amountStr = `    ${checkedItem.price / 100}元`
+    console.log('111111111')
     this.setData({
-      radio: checkedItem._id,
       checkedItem,
-      disabled: false,
+      singleAmountStr: amountStr,
       amountStr,
-      singleAmountStr: amountStr
     })
   },
   // 支付
   pay(e) {
-    const { currentTab, disabled, checkedItem, weekPackages, weekAmount } = this.data
-    if (!disabled) {
-      const params = {}
-      // 预约明天
-      if (currentTab === 1 && checkedItem) {
+    const { currentTab, checkedItem, weekPackages, weekAmount, isNewCustomer } = this.data
+    const params = {}
+    if (isNewCustomer) {
+      const code = e.detail.code
+      if (code) {
+        params.code = e.detail.code
+      } else {
+        wx.showToast({
+          title: '授权失败',
+          icon: 'none'
+        })
+        return;
+      }
+    }
+    // 预约明天
+    if (currentTab === 1) {
+      if (checkedItem._id) {
         params.packages = [{
           id: checkedItem._id,
           date: moment(new Date()).add(1, 'd').format('YYYY-MM-DD')
         }]
         params.amount = checkedItem.price
       } else {
-        // 预约一周
+        wx.showToast({
+          title: '请选择套餐',
+          icon: 'none'
+        })
+        return
+      }
+    } else {
+      // 预约一周
+      if (weekPackages.length) {
         params.packages = weekPackages.map(item => {
           return {
             id: item.package._id,
@@ -264,35 +280,28 @@ Page({
           }
         })
         params.amount = weekAmount
+      } else {
+        wx.showToast({
+          title: '请选择套餐',
+          icon: 'none'
+        })
+        return
       }
-      if (this.data.isNewCustomer) {
-        const code = e.detail.code
-        if (code) {
-          params.code = e.detail.code
-        } else {
-          return
-        }
-      }
-      wx.getLocalIPAddress({
-        success(res) {
-          params.ip = res.localip // ip地址
-          ajax.request('order/createOrder', params).then(res => {
-            console.log(res)
-            wx.requestPayment({
-              ...res,
-              success(res) {
-                console.log('pay success', res)
-              },
-            })
-          })
-        }
-      })
-    } else {
-      wx.showToast({
-        title: '请选择套餐',
-        icon: 'none'
-      })
     }
+    wx.getLocalIPAddress({
+      success(res) {
+        params.ip = res.localip // ip地址
+        ajax.request('order/createOrder', params).then(res => {
+          console.log(res)
+          wx.requestPayment({
+            ...res,
+            success(res) {
+              console.log('pay success', res)
+            },
+          })
+        })
+      }
+    })
   },
   // 关闭菜单
   openMenu(e) {

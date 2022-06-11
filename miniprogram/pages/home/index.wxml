@@ -4,15 +4,13 @@
   <view style="position:fixed;top:0">
     <custom-nav showBack="{{false}}" title="明儿吃啥" bind:clickPerson="openMenu" showPerson></custom-nav>
   </view>
-  <view class="banner-wrap">
-    <banner class="banner" data="{{banner}}" />
-  </view>
+  <banner data="{{banner}}" />
   <!-- 首页tab标签 -->
   <van-tabs color="#00BEE6" bind:change="tabChange" animated ellipsis lazy-render sticky>
     <van-tab wx:for="{{tabs}}" wx:for-item="tab" wx:key="id" title="{{tab.name}}" name="{{tab.id}}">
       <!-- tab标签 内容区域 -->
-      <scroll-view wx:if="{{tab.id === 1}}" scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" style="{{scrollStyle}}" enhanced="{{true}}" show-scrollbar="{{false}}">
-        <van-radio-group class="package-list" value="{{ radio }}" bind:change="onChange">
+      <scroll-view scroll-y="{{scrollEnable}}" class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" style="{{scrollStyle}}" enhanced="{{true}}" show-scrollbar="{{true}}">
+        <van-radio-group wx:if="{{tab.id === 1}}" class="package-list" value="{{ checkedItem._id }}" bind:change="onChange">
           <view class="package" wx:for="{{packages}}" wx:key="_id" bind:tap="check" data-package="{{item}}">
             <van-radio checked-color="#00BEE6" custom-class="radio" name="{{item._id}}"></van-radio>
             <view class="package-wrap">
@@ -42,15 +40,16 @@
             </view>
           </view>
         </van-radio-group>
-      </scroll-view>
-      <scroll-view wx:else scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" style="{{scrollStyle}}" enhanced="{{true}}" show-scrollbar="{{false}}">
-        <view class="package-list">
-          <view class="package" wx:for="{{weekPackages}}" wx:key="_id" bind:tap="check" data-package="{{item}}">
+        <view wx:elif="{{tab.id === 2}}" class="package-list">
+          <view class="package" wx:for="{{weekPackages}}" wx:key="_id" data-package="{{item}}">
             <view class="date-wrap">
               <view class="day">{{item.dayStr}}</view>
               <view class="date">{{item.dateStr}}</view>
             </view>
             <view class="package-wrap">
+              <view class="arrow" wx:if="{{index !== 0}}">
+                <van-icon name="ascending" size="25px" custom-class="arrow-up" data-index="{{index}}" bindtap="moveUp" color="#00BEE6" />
+              </view>
               <view class="img-wrap">
                 <image class="img" src="{{item.package.image}}" />
               </view>
@@ -72,18 +71,14 @@
                     </view>
                     <view wx:if="{{item.package.oldPrice !== undefined}}" class="old-price">¥{{item.package.oldPrice/100}}</view>
                   </view>
-                  <view class="optioins">
-                    <view class="move-btn" data-index="{{index}}" catchtap="moveUp">上移</view>
-                    <view class="move-btn" data-index="{{index}}" catchtap="moveDown">下移</view>
-                  </view>
                 </view>
               </view>
             </view>
           </view>
         </view>
       </scroll-view>
-      <button class="btn {{disabled?'disabled':''}}" wx:if="{{isNewCustomer}}" open-type="getPhoneNumber" bindgetphonenumber="pay">立即购买{{amountStr}}</button>
-      <button class="btn {{disabled?'disabled':''}}" wx:else bindtap="pay">立即购买{{amountStr}}</button>
+      <button class="btn" wx:if="{{isNewCustomer}}" open-type="getPhoneNumber" bindgetphonenumber="pay">立即购买{{amountStr}}</button>
+      <button class="btn" wx:else bindtap="pay">立即购买{{amountStr}}</button>
     </van-tab>
   </van-tabs>
 </view>

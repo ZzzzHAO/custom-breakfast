@@ -6,7 +6,8 @@
     "van-tabs": "@vant/weapp/tabs/index",
     "van-radio": "@vant/weapp/radio/index",
     "van-radio-group": "@vant/weapp/radio-group/index",
-    "van-popup": "@vant/weapp/popup/index"
+    "van-popup": "@vant/weapp/popup/index",
+    "van-icon": "@vant/weapp/icon/index"
   },
   "disableScroll": true,
   "navigationStyle": "custom"
