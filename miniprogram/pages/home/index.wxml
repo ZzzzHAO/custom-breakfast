@@ -1,32 +1,86 @@
 <!--pages/home/index.wxml-->
-<view class="home-wrap">
-  <view class="banner-wrap" wx:if="{{banner.length}}">
+<view class="home-wrap" style="{{wrapStyle}}">
+  <!-- 自定义头部 -->
+  <view style="position:fixed;top:0">
+    <custom-nav showBack="{{false}}" title="明儿吃啥" bind:clickPerson="openMenu" showPerson></custom-nav>
+  </view>
+  <view class="banner-wrap">
     <banner class="banner" data="{{banner}}" />
   </view>
   <!-- 首页tab标签 -->
-  <van-tabs color="#00BEE6" offset-top="{{40}}" z-index="{{1}}" bind:change="tabChange" animated ellipsis lazy-render sticky>
+  <van-tabs color="#00BEE6" bind:change="tabChange" animated ellipsis lazy-render sticky>
     <van-tab wx:for="{{tabs}}" wx:for-item="tab" wx:key="id" title="{{tab.name}}" name="{{tab.id}}">
       <!-- tab标签 内容区域 -->
-      <scroll-view wx:if="{{tab.id === 1}}" scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" bindscrolltolower="loadProduct" enhanced="{{true}}" show-scrollbar="{{false}}">
-        <view class="package" wx:for="{{packages}}" wx:key="_id">
-          <view class="image-wrap">
-            <image class="image" mode="aspectFit" src="{{item.image}}" />
-          </view>
-          <view class="content">
-            <view class="title">{{item.name}}</view>
-            <view class="composition">
-              <view class="product" wx:for="{{item.products}}" wx:for-item="product">
-                {{product.name}}*{{product.count}}
+      <scroll-view wx:if="{{tab.id === 1}}" scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" style="{{scrollStyle}}" enhanced="{{true}}" show-scrollbar="{{false}}">
+        <van-radio-group class="package-list" value="{{ radio }}" bind:change="onChange">
+          <view class="package" wx:for="{{packages}}" wx:key="_id" bind:tap="check" data-package="{{item}}">
+            <van-radio checked-color="#00BEE6" custom-class="radio" name="{{item._id}}"></van-radio>
+            <view class="package-wrap">
+              <view class="img-wrap">
+                <image class="img" src="{{item.image}}" />
+              </view>
+              <view class="content">
+                <view class="package-name">{{item.name}}</view>
+                <view class="specs">
+                  <view class="spec" wx:for="{{item.products}}" wx:for-item="product">
+                    {{product.name}} * {{product.count}}
+                  </view>
+                </view>
+                <view class="footer">
+                  <view class="price-wrap">
+                    <view class="price">
+                      <text class="symbol">¥</text>
+                      {{item.price/100}}
+                    </view>
+                    <view wx:if="{{item.oldPrice !== undefined}}" class="old-price">¥{{item.oldPrice/100}}</view>
+                  </view>
+                </view>
               </view>
             </view>
-            <view class="price">item.price</view>
-            <view class="sales">item.sales</view>
+          </view>
+        </van-radio-group>
+      </scroll-view>
+      <scroll-view wx:else scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" style="{{scrollStyle}}" enhanced="{{true}}" show-scrollbar="{{false}}">
+        <view class="package-list">
+          <view class="package" wx:for="{{weekPackages}}" wx:key="_id" bind:tap="check" data-package="{{item}}">
+            <view class="date-wrap">
+              <view class="day">{{item.dayStr}}</view>
+              <view class="date">{{item.dateStr}}</view>
+            </view>
+            <view class="package-wrap">
+              <view class="img-wrap">
+                <image class="img" src="{{item.package.image}}" />
+              </view>
+              <view class="content">
+                <view class="package-name">{{item.package.name}}</view>
+                <view class="specs">
+                  <view class="spec" wx:for="{{item.package.products}}" wx:for-item="product">
+                    {{product.name}} * {{product.count}}
+                  </view>
+                </view>
+                <view class="footer">
+                  <view class="price-wrap">
+                    <view class="price">
+                      <text class="symbol">¥</text>
+                      {{item.package.price/100}}
+                    </view>
+                    <view wx:if="{{item.package.oldPrice !== undefined}}" class="old-price">¥{{item.package.oldPrice/100}}</view>
+                  </view>
+                  <view class="optioins">
+                    <view class="move-btn" data-index="{{index}}" catchtap="moveUp">上移</view>
+                    <view class="move-btn" data-index="{{index}}" catchtap="moveDown">下移</view>
+                  </view>
+                </view>
+              </view>
+            </view>
           </view>
         </view>
       </scroll-view>
-      <scroll-view wx:else scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" bindscrolltolower="loadProduct" enhanced="{{true}}" show-scrollbar="{{false}}">
-
-      </scroll-view>
+      <button class="btn {{disabled?'disabled':''}}" wx:if="{{isNewCustomer}}" open-type="getPhoneNumber" bindgetphonenumber="pay">立即购买{{amountStr}}</button>
+      <button class="btn {{disabled?'disabled':''}}" wx:else bindtap="pay">立即购买{{amountStr}}</button>
     </van-tab>
   </van-tabs>
 </view>
+<van-popup show="{{ showMenu }}" closeable position="left" z-index="{{999999999}}" custom-style="height:100vh;width: 40vw;" bind:close="closeMenu">
+  自定义菜单
+</van-popup>

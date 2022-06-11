@@ -23,16 +23,5 @@
     "navigationBarTitleText": "明儿吃啥",
     "navigationBarTextStyle": "black"
   },
-  "sitemapLocation": "sitemap.json",
-  "tabBar": {
-    "custom": true,
-    "list": [
-      {
-        "pagePath": "pages/home/index"
-      },
-      {
-        "pagePath": "pages/mine/index"
-      }
-    ]
-  }
+  "sitemapLocation": "sitemap.json"
 }

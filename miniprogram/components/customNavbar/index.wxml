@@ -1,0 +1,12 @@
+<view class="custom-nav-wrap {{noBg ? 'no-bg' : ''}}" style="height: {{navPos.headerHeight}}px;">
+  <view class="custom-nav-inner" style="line-height: {{navPos.height}}px;padding-right:{{navPos.right}}px;padding-top: {{navPos.top + navPos.distance}}px;padding-bottom:{{navPos.distance}}px">
+    <view class="custom-nav-bag" style="height: {{navPos.height}}px;">
+      <van-icon bindtap="goBackPage" wx:if="{{showBack}}" class="custom-nav-back" size="40rpx" style="color:{{backIconColor}}" name="arrow-left" />
+      <van-icon bindtap="clickPerson" wx:if="{{showPerson}}" class="custom-nav-person" size="40rpx" style="color:{{backIconColor}}" name="user-o" />
+      <view class="custom-nav" style="{{centerStyle}}">
+        <view class="custom-nav-title" wx:if="{{title}}" style="color:{{titleColor}};font-weight: bold;">{{title}}</view>
+        <slot wx:else />
+      </view>
+    </view>
+  </view>
+</view>

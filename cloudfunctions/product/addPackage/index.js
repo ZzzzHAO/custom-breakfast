@@ -54,15 +54,16 @@ exports.main = async (event, context) => {
               data: {
                 // stock,
                 // amount,
-                image: package.image,
-                name: package.name,
-                desc: package.desc,
-                price: +package.price,
-                products: package.products,
-                onSale: false,
-                createTime: db.serverDate(),
-                store: storeId,
-                creator: OPENID
+                image: package.image, // 套餐图片
+                name: package.name, // 套餐名称
+                desc: package.desc, // 套餐描述
+                price: +package.price, // 套餐价格
+                oldPrice: +package.oldPrice, // 套餐原价
+                products: package.products, // 套餐商品组合
+                onSale: false, // 是否上架
+                createTime: db.serverDate(), // 录入时间
+                store: storeId, // 门店id
+                creator: OPENID // 上架者
               }
             })
             if (index === packages.length - 1) {

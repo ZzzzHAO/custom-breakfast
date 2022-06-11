@@ -20,6 +20,9 @@ exports.main = async (event, context) => {
       .limit(pageSize) // 限制返回数量为 10 条
       .get()
     packageRes = packageRes.data
+    console.log(packageRes)
+    packageRes = packageRes.filter(item => item.onSale)
+    console.log(packageRes)
     const tasks = []
     if (packageRes.length) {
       for (let i = 0; i < packageRes.length; i++) {

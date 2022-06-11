@@ -1,8 +1,13 @@
 {
   "usingComponents": {
     "banner": "../../components/banner/index",
+    "custom-nav": "../../components/customNavbar/index",
     "van-tab": "@vant/weapp/tab/index",
-    "van-tabs": "@vant/weapp/tabs/index"
+    "van-tabs": "@vant/weapp/tabs/index",
+    "van-radio": "@vant/weapp/radio/index",
+    "van-radio-group": "@vant/weapp/radio-group/index",
+    "van-popup": "@vant/weapp/popup/index"
   },
-  "disableScroll": true
+  "disableScroll": true,
+  "navigationStyle": "custom"
 }

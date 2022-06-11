@@ -1,0 +1,23 @@
+<!--pages/seckill/components/nav/index.wxml-->
+<view class="seckill-nav-wrap" style="height: {{navPos.headerHeight}}px;line-height: {{navPos.height}}px;padding-right:{{navPos.right}}px;padding-top: {{navPos.top + navPos.distance}}px;padding-bottom:{{navPos.distance}}px">
+	<image
+	 class="seckill-nav-bg"
+	 mode="aspectFill"
+     style="height: {{navPos.headerHeight + 129}}px;"
+	 src="../../../../assets/img/seckill-bg3.png"
+	/>
+	<view class="seckill-nav-bag" style="height: {{navPos.height}}px;">
+		<van-icon
+		 bindtap="goBackPage"
+		 wx:if="{{showBack}}"
+		 class="icon"
+     color="#fff"
+		 size="40rpx"
+		 name="arrow-left"
+		/>
+		<view class="seckill-nav" style="{{centerStyle}}">
+			<slot/>
+		</view>
+	</view>
+</view>
+
