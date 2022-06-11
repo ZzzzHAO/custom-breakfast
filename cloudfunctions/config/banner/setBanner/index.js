@@ -13,7 +13,7 @@ exports.main = async (event, context) => {
   if (banner.length) {
     try {
       // 新增
-      await db.runTransaction(async transaction => {
+      const result = await db.runTransaction(async transaction => {
         for (let i = 0; i < banner.length; i++) {
           const item = banner[i]
           await db.collection('banner').add({
@@ -27,7 +27,6 @@ exports.main = async (event, context) => {
             }
           })
           if (i === banner.length - 1) {
-            await transaction.commit()
             return {
               success: true,
               data: {}
@@ -35,6 +34,7 @@ exports.main = async (event, context) => {
           }
         }
       })
+      return result
     } catch (error) {
       return {
         success: false,

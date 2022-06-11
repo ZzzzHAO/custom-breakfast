@@ -10,46 +10,34 @@ const _ = db.command
 exports.main = async (event, context) => {
   let {
     phone,
-    store
+    openId
   } = event
-  const openId = cloud.getWXContext().OPENID;
   try {
-    const result = await db.runTransaction(async transaction => {
-      let userRes = await transaction.collection('user').where({
-        openId
-      }).get()
-      userRes = userRes.data && userRes.data[0]
-      console.log(userRes)
-      if (!userRes) {
-        const data = {
+    let userRes = await db.collection('user').where({
+      openId
+    }).get()
+    userRes = userRes.data && userRes.data[0]
+    if (!userRes) {
+      const transaction = await db.startTransaction()
+      await transaction.collection('user').add({
+        data: {
           phone,
           openId,
           createTime: db.serverDate()
         }
-        // 如果是店铺员工 则追加店铺信息
-        if (store) {
-          data.store = store
-        }
-        await transaction.collection('user').add({
-          data
-        })
-        return {
-          success: true,
-          data: {}
-        }
-      } else {
-        await transaction.rollback(-100)
-        // TODO 验证
-        return {
-          success: false,
-          error: {
-            message: '您已完成注册'
-          }
+      })
+      await transaction.commit()
+      return {
+        success: true,
+        data: {}
+      }
+    } else {
+      return {
+        success: false,
+        error: {
+          message: '您已完成注册'
         }
       }
-    })
-    return {
-      ...result
     }
   } catch (error) {
     return {

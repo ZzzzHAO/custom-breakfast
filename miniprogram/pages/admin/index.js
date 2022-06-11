@@ -21,17 +21,17 @@ Page({
   uploadBanner(e) {
     ajax.request('config/banner/setBanner', {
       banner: [{
-        name: '轮播图',
+        name: '轮播图1',
         image: 'cloud://cloud1-3g1ptrnzda536c06.636c-cloud1-3g1ptrnzda536c06-1300751264/banner.jpg',
         jumpUrl: '',
-        validateTiem: new Date(),
+        validateTiem: moment(new Date()).add(365, 'd').toDate(),
       }, {
-        name: '轮播图',
+        name: '轮播图2',
         image: 'cloud://cloud1-3g1ptrnzda536c06.636c-cloud1-3g1ptrnzda536c06-1300751264/banner.jpg',
         jumpUrl: '',
-        validateTiem: new Date(),
+        validateTiem: moment(new Date()).add(365, 'd').toDate(),
       }, {
-        name: '轮播图',
+        name: '轮播图3',
         image: 'cloud://cloud1-3g1ptrnzda536c06.636c-cloud1-3g1ptrnzda536c06-1300751264/banner.jpg',
         jumpUrl: '',
         validateTiem: new Date(),
@@ -101,7 +101,7 @@ Page({
   switchPackageSaleStatus(e) {
     ajax.request('product/switchPackageSaleStatus', {
       onSale: true, // 上架
-      packages: ['0a4ec1f9629a3950087bf95708fbd43a']
+      packages: ['ca780ad562a4743006daa0d378179ec5', 'ca780ad562a4743006daa0d934111f89', 'ca780ad562a4743006daa0df500976b2', 'ca780ad562a4743006daa0e523cc5842', 'ca780ad562a4743006daa0e84c332b31']
     }).then(res => {
       console.log(res)
     })

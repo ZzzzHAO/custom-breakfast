@@ -20,7 +20,10 @@
                 <image class="img" src="{{item.image}}" />
               </view>
               <view class="content">
-                <view class="package-name">{{item.name}}</view>
+                <view class="title">
+                  <view class="package-name">{{item.name}}</view>
+                  <view class="package-desc">{{item.desc}}</view>
+                </view>
                 <view class="specs">
                   <view class="spec" wx:for="{{item.products}}" wx:for-item="product">
                     {{product.name}} * {{product.count}}
@@ -52,7 +55,10 @@
                 <image class="img" src="{{item.package.image}}" />
               </view>
               <view class="content">
-                <view class="package-name">{{item.package.name}}</view>
+                <view class="title">
+                  <view class="package-name">{{item.package.name}}</view>
+                  <view class="package-desc">{{item.package.desc}}</view>
+                </view>
                 <view class="specs">
                   <view class="spec" wx:for="{{item.package.products}}" wx:for-item="product">
                     {{product.name}} * {{product.count}}

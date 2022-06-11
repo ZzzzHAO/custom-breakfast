@@ -43,12 +43,7 @@ exports.main = async (event, context) => {
           res = res.map(item => item.data[0]) // 商品信息列表
           // 校验套餐中的商品是否都取到了
           if (res.every(item => item)) {
-            // let amount = 0 // 套餐成本价
             // let stock = Infinity // 取商品列表里库存最小的 作为套餐库存
-            // 遍历套餐商品 计算套餐成本价
-            // res.forEach((item, index) => {
-            //   amount += item.amount * products[index].count
-            // })
             // stock = Math.min.apply(this, res.map(item => item.stock))
             await transaction.collection('package').add({
               data: {

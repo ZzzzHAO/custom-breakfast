@@ -81,7 +81,7 @@ Page({
   // 获取套餐list
   async getPackageList(e) {
     const res = await ajax.request('product/getPackageList', {
-      storeId: '6d85a2b962a0adae0981cf6e396616d2',
+      storeId: 'f6797f72feae4d74d1fa497ca3b47f82',
       pageNo: 1,
       pageSize: 10
     })
@@ -138,7 +138,7 @@ Page({
       this.renderTab(tabId);
     }
   },
-  async renderTab(tabId, isRefresh) {
+  async renderTab(tabId) {
     // 将此pageId设置为已渲染
     this.setData({
       renderedList: [...this.data.renderedList, tabId], // 已渲染列表

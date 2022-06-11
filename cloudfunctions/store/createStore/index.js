@@ -44,10 +44,11 @@ exports.main = async (event, context) => {
           name: 'user',
           data: {
             _path: 'createUser',
-            phone
+            phone,
+            openId: OPENID
           }
         })
-        if (!result.success) {
+        if (!result.result.success) {
           return result
         }
       } else {

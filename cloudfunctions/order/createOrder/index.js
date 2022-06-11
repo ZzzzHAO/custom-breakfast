@@ -56,7 +56,8 @@ exports.main = async (event, context) => {
           name: 'user',
           data: {
             _path: 'createUser',
-            phone
+            phone,
+            openId: OPENID
           }
         })
       } else {

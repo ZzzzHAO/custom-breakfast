@@ -29,16 +29,16 @@ exports.main = async (event, context) => {
           const item = products[index]
           await transaction.collection('product').add({
             data: {
-              amount: +item.amount,
-              image: item.image,
-              name: item.name,
-              price: +item.price,
-              category: +item.category,
-              stock: +item.stock,
+              amount: +item.amount, // 成本价格
+              image: item.image, // 图片
+              name: item.name, // 商品民称
+              price: +item.price, // 商品售价
+              category: +item.category, // 商品品类
+              stock: +item.stock, // 商品库存
               onSale: false, // 默认不上架
-              createTime: db.serverDate(),
-              store: storeId,
-              creator: OPENID
+              createTime: db.serverDate(), // 创建时间
+              store: storeId, // 门店id
+              creator: OPENID // 创建者
             }
           })
           if (index === length - 1) {
