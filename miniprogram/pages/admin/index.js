@@ -64,14 +64,14 @@ Page({
   updateProduct(e) {
     ajax.request('product/updateProduct', {
       productId: '0ab5303b629a2d17078b869c4b62f87c',
-      stock: 10000
+      name: '新一代更名苹果'
     }).then(res => {
       console.log(res)
     })
   },
-  updateProductStock(e) {
-    ajax.request('product/updateProductStock', {
-      outTradeNo: '317f3e0f38a14dd8ff7add1f71e0824f',
+  updateSales(e) {
+    ajax.request('product/updateSales', {
+      outTradeNo: '8a1a6990342d4007a9196f53552366ec',
     }).then(res => {
       console.log(res)
     })

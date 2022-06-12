@@ -10,7 +10,7 @@ const addProduct = require('./addProduct/index')
 const switchProductSaleStatus = require('./switchProductSaleStatus/index')
 const switchPackageSaleStatus = require('./switchPackageSaleStatus/index')
 const updateProduct = require('./updateProduct/index')
-const updateProductStock = require('./updateProductStock/index')
+const updateSales = require('./updateSales/index')
 const getProductDetailByPackage = require('./getProductDetailByPackage/index')
 
 // 云函数入口函数
@@ -38,8 +38,8 @@ exports.main = async (event, context) => {
       return await switchProductSaleStatus.main(event, context);
     case 'switchPackageSaleStatus':
       return await switchPackageSaleStatus.main(event, context);
-    case 'updateProductStock':
-      return await updateProductStock.main(event, context);
+    case 'updateSales':
+      return await updateSales.main(event, context);
     case 'getProductDetailByPackage':
       return await getProductDetailByPackage.main(event, context);
     default:

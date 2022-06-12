@@ -32,7 +32,6 @@ exports.main = async (event, context) => {
               name: updteInfo.name || product.name,
               price: +updteInfo.price || +product.price,
               category: +updteInfo.category || +product.category,
-              stock: +updteInfo.stock || +product.stock,
             }
           })
           await transaction.commit()

@@ -34,7 +34,6 @@ exports.main = async (event, context) => {
               name: item.name, // 商品民称
               price: +item.price, // 商品售价
               category: +item.category, // 商品品类
-              stock: +item.stock, // 商品库存
               onSale: false, // 默认不上架
               createTime: db.serverDate(), // 创建时间
               store: storeId, // 门店id

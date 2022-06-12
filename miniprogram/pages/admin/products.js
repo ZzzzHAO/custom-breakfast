@@ -5,7 +5,7 @@ export default {
     "name": "肉包",
     "price": 200.0,
     "category": 1.0,
-    "stock": 9999
+
   },
   {
     "amount": 150.0,
@@ -13,7 +13,7 @@ export default {
     "name": "菜包",
     "price": 200.0,
     "category": 1.0,
-    "stock": 9999
+
   },
   {
     "amount": 100.0,
@@ -21,7 +21,7 @@ export default {
     "name": "馒头",
     "price": 150.0,
     "category": 1.0,
-    "stock": 9999
+
   },
   {
     "amount": 100.0,
@@ -29,7 +29,7 @@ export default {
     "name": "花卷",
     "price": 150.0,
     "category": 1.0,
-    "stock": 9999
+
   },
   {
     "amount": 200.0,
@@ -37,7 +37,7 @@ export default {
     "name": "酱香饼",
     "price": 300.0,
     "category": 1.0,
-    "stock": 9999
+
   },
   {
     "amount": 200.0,
@@ -45,7 +45,7 @@ export default {
     "name": "鸡蛋饼",
     "price": 300.0,
     "category": 1.0,
-    "stock": 9999
+
   },
   {
     "amount": 100.0,
@@ -53,7 +53,7 @@ export default {
     "name": "苹果",
     "price": 200.0,
     "category": 2.0,
-    "stock": 9999
+
   },
   {
     "amount": 100.0,
@@ -61,7 +61,7 @@ export default {
     "name": "香蕉",
     "price": 200.0,
     "category": 2.0,
-    "stock": 9999
+
   },
   {
     "amount": 100.0,
@@ -69,7 +69,7 @@ export default {
     "name": "草莓",
     "price": 200.0,
     "category": 2.0,
-    "stock": 9999
+
   },
   {
     "amount": 100.0,
@@ -77,7 +77,7 @@ export default {
     "name": "橘子",
     "price": 200.0,
     "category": 2.0,
-    "stock": 9999
+
   },
   {
     "amount": 100.0,
@@ -85,7 +85,7 @@ export default {
     "name": "西瓜",
     "price": 200.0,
     "category": 2.0,
-    "stock": 9999
+
   },
   {
     "amount": 100.0,
@@ -93,7 +93,7 @@ export default {
     "name": "哈密瓜",
     "price": 200.0,
     "category": 2.0,
-    "stock": 9999
+
   },
   {
     "amount": 100.0,
@@ -101,7 +101,7 @@ export default {
     "name": "白煮蛋",
     "price": 200.0,
     "category": 3.0,
-    "stock": 9999
+
   },
   {
     "amount": 100.0,
@@ -109,7 +109,7 @@ export default {
     "name": "茶叶蛋",
     "price": 200.0,
     "category": 3.0,
-    "stock": 9999
+
   },
   {
     "_id": "15",
@@ -118,7 +118,7 @@ export default {
     "name": "酸奶",
     "price": 500.0,
     "category": 4.0,
-    "stock": 9999
+
   },
   {
     "_id": "16",
@@ -127,7 +127,7 @@ export default {
     "name": "纯牛奶",
     "price": 600.0,
     "category": 4.0,
-    "stock": 9999
+
   },
   {
     "_id": "17",
@@ -136,7 +136,7 @@ export default {
     "name": "乳酸菌",
     "price": 600.0,
     "category": 4.0,
-    "stock": 9999
+
   },
   {
     "_id": "18",
@@ -145,7 +145,7 @@ export default {
     "name": "玉米",
     "price": 300.0,
     "category": 5.0,
-    "stock": 9999
+
   },
   {
     "_id": "19",
@@ -154,7 +154,7 @@ export default {
     "name": "紫薯",
     "price": 300.0,
     "category": 5.0,
-    "stock": 9999
+
   },
   {
     "_id": "20",
@@ -163,7 +163,7 @@ export default {
     "name": "红薯",
     "price": 500.0,
     "category": 5.0,
-    "stock": 9999
+
   },
   {
     "_id": "21",
@@ -173,7 +173,7 @@ export default {
     "price": 200.0,
     "category": 6.0,
 
-    "stock": 9999
+
   },
   {
     "_id": "22",
@@ -183,7 +183,7 @@ export default {
     "price": 300.0,
     "category": 6.0,
 
-    "stock": 9999
+
   },
   {
     "_id": "23",
@@ -193,7 +193,7 @@ export default {
     "price": 300.0,
     "category": 6.0,
 
-    "stock": 9999
+
   },
   ]
 }

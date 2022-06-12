@@ -33,6 +33,7 @@ const ajax = {
           ...params
         },
         success(res) {
+          console.log(res)
           if (res.result.success) {
             resolve(res.result.data)
           } else {
@@ -46,6 +47,7 @@ const ajax = {
           }
         },
         fail(error) {
+          console.log(error)
           reject(error)
         },
         complete() {

@@ -41,16 +41,13 @@ exports.main = async (event, context) => {
           res = res.map(item => item.data) // 商品信息列表
           // 校验套餐中的商品是否都取到了
           if (res.every(item => item)) {
-            // let stock = Infinity // 取商品列表里库存最小的 作为套餐库存
-            // stock = Math.min.apply(this, res.map(item => item.stock))
             await transaction.collection('package').add({
               data: {
-                // stock,
-                // amount,
-                image: package.image, // 套餐图片
                 name: package.name, // 套餐名称
                 desc: package.desc, // 套餐描述
-                price: +package.price, // 套餐价格
+                image: package.image, // 套餐图片
+                amount: +package.amount, // 套餐成本价
+                price: +package.price, // 套餐按周预约价格
                 oldPrice: +package.oldPrice, // 套餐原价
                 products: package.products, // 套餐商品组合
                 onSale: false, // 是否上架

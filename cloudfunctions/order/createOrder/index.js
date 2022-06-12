@@ -1,6 +1,9 @@
 const cloud = require('wx-server-sdk');
 const moment = require('moment')
 const {
+  PA_ORDER_STATUS
+} = require('../const')
+const {
   uuid
 } = require('../util')
 
@@ -86,7 +89,7 @@ exports.main = async (event, context) => {
         if (packageRes.every(item => item.store === storeId)) {
           // 如果一致 获取店铺信息
           let storeRes = await db.collection('store').doc(storeId).get()
-          storeRes = storeRes.data || {}
+          storeRes = storeRes.data
           // 是否已下架
           const onSale = packageRes.every(item => item.onSale)
           if (onSale) {
@@ -98,7 +101,7 @@ exports.main = async (event, context) => {
             if (price === amount) {
               // 排序
               packages = packages.map(item => {
-                const day = moment(item.date).day()
+                const day = moment(item.date).day() // TODO 不按星期排序
                 return {
                   ...item,
                   day,
@@ -107,7 +110,7 @@ exports.main = async (event, context) => {
               }).sort((a, b) => {
                 return a.day - b.day
               })
-              let body = `${storeRes.name}--`
+              let body = `${storeRes.name}：`
               body += packages.map(item => item.dayStr).join('、')
               body += '套餐组合'
               // 获取套餐内商品快照
@@ -129,25 +132,12 @@ exports.main = async (event, context) => {
                 }
               }
               try {
-                const wxTransaction = await db.startTransaction()
-                // 生成父单号
+                // 将套餐快照保存至packages
+                for (let i = 0; i < length; i++) {
+                  packages[i].detail = packageRes[i]
+                }
+                // 生成微信父订单号
                 const outTradeNo = uuid()
-                // 生成 微信总订单 到数据库
-                await wxTransaction.collection('wx-order').add({
-                  data: {
-                    _id: outTradeNo, // 商户订单号
-                    creator: OPENID, // 创建者
-                    phone, // 下单人手机号
-                    store: storeId, // 门店id
-                    price, // 价格
-                    orders: [], // 子订单号数组
-                    product: packageRes, // 订单商品
-                    createTime: db.serverDate(), // 创建时间
-                    status: 0 // 0 创建中 1 创建成功 2 创建失败 3支付成功 4 支付失败
-                  }
-                })
-                await wxTransaction.commit()
-
                 // 调用微信统一下单
                 const res = await cloud.cloudPay.unifiedOrder({
                   body, // 商品名称
@@ -158,64 +148,44 @@ exports.main = async (event, context) => {
                   envId: 'cloud1-3g1ptrnzda536c06', // 云函数环境id
                   functionName: "pay_cb" // 支付回调 云函数name
                 })
-                // 下单后开起另一个事务 更新父订单 生成子订单
-                const transaction = await db.startTransaction()
                 if (res.returnCode === 'SUCCESS' && res.resultCode === 'SUCCESS') {
-                  // 更新父订单状态
-                  await transaction.collection('wx-order').doc(outTradeNo).update({
+                  // 开启事务
+                  const transaction = await db.startTransaction()
+                  // 生成 微信总订单 到数据库
+                  await transaction.collection('wx-order').add({
                     data: {
-                      status: 1, // 0 创建中 1 创建成功 2 创建失败 3支付成功 4 支付失败
-                      createResult: res // 微信订单 创建成功信息
-                    }
-                  })
-                  // 拆分订单
-                  for (let i = 0; i < length; i++) {
-                    let package = packageRes[i]
-                    const orderNo = uuid() // uuid 作为子订单号
-                    await transaction.collection('order').add({
-                      data: {
-                        _id: orderNo, // 子订单号
-                        distributeDate: moment(packages[i].date).toDate(), // 配送日期
-                        outTradeNo, // 父订单号
-                        creator: OPENID, // 创建者
+                      _id: outTradeNo, // 商户订单号
+                      orders: [], // 子订单号数组
+                      createTime: db.serverDate(), // 创建时间
+                      orderStatus: PA_ORDER_STATUS.CREATE_SUCCESS, // 已创建状态
+                      createResult: res, // 微信订单 创建成功信息
+                      product: packages, // 订单商品快照
+                      orderAmount: price, // 订单金额
+                      // 用户信息
+                      userInfo: {
+                        openId: OPENID, // 用户openid
                         phone, // 下单人手机号
-                        store: storeId, // 门店号
-                        createTime: db.serverDate(), // 创建时间
-                        status: 0, // 0 待支付 1 支付成功 2 支付失败 3 已取消 4 退款中 5 退款成功 6 退款失败
-                        distributeStatus: 0, // 0 待配送 1 已配送
-                        product: package, // 套餐信息
                       },
-                    })
-                    // 往父订单追加子订单信息
-                    await transaction.collection('wx-order').doc(outTradeNo).update({
-                      data: {
-                        orders: _.push([orderNo])
-                      }
-                    })
-                    if (i === length - 1) {
-                      await transaction.commit()
-                      return {
-                        success: true,
-                        data: {
-                          ...res.payment
-                        }
-                      }
-                    }
-                  }
-                } else {
-                  await transaction.collection('wx-order').where({
-                    outTradeNo
-                  }).update({
-                    data: {
-                      status: 2, // 0 创建中 1 创建成功 2 创建失败 3支付成功 4 支付失败
-                      createResult: res
+                      // 门店信息
+                      storeInfo: {
+                        storeId, // 门店Id
+                        storeName: storeRes.name
+                      },
                     }
                   })
                   await transaction.commit()
                   return {
+                    success: true,
+                    data: {
+                      ...res.payment
+                    }
+                  }
+                } else {
+                  console.log(res)
+                  return {
                     success: false,
                     error: {
-                      message: `微信订单创建失败，${res.returnMsg}`
+                      message: `订单创建失败`
                     }
                   }
                 }
