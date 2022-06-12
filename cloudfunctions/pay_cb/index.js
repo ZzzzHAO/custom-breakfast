@@ -39,7 +39,8 @@ exports.main = async (event, context) => {
   await transaction.collection('wx-order').doc(outTradeNo).update({
     data: {
       status: wxStatus, // 支付状态翻转
-      payResult: event
+      payResult: event, // 支付结果
+      payTime: db.serverDate() // 支付时间
     }
   })
   await transaction.commit()

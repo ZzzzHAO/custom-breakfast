@@ -1,6 +1,6 @@
 // pages/home/index.js
 import ajax from '../../common/ajax'
-import { px2rpx, rpx2px } from '../../common/util'
+import { px2rpx } from '../../common/util'
 const moment = require('moment')
 const DAY_ENUM = {
   1: '周一',
@@ -68,7 +68,6 @@ Page({
   // 获取banner
   getBanner() {
     ajax.request('config/banner/getBanner').then(res => {
-      console.log(res)
       this.setData({
         banner: res.banner
       })
@@ -98,7 +97,6 @@ Page({
   },
   // 下啦刷新
   async refresh(e) {
-    console.log(e)
     const tabId = e.currentTarget.dataset.id;
     const refreshTab = this.data.tabs.find((tab) => tab.id === tabId);
     if (!refreshTab.refresh) {
@@ -133,7 +131,6 @@ Page({
   },
   tabChange(e) {
     const tabId = e.detail.name;
-    console.log(33333)
     // 设为当前tab
     this.setData({
       currentTab: tabId,
@@ -153,7 +150,6 @@ Page({
       })
     }
     if (tabId === 1) {
-      console.log(4444)
       this.setData({
         isLoading: true,
         amountStr: '', // 文案清空
@@ -164,7 +160,6 @@ Page({
         packages,
       })
     } else if (tabId === 2) {
-      console.log(55555)
       this.setData({
         isLoading: true,
         amountStr: '', // 文案清空
@@ -192,7 +187,6 @@ Page({
           amount += packages[i].price
         }
         const amountStr = `    ${amount / 100}元`
-        console.log(222222)
         this.setData({
           weekPackages: dateArr,
           weekAmount: amount,
@@ -232,7 +226,6 @@ Page({
   check(e) {
     const checkedItem = e.currentTarget.dataset.package
     const amountStr = `    ${checkedItem.price / 100}元`
-    console.log('111111111')
     this.setData({
       checkedItem,
       singleAmountStr: amountStr,
@@ -292,7 +285,6 @@ Page({
       success(res) {
         params.ip = res.localip // ip地址
         ajax.request('order/createOrder', params).then(res => {
-          console.log(res)
           wx.requestPayment({
             ...res,
             success(res) {
