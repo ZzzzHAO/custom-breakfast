@@ -74,23 +74,19 @@ exports.main = async (event, context) => {
       // 查找套餐信息
       const tasks = [] // 查询商品信息任务队列
       packages.forEach(item => {
-        const promise = db.collection('package').where({
-          _id: item.id
-        }).get()
+        const promise = db.collection('package').doc(item.id).get()
         tasks.push(promise)
       })
       let packageRes = await Promise.all(tasks)
-      packageRes = packageRes.map(item => item.data[0]) // 商品信息列表
+      packageRes = packageRes.map(item => item.data) // 商品信息列表
       // 是否都找到
       if (packageRes.every(item => item)) {
         const storeId = packageRes[0].store // 门店号
         // 所有套餐是否属于同一家store
         if (packageRes.every(item => item.store === storeId)) {
           // 如果一致 获取店铺信息
-          let storeRes = await db.collection('store').where({
-            _id: storeId
-          }).get()
-          storeRes = (storeRes.data && storeRes.data[0]) || {}
+          let storeRes = await db.collection('store').doc(storeId).get()
+          storeRes = storeRes.data || {}
           // 是否已下架
           const onSale = packageRes.every(item => item.onSale)
           if (onSale) {
@@ -114,6 +110,24 @@ exports.main = async (event, context) => {
               let body = `${storeRes.name}--`
               body += packages.map(item => item.dayStr).join('、')
               body += '套餐组合'
+              // 获取套餐内商品快照
+              packageRes = await cloud.callFunction({
+                name: 'product',
+                data: {
+                  _path: 'getProductDetailByPackage',
+                  packages: packageRes
+                }
+              })
+              if (packageRes.result.success) {
+                packageRes = packageRes.result.data.packages
+              } else {
+                return {
+                  success: false,
+                  error: {
+                    message: '查找商品信息出错'
+                  }
+                }
+              }
               try {
                 const wxTransaction = await db.startTransaction()
                 // 生成父单号
@@ -129,7 +143,7 @@ exports.main = async (event, context) => {
                     orders: [], // 子订单号数组
                     product: packageRes, // 订单商品
                     createTime: db.serverDate(), // 创建时间
-                    status: 0 // 0 创建中 1 创建成功 2 创建失败 3
+                    status: 0 // 0 创建中 1 创建成功 2 创建失败 3支付成功 4 支付失败
                   }
                 })
                 await wxTransaction.commit()
@@ -144,31 +158,19 @@ exports.main = async (event, context) => {
                   envId: 'cloud1-3g1ptrnzda536c06', // 云函数环境id
                   functionName: "pay_cb" // 支付回调 云函数name
                 })
-
                 // 下单后开起另一个事务 更新父订单 生成子订单
                 const transaction = await db.startTransaction()
                 if (res.returnCode === 'SUCCESS' && res.resultCode === 'SUCCESS') {
                   // 更新父订单状态
-                  await transaction.collection('wx-order').where({
-                    _id: outTradeNo
-                  }).update({
+                  await transaction.collection('wx-order').doc(outTradeNo).update({
                     data: {
-                      status: 1, // 0 创建中 1 创建成功 2 创建失败
-                      result: res // 微信订单 创建成功信息
+                      status: 1, // 0 创建中 1 创建成功 2 创建失败 3支付成功 4 支付失败
+                      createResult: res // 微信订单 创建成功信息
                     }
                   })
                   // 拆分订单
                   for (let i = 0; i < length; i++) {
                     let package = packageRes[i]
-                    // 获取套餐内商品快照
-                    package = await cloud.callFunction({
-                      name: 'product',
-                      data: {
-                        _path: 'getProductDetailByPackage',
-                        package
-                      }
-                    })
-                    package = package.result.data
                     const orderNo = uuid() // uuid 作为子订单号
                     await transaction.collection('order').add({
                       data: {
@@ -185,9 +187,7 @@ exports.main = async (event, context) => {
                       },
                     })
                     // 往父订单追加子订单信息
-                    await transaction.collection('wx-order').where({
-                      _id: outTradeNo
-                    }).update({
+                    await transaction.collection('wx-order').doc(outTradeNo).update({
                       data: {
                         orders: _.push([orderNo])
                       }
@@ -207,8 +207,8 @@ exports.main = async (event, context) => {
                     outTradeNo
                   }).update({
                     data: {
-                      status: 2, // 0 创建中 1 创建成功 2 创建失败
-                      result: res
+                      status: 2, // 0 创建中 1 创建成功 2 创建失败 3支付成功 4 支付失败
+                      createResult: res
                     }
                   })
                   await transaction.commit()

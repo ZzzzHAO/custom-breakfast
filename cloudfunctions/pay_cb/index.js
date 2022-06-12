@@ -16,8 +16,10 @@ exports.main = async (event, context) => {
     returnCode
   } = event
   let status = 2 // 支付失败
+  let wxStatus = 4 // 支付失败
   if (returnCode === 'SUCCESS' && resultCode === 'SUCCESS') {
     status = 1 // 支付成功
+    wxStatus = 3 // 支付成功
     await cloud.callFunction({
       name: 'product',
       data: {
@@ -31,8 +33,13 @@ exports.main = async (event, context) => {
     outTradeNo
   }).update({
     data: {
-      status, // 支付状态翻转
-      result: event
+      status // 支付状态翻转
+    }
+  })
+  await transaction.collection('wx-order').doc(outTradeNo).update({
+    data: {
+      status: wxStatus, // 支付状态翻转
+      payResult: event
     }
   })
   await transaction.commit()

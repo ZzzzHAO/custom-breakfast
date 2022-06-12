@@ -25,9 +25,7 @@ exports.main = async (event, context) => {
         const transaction = await db.startTransaction()
         for (let index = 0; index < length; index++) {
           const item = products[index]
-          await transaction.collection('product').where({
-            _id: item
-          }).update({
+          await transaction.collection('product').doc(item).update({
             data: {
               onSale // 默认不上架
             }

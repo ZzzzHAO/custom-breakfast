@@ -20,41 +20,41 @@ exports.main = async (event, context) => {
       .limit(pageSize) // 限制返回数量为 10 条
       .get()
     packageRes = packageRes.data
-    console.log(packageRes)
     packageRes = packageRes.filter(item => item.onSale)
-    console.log(packageRes)
-    const tasks = []
     if (packageRes.length) {
-      for (let i = 0; i < packageRes.length; i++) {
-        let package = packageRes[i]
-        const promise = getProductDetailByPackage.main({ package })
-        tasks.push(promise)
-      }
-      let result = await Promise.all(tasks)
-      result = result.map(item => item.data)
-      result = result.map(item => {
+      // 获取套餐商品详细信息
+      let result = await getProductDetailByPackage.main({ packages: packageRes })
+      if (result.success) {
+        let packages = result.data.packages
+        packages = packages.map(item => {
+          return {
+            ...item,
+            products: item.products.map(p => {
+              return {
+                id: p.id,
+                count: p.count,
+                name: p.detail.name
+              }
+            })
+          }
+        })
         return {
-          ...item,
-          products: item.products.map(p => {
-            return {
-              id: p.id,
-              count: p.count,
-              name: p.detail.name
-            }
-          })
+          success: true,
+          data: {
+            packageList: packages
+          }
         }
-      })
-      return {
-        success: true,
-        data: {
-          packageList: result
+      } else {
+        return {
+          success: false,
+          error: result.error
         }
       }
     } else {
       return {
-        success: true,
-        data: {
-          packageList: []
+        success: false,
+        error: {
+          message: '未查到门店内套餐'
         }
       }
     }

@@ -28,9 +28,7 @@ exports.main = async (event, context) => {
         const tasks = []
         for (let i = 0; i < products.length; i++) {
           const product = products[i]
-          const promise = transaction.collection('product').where({
-            _id: product.id
-          }).update({
+          const promise = transaction.collection('product').doc(product.id).update({
             data: {
               stock: _.inc(-product.count)
             }

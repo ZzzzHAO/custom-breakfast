@@ -34,13 +34,11 @@ exports.main = async (event, context) => {
           const products = package.products // 套餐商品列表
           const tasks = [] // 查询商品信息任务队列
           products.forEach(item => {
-            const promise = db.collection('product').where({
-              _id: item.id
-            }).get()
+            const promise = db.collection('product').doc(item.id).get()
             tasks.push(promise)
           })
           let res = await Promise.all(tasks)
-          res = res.map(item => item.data[0]) // 商品信息列表
+          res = res.map(item => item.data) // 商品信息列表
           // 校验套餐中的商品是否都取到了
           if (res.every(item => item)) {
             // let stock = Infinity // 取商品列表里库存最小的 作为套餐库存

@@ -12,15 +12,13 @@ exports.main = async (event, context) => {
   } = event
   if (packageId) {
     try {
-      let packageRes = await db.collection('package').where({
-        _id: packageId + ''
-      }).get()
+      let packageRes = await db.collection('package').doc(packageId + '').get()
       packageRes = packageRes.data
-      if (packageRes.length) {
+      if (packageRes) {
         return {
           success: true,
           data: {
-            ...packageRes[0]
+            ...packageRes
           }
         }
       } else {

@@ -12,15 +12,13 @@ exports.main = async (event, context) => {
   } = event
   if (productId) {
     try {
-      let productRes = await db.collection('product').where({
-        _id: productId + ''
-      }).get()
+      let productRes = await db.collection('product').doc(productId + '').get()
       productRes = productRes.data
-      if (productRes.length) {
+      if (productRes) {
         return {
           success: true,
           data: {
-            ...productRes[0]
+            ...productRes
           }
         }
       } else {

@@ -17,21 +17,15 @@ exports.main = async (event, context) => {
       const {
         OPENID
       } = cloud.getWXContext()
-      const productRes = await db.collection('product').where({
-        _id: productId
-      }).get()
-      const product = productRes.data && productRes.data[0]
+      const productRes = await db.collection('product').doc(productId).get()
+      const product = productRes.data
       if (product) {
-        const storeRes = await db.collection('store').where({
-          _id: product.store
-        }).get()
-        const store = storeRes.data && storeRes.data[0]
+        const storeRes = await db.collection('store').doc(product.store).get()
+        const store = storeRes.data
         // 是否是店主
         if (store.creator === OPENID) {
           const transaction = await db.startTransaction()
-          await transaction.collection('product').where({
-            _id: productId
-          }).update({
+          await transaction.collection('product').doc(productId).update({
             data: {
               amount: +updteInfo.amount || +product.amount,
               image: updteInfo.image || product.image,

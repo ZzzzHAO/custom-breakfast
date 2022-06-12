@@ -26,9 +26,7 @@ exports.main = async (event, context) => {
         // TODO:需要校验 商品是否都是上架状态
         for (let index = 0; index < length; index++) {
           const item = packages[index]
-          await transaction.collection('package').where({
-            _id: item
-          }).update({
+          await transaction.collection('package').doc(item).update({
             data: {
               onSale // 默认不上架
             }
