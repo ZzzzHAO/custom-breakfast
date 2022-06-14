@@ -23,7 +23,7 @@ exports.main = async (event, context) => {
               jumpUrl: item.jumpUrl,
               validateTiem: item.validateTiem,
               createTime: db.serverDate(),
-              creator: cloud.getWXContext().OPENID
+              _openid: cloud.getWXContext().OPENID
             }
           })
           if (i === banner.length - 1) {

@@ -37,7 +37,8 @@ Page({
     checkedItem: {}, // 清空勾选项
     weekPackages: [], // 清空周套餐数组
     weekAmount: 0, // 周套餐价格
-    scrollEnable: false,
+    scrollEnable: false, // 是否可滚动
+    popupStyle: '' // 菜单样式
   },
 
   /**
@@ -52,6 +53,8 @@ Page({
     this.setData({
       scrollStyle: `height: calc(100vh - ${bannerHeight} - ${tabsHeight} - ${headerHeight} - ${safeHeight})`,
       wrapStyle: `padding-top: ${headerHeight}`,
+      popupStyle: `position: fixed;height: calc(100vh - ${headerHeight});top: ${headerHeight};width: 60vw;transform: translate3d(0,0,0);;background-color:#fff;border-top:1px solid #ddd`,
+      overlayStyle: `position: fixed;height: calc(100vh - ${headerHeight});top: ${headerHeight};`
     });
     setTimeout(() => {
       this.setData({

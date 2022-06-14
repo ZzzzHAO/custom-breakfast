@@ -18,7 +18,7 @@ exports.main = async (event, context) => {
         OPENID
       } = cloud.getWXContext()
       let storeRes = await db.collection('store').where({
-        creator: OPENID,
+        _openid: OPENID,
       }).get()
       storeRes = storeRes.data && storeRes.data[0]
       if (storeRes) {

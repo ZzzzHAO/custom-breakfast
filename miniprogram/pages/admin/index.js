@@ -16,7 +16,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    this.getUser()
+    this.getPakcage()
+  },
+  async getPakcage() {
+    const db = wx.cloud.database()
+    const res = await db.collection('banner').doc('6842667962a6b79f05a5839b6d2836a3').get()
+    console.log(res)
   },
   uploadBanner(e) {
     ajax.request('config/banner/setBanner', {

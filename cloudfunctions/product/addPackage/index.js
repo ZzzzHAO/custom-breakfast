@@ -21,7 +21,7 @@ exports.main = async (event, context) => {
       } = cloud.getWXContext()
       // 只有门店拥有者才能上传套餐
       let storeRes = await db.collection('store').where({
-        creator: OPENID,
+        _openid: OPENID,
       }).get()
       storeRes = storeRes.data && storeRes.data[0]
       if (storeRes) {
@@ -53,7 +53,7 @@ exports.main = async (event, context) => {
                 onSale: false, // 是否上架
                 createTime: db.serverDate(), // 录入时间
                 store: storeId, // 门店id
-                creator: OPENID // 上架者
+                _openid: OPENID // 上架者
               }
             })
             if (index === packages.length - 1) {

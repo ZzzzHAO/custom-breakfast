@@ -44,24 +44,20 @@ exports.main = async (event, context) => {
             })
           }
           const tasks = [] // package 销量更新任务队列
-          let products = []
           for (let i = 0; i < length; i++) {
             // package 销量更新
             const package = packages[i] // package: .id .date .detail
             tasks.push(createPackagePromise.bind(this, package))
-            // package套餐内所有的商品 销量更新
-            products = package.detail.products.reduce((acc, cur) => {
+            const products = package.detail.products.reduce((acc, cur) => {
               return acc.concat(cur)
-            }, products)
+            }, [])
+            products.forEach(item => {
+              const product = item // product .id .count .detail
+              tasks.push(createProductPromise.bind(this, product))
+            })
           }
-          const packageRes = await runPromiseByQueue(tasks) // 先等package更新
-          const jobs = []
-          products.forEach(item => {
-            const product = item // product .id .count .detail
-            jobs.push(createProductPromise.bind(this, product))
-          })
-          const productRes = await runPromiseByQueue(jobs) // 先等package更新
-          if (packageRes.success && productRes.success) {
+          const res = await runPromiseByQueue(tasks) // 先等package更新
+          if (res.success) {
             await transaction.commit()
             return {
               success: true,

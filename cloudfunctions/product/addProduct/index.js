@@ -19,7 +19,7 @@ exports.main = async (event, context) => {
       } = cloud.getWXContext()
       // 只有门店拥有者才能上传商品
       let storeRes = await db.collection('store').where({
-        creator: OPENID,
+        _openid: OPENID,
       }).get()
       storeRes = storeRes.data && storeRes.data[0]
       if (storeRes) {
@@ -37,7 +37,7 @@ exports.main = async (event, context) => {
               onSale: false, // 默认不上架
               createTime: db.serverDate(), // 创建时间
               store: storeId, // 门店id
-              creator: OPENID // 创建者
+              _openid: OPENID // 创建者
             }
           })
           if (index === length - 1) {

@@ -23,7 +23,7 @@ exports.main = async (event, context) => {
         const storeRes = await db.collection('store').doc(product.store).get()
         const store = storeRes.data
         // 是否是店主
-        if (store.creator === OPENID) {
+        if (store._openid === OPENID) {
           const transaction = await db.startTransaction()
           await transaction.collection('product').doc(productId).update({
             data: {

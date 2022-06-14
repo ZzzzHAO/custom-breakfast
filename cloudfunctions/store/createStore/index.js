@@ -65,7 +65,7 @@ exports.main = async (event, context) => {
     await transaction.collection('store').add({
       data: {
         _id: storeId,
-        creator: OPENID,
+        _openid: OPENID,
         createTime: db.serverDate(),
         manager: [OPENID],
         name,
