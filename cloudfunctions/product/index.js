@@ -12,6 +12,7 @@ const switchPackageSaleStatus = require('./switchPackageSaleStatus/index')
 const updateProduct = require('./updateProduct/index')
 const updateSales = require('./updateSales/index')
 const getProductDetailByPackage = require('./getProductDetailByPackage/index')
+const getPackageSales = require('./getPackageSales/index')
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -42,6 +43,8 @@ exports.main = async (event, context) => {
       return await updateSales.main(event, context);
     case 'getProductDetailByPackage':
       return await getProductDetailByPackage.main(event, context);
+    case 'getPackageSales':
+      return await getPackageSales.main(event, context);
     default:
       return {
         success: false,

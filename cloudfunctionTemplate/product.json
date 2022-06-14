@@ -20,5 +20,12 @@
       "pageNo": 3,
       "pageSize": 2
     }
+  },
+  {
+    "name": "查询套餐销量",
+    "value": {
+      "_path": "getPackageSales",
+      "packageId": "ca780ad562a4743006daa0e84c332b31"
+    }
   }
 ]
