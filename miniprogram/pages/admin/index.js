@@ -225,5 +225,10 @@ Page({
         isNewCustomer
       })
     })
+  },
+  getOrderList(e) {
+    ajax.request('order/getOrderList', { pageNo: 1, pageSize: 10 }).then(res => {
+      console.log(res)
+    })
   }
 })

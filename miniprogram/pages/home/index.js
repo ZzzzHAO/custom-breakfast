@@ -53,8 +53,9 @@ Page({
     this.setData({
       scrollStyle: `height: calc(100vh - ${bannerHeight} - ${tabsHeight} - ${headerHeight} - ${safeHeight})`,
       wrapStyle: `padding-top: ${headerHeight}`,
-      popupStyle: `position: fixed;height: calc(100vh - ${headerHeight});top: ${headerHeight};width: 60vw;transform: translate3d(0,0,0);;background-color:#fff;border-top:1px solid #ddd`,
-      overlayStyle: `position: fixed;height: calc(100vh - ${headerHeight});top: ${headerHeight};`
+      popupStyle: `height:100%;width: 60vw;background-color:#ff`,
+      overlayStyle: `position: fixed;height: calc(100vh - ${headerHeight});top: ${headerHeight};over-folow:hidden`,
+      wrapStyle: `position: fixed;height: calc(100vh - ${headerHeight});top: ${headerHeight};width: 100vw;background-color:red;`
     });
     setTimeout(() => {
       this.setData({

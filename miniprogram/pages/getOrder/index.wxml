@@ -1,0 +1,5 @@
+<!--pages/queryOrder/index.wxml-->
+<view class="get-order-wrap">
+  <input class="input" bindinput="input" type="text" />
+  <button bindtap="getOrder">查询</button>
+</view>

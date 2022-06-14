@@ -1,6 +1,9 @@
 // 云函数入口文件
 const createOrder = require('./createOrder/index')
 const splitOrder = require('./splitOrder/index')
+const getOrderList = require('./getOrderList/index')
+const getOrderDetail = require('./getOrderDetail/index')
+const getOrderBySeq = require('./getOrderBySeq/index')
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -9,6 +12,12 @@ exports.main = async (event, context) => {
       return await createOrder.main(event, context);
     case 'splitOrder':
       return await splitOrder.main(event, context);
+    case 'getOrderList':
+      return await getOrderList.main(event, context);
+    case 'getOrderDetail':
+      return await getOrderDetail.main(event, context);
+    case 'getOrderBySeq':
+      return await getOrderBySeq.main(event, context);
     default:
       return {
         success: false,
