@@ -259,7 +259,7 @@ Page({
           id: checkedItem._id,
           date: moment(new Date()).add(1, 'd').format('YYYY-MM-DD')
         }]
-        params.amount = checkedItem.price
+        params.amount = checkedItem.oldPrice
       } else {
         wx.showToast({
           title: '请选择套餐',

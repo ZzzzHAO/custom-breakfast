@@ -9,11 +9,13 @@ const PA_ORDER_STATUS = {
   DEAL_DONE: 8 // 交易完成 
 }
 const CH_ORDER_STATUS = {
-  PAY_SUCCESS: 1, // 已支付
-  REFUND_ING: 2, // 退款中
-  REFUND_SUCCESS: 3, // 退款成功
-  REFUND_FAIL: 4, // 退款失败
-  DEAL_DONE: 5 // 交易完成 
+  CREATE_SUCCESS: 1, // 已创建
+  PAY_SUCCESS: 2, // 支付成功
+  PAY_FAIL: 3, // 支付失败
+  REFUND_ING: 4, // 退款中
+  REFUND_SUCCESS: 5, // 退款成功
+  REFUND_FAIL: 6, // 退款失败
+  DEAL_DONE: 7 // 交易完成 
 }
 
 const DISTRIBUTE_STATUS = {

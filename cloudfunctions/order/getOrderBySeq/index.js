@@ -20,7 +20,7 @@ exports.main = async (event, context) => {
     if (storeRes && storeRes.store && storeRes.store.length) {
       let orderRes = await db.collection('order').where({
         seq,
-        distributeDate: _.and(_.gt(moment(new Date('2022/06/20')).startOf('day').toDate()), _.lt(moment(new Date('2022/06/20')).endOf('day').toDate())),
+        distributeDate: _.and(_.gt(moment(db.serverDate()).startOf('day').toDate()), _.lt(moment(new Date(db.serverDate())).endOf('day').toDate())),
         'storeInfo.storeId': storeRes.store[0]
       }).get()
       orderRes = orderRes.data
@@ -33,14 +33,10 @@ exports.main = async (event, context) => {
                 orderNo: item._id, // 订单号
                 name: item.product.name,
                 product: item.product.products.map(v => {
-                  // return {
-                  //   products: v.products.map(p => {
                   return {
                     name: v.detail.name,
                     count: v.count
                   }
-                  //   })
-                  // }
                 }), // 订单商品
                 phone: item.userInfo.phone, // 消费者手机号
                 status: item.status, // 订单状态

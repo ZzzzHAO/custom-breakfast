@@ -16,12 +16,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    this.getPakcage()
-  },
-  async getPakcage() {
-    const db = wx.cloud.database()
-    const res = await db.collection('banner').doc('6842667962a6b79f05a5839b6d2836a3').get()
-    console.log(res)
+    ajax.request('order/getOrderDetail', {}).then(res => {
+      console.log(res)
+    })
   },
   uploadBanner(e) {
     ajax.request('config/banner/setBanner', {
@@ -227,7 +224,10 @@ Page({
     })
   },
   getOrderList(e) {
-    ajax.request('order/getOrderList', { pageNo: 1, pageSize: 10 }).then(res => {
+    ajax.request('order/getOrderList', {
+      pageNo: 1,
+      pageSize: 10
+    }).then(res => {
       console.log(res)
     })
   }

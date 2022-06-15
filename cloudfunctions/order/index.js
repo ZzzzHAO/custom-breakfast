@@ -1,6 +1,5 @@
 // 云函数入口文件
 const createOrder = require('./createOrder/index')
-const splitOrder = require('./splitOrder/index')
 const getOrderList = require('./getOrderList/index')
 const getOrderDetail = require('./getOrderDetail/index')
 const getOrderBySeq = require('./getOrderBySeq/index')
@@ -10,8 +9,6 @@ exports.main = async (event, context) => {
   switch (event._path) {
     case 'createOrder':
       return await createOrder.main(event, context);
-    case 'splitOrder':
-      return await splitOrder.main(event, context);
     case 'getOrderList':
       return await getOrderList.main(event, context);
     case 'getOrderDetail':
