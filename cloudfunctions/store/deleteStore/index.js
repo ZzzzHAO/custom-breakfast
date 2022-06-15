@@ -20,7 +20,7 @@ exports.main = async (event, context) => {
         OPENID
       } = cloud.getWXContext()
       let userRes = await db.collection('user').where({
-        openId: OPENID
+        _openid: OPENID
       }).get()
       userRes = userRes.data && userRes.data[0]
       // 只有管理员可以删除门店

@@ -78,7 +78,7 @@
         </view>
       </scroll-view>
       <button class="btn" wx:if="{{isNewCustomer}}" open-type="getPhoneNumber" bindgetphonenumber="pay">立即购买{{amountStr}}</button>
-      <button class="btn" wx:else bindtap="pay">立即购买{{amountStr}}</button>
+      <button class="btn" wx:else bindtap="pay">立即预约{{amountStr}}</button>
     </van-tab>
   </van-tabs>
 </view>

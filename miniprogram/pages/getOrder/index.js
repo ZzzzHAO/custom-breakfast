@@ -21,7 +21,7 @@ Page({
     })
   },
   getOrder(e) {
-    ajax.request('order/getOrderBySeq', {
+    ajax.request('order/getOrderByCode', {
       seq: this.data.seq
     }).then(res => {
       console.log(res)

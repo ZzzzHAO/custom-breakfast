@@ -73,7 +73,7 @@ exports.main = async (event, context) => {
     let phone = '' // 用户手机号
     // 获取用户信息
     let userRes = await db.collection('user').where({
-      openId: OPENID
+      _openid: OPENID
     }).get()
     userRes = userRes.data && userRes.data[0]
     if (userRes) {
@@ -92,7 +92,7 @@ exports.main = async (event, context) => {
           data: {
             _path: 'createUser',
             phone,
-            openId: OPENID
+            openid: OPENID
           }
         })
       } else {
@@ -185,7 +185,7 @@ exports.main = async (event, context) => {
                 // 开启事务
                 const transaction = await db.startTransaction()
                 const userInfo = {
-                  openId: OPENID, // 用户openid
+                  openid: OPENID, // 用户openid
                   phone, // 下单人手机号
                 }
                 const storeInfo = {
@@ -225,8 +225,7 @@ exports.main = async (event, context) => {
                     createTime: db.serverDate(), // 创建时间
                     orderStatus: PA_ORDER_STATUS.CREATE_SUCCESS, // 已创建状态
                     createResult: res, // 微信订单 创建成功信息
-                    product: packages, // 订单商品快照
-                    orderAmount: price, // 订单金额
+                    orderAmount: price, // 支付金额
                     // 用户信息
                     userInfo,
                     // 门店信息

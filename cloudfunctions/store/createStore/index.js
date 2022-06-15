@@ -77,7 +77,9 @@ exports.main = async (event, context) => {
         closeTime
       }
     })
-    await transaction.collection('user').doc(OPENID).update({
+    await transaction.collection('user').where({
+      _openid: OPENID
+    }).update({
       data: {
         store: _.push([storeId])
       }

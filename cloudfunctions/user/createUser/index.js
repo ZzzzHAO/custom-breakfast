@@ -18,7 +18,7 @@ exports.main = async (event, context) => {
     let userRes = await db.collection('user').where({
       _openid: openid
     }).get()
-    userRes = userRes.data
+    userRes = userRes.data && userRes.data[0]
     if (!userRes) {
       await db.collection('user').add({
         data: {

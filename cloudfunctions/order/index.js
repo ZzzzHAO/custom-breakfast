@@ -2,7 +2,7 @@
 const createOrder = require('./createOrder/index')
 const getOrderList = require('./getOrderList/index')
 const getOrderDetail = require('./getOrderDetail/index')
-const getOrderBySeq = require('./getOrderBySeq/index')
+const getOrderByCode = require('./getOrderByCode/index')
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -13,8 +13,8 @@ exports.main = async (event, context) => {
       return await getOrderList.main(event, context);
     case 'getOrderDetail':
       return await getOrderDetail.main(event, context);
-    case 'getOrderBySeq':
-      return await getOrderBySeq.main(event, context);
+    case 'getOrderByCode':
+      return await getOrderByCode.main(event, context);
     default:
       return {
         success: false,

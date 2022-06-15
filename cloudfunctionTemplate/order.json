@@ -1,0 +1,9 @@
+[
+  {
+    "name": "查询订单详情",
+    "value": {
+      "_path": "getOrderDetail",
+      "orderNo": "f55ac67c06434e529d9e8c0af57ff357"
+    }
+  }
+]

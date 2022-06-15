@@ -1,5 +1,4 @@
 const cloud = require('wx-server-sdk');
-const moment = require('moment')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV

@@ -12,18 +12,21 @@ const _ = db.command
 // 通过取餐码获取订单信息
 exports.main = async (event, context) => {
   const {
-    seq
+    code
   } = event
   try {
+    // 现查找当前门店
     let storeRes = await db.collection('user').where({
       _openid: cloud.getWXContext().OPENID
     }).get()
     storeRes = storeRes.data && storeRes.data[0]
-    if (storeRes && storeRes.store && storeRes.store.length) {
+    if (storeRes) {
       let orderRes = await db.collection('order').where({
-        seq,
+        code,
         distributeDate: _.and(_.gt(moment(db.serverDate()).startOf('day').toDate()), _.lt(moment(new Date(db.serverDate())).endOf('day').toDate())),
-        'storeInfo.storeId': storeRes.store[0]
+        storeInfo: {
+          storeId: storeRes._id,
+        }
       }).get()
       orderRes = orderRes.data
       if (orderRes.length) {
@@ -33,7 +36,7 @@ exports.main = async (event, context) => {
             orderList: orderRes.map(item => {
               return {
                 orderNo: item._id, // 订单号
-                name: item.product.name,
+                name: item.product.name, // 套餐名称
                 product: item.product.products.map(v => {
                   return {
                     name: v.detail.name,
@@ -41,7 +44,7 @@ exports.main = async (event, context) => {
                   }
                 }), // 订单商品
                 phone: item.userInfo.phone, // 消费者手机号
-                status: item.status, // 订单状态
+                status: item.orderStatus, // 订单状态
                 distributeStatus: item.distributeStatus, // 配送状态
                 distributeDate: item.distributeDate, // 配送时间
               }
