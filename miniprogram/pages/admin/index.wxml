@@ -1,6 +1,6 @@
 <!--pages/admin/index.wxml-->
 <view class="admin-wrap">
-  <button class="btn" bindtap="getUser">获取用户信息 ✓</button>
+  <button class="btn" bindtap="getUserInfo">获取用户信息 ✓</button>
   <button class="btn" bindtap="uploadBanner">上传banner ✓</button>
   <button class="btn" bindtap="getBanner">获取banner ✓</button>
   <button class="btn" open-type="getPhoneNumber" bindgetphonenumber="createStore">创建门店 ✓</button>

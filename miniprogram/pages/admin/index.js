@@ -212,8 +212,8 @@ Page({
       }
     })
   },
-  getUser(e) {
-    ajax.request('user/getUser').then(res => {
+  getUserInfo(e) {
+    ajax.request('user/getUserInfo').then(res => {
       let isNewCustomer = true
       if (res.userInfo) {
         isNewCustomer = false

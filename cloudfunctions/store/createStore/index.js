@@ -7,7 +7,10 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 });
 
-const db = cloud.database()
+const db = cloud.database({
+  throwOnNotFound: false,
+})
+
 const _ = db.command
 // 创建门店
 exports.main = async (event, context) => {
@@ -26,9 +29,9 @@ exports.main = async (event, context) => {
     let phone = '' // 用户手机号
     // 获取用户信息
     let userRes = await db.collection('user').where({
-      openId: OPENID
+      _openid: OPENID
     }).get()
-    userRes = userRes.data && userRes.data[0]
+    userRes = userRes.data
     if (userRes) {
       phone = userRes.phone
     } else {
@@ -45,7 +48,7 @@ exports.main = async (event, context) => {
           data: {
             _path: 'createUser',
             phone,
-            openId: OPENID
+            openid: OPENID
           }
         })
         if (!result.result.success) {
@@ -64,7 +67,6 @@ exports.main = async (event, context) => {
     const storeId = uuid()
     await transaction.collection('store').add({
       data: {
-        _id: storeId,
         _openid: OPENID,
         createTime: db.serverDate(),
         manager: [OPENID],
@@ -75,9 +77,7 @@ exports.main = async (event, context) => {
         closeTime
       }
     })
-    await transaction.collection('user').where({
-      openId: OPENID
-    }).update({
+    await transaction.collection('user').doc(OPENID).update({
       data: {
         store: _.push([storeId])
       }
@@ -85,7 +85,9 @@ exports.main = async (event, context) => {
     await transaction.commit()
     return {
       success: true,
-      data: {}
+      data: {
+        storeId
+      }
     }
   } catch (error) {
     return {

@@ -4,29 +4,29 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 });
 
-const db = cloud.database()
+const db = cloud.database({
+  throwOnNotFound: false,
+})
 const _ = db.command
 // 删除套餐
 exports.main = async (event, context) => {
   let {
     phone,
-    openId
+    openid
   } = event
   try {
     let userRes = await db.collection('user').where({
-      openId
+      _openid: openid
     }).get()
-    userRes = userRes.data && userRes.data[0]
+    userRes = userRes.data
     if (!userRes) {
-      const transaction = await db.startTransaction()
-      await transaction.collection('user').add({
+      await db.collection('user').add({
         data: {
+          _openid: openid,
           phone,
-          openId,
           createTime: db.serverDate()
         }
       })
-      await transaction.commit()
       return {
         success: true,
         data: {}

@@ -65,7 +65,7 @@ Page({
   },
 
   init() {
-    this.getUser() // 获取用户信息
+    this.getUserInfo() // 获取用户信息
     this.getBanner() // 获取轮播图
     this.renderTab(this.data.currentTab) // 获取套餐列表
   },
@@ -78,8 +78,8 @@ Page({
     })
   },
   // 获取用户信息
-  getUser(e) {
-    ajax.request('user/getUser').then(res => {
+  getUserInfo(e) {
+    ajax.request('user/getUserInfo').then(res => {
       let isNewCustomer = true
       if (res.userInfo) {
         isNewCustomer = false

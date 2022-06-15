@@ -5,7 +5,9 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 });
 
-const db = cloud.database()
+const db = cloud.database({
+  throwOnNotFound: false,
+})
 // 获取商品详情
 exports.main = async (event, context) => {
   const {

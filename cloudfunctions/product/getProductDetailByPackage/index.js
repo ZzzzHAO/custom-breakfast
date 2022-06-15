@@ -4,7 +4,9 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 });
 
-const db = cloud.database()
+const db = cloud.database({
+  throwOnNotFound: false,
+})
 const getProductDetail = async function (package) {
   // 获取套餐内商品
   const products = package.products // 套餐内 具体商品

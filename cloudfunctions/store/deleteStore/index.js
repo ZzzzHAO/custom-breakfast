@@ -4,7 +4,9 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 });
 
-const db = cloud.database()
+const db = cloud.database({
+  throwOnNotFound: false,
+})
 const _ = db.command
 // 删除门店
 exports.main = async (event, context) => {

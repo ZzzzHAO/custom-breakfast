@@ -4,7 +4,9 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 });
 
-const db = cloud.database()
+const db = cloud.database({
+  throwOnNotFound: false,
+})
 // 获取店铺list
 exports.main = async (event, context) => {
   const {

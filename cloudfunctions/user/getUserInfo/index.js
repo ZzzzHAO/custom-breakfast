@@ -4,16 +4,18 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 });
 
-const db = cloud.database()
+const db = cloud.database({
+  throwOnNotFound: false,
+})
 const _ = db.command
 // 获取用户信息
 exports.main = async (event, context) => {
-  const openId = cloud.getWXContext().OPENID;
+  const openid = cloud.getWXContext().OPENID;
   try {
     let userRes = await db.collection('user').where({
-      openId
+      _openid: openid
     }).get()
-    userRes = userRes.data && userRes.data[0]
+    userRes = userRes.data
     return {
       success: true,
       data: {
