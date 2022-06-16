@@ -1,1 +1,40 @@
 /* pages/queryOrder/index.wxss */
+.get-order-wrap {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  .input-wrap {
+    position: relative;
+    width: 600rpx;
+    height: 150rpx;
+    margin: 200rpx auto;
+
+    .input {
+      height: 150rpx;
+      padding: 0 20rpx;
+      background-color: #fff;
+      font-size: 60rpx;
+      font-weight: bold;
+      border-radius: 10rpx;
+    }
+
+    .placeholder {
+      font-weight: normal;
+    }
+
+    .clear {
+      height: 100%;
+      position: absolute;
+      right: 20rpx;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+    }
+  }
+
+  .scroll-wrap {
+    height: calc(100vh - 350rpx);
+  }
+}

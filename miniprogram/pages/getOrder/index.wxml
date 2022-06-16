@@ -1,5 +1,18 @@
 <!--pages/queryOrder/index.wxml-->
 <view class="get-order-wrap">
-  <input class="input" bindinput="input" type="text" />
-  <button bindtap="getOrder">查询</button>
+  <view class="input-wrap">
+    <input class="input" bindinput="input" type="number" placeholder="请输入取餐码" always-embed placeholder-class="placeholder" maxlength="4" focus="{{focus}}" value="{{code}}" />
+    <van-icon bindtap="clear" class="clear" color="#ddd" size="60rpx" name="clear" />
+  </view>
+  <scroll-view class="scroll-wrap">
+    <view class="order-wrap">
+      <view>套餐名称：套餐一</view>
+      <view>订单号：CH2034793827489327</view>
+      <view>配送日期：2022-05-17</view>
+      <view>客户手机号：13248322521</view>
+      <view>订单状态：已支付</view>
+      <view>配送状态：已配送</view>
+      <view>包子*1</view>
+    </view>
+  </scroll-view>
 </view>

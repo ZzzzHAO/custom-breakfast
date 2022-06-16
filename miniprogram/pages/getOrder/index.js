@@ -6,7 +6,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    seq: ''
+    code: '',
+    focus: true
   },
 
   /**
@@ -16,15 +17,25 @@ Page({
 
   },
   input(e) {
-    this.setData({
-      seq: e.detail.value
-    })
+    const {
+      value
+    } = e.detail
+    if (value.length === 4) {
+      this.getOrderByCode(value)
+    }
   },
-  getOrder(e) {
+  getOrderByCode(code) {
     ajax.request('order/getOrderByCode', {
-      seq: this.data.seq
+      code
     }).then(res => {
       console.log(res)
+    })
+  },
+  clear(e) {
+    console.log(e)
+    this.setData({
+      code: '',
+      focus: true
     })
   }
 })
