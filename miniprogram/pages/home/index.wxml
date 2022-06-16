@@ -31,9 +31,8 @@
                   <view class="price-wrap">
                     <view class="price">
                       <text class="symbol">¥</text>
-                      {{item.price/100}}
+                      {{item.oldPrice/100}}
                     </view>
-                    <view wx:if="{{item.oldPrice !== undefined}}" class="old-price">¥{{item.oldPrice/100}}</view>
                   </view>
                 </view>
               </view>

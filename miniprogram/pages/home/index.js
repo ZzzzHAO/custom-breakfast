@@ -226,7 +226,7 @@ Page({
   // 勾选套餐
   check(e) {
     const checkedItem = e.currentTarget.dataset.package
-    const amountStr = `    ${checkedItem.price / 100}元`
+    const amountStr = `    ${checkedItem.oldPrice / 100}元`
     this.setData({
       checkedItem,
       singleAmountStr: amountStr,
