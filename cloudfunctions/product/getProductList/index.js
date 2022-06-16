@@ -16,7 +16,7 @@ exports.main = async (event, context) => {
   } = event
   try {
     const productData = await db.collection('product').where({
-      store: storeId || '0a4ec1f96297164707fbcd7a39751170'
+      storeId: storeId
     }).skip(pageSize * (pageNo - 1))
       .limit(pageSize) // 限制返回数量为 10 条
       .get()

@@ -5,8 +5,9 @@ export default {
     image: 'cloud://cloud1-3g1ptrnzda536c06.636c-cloud1-3g1ptrnzda536c06-1300751264/早餐.png',
     price: 1,
     oldPrice: 2,
+    amount: 0.5,
     products: [{
-      id: 'f6e08a6462a4711e0792254166cdd5c6',
+      id: '0ab5303b62ab4be409b07f3d5abf0739',
       count: 1
     }]
   }, {
@@ -15,11 +16,12 @@ export default {
     image: 'cloud://cloud1-3g1ptrnzda536c06.636c-cloud1-3g1ptrnzda536c06-1300751264/早餐2.png',
     price: 1,
     oldPrice: 2,
+    amount: 0.5,
     products: [{
-      id: 'f6e08a6462a4711e07922545046444d7',
+      id: '0ab5303b62ab4be409b07f3e610f8652',
       count: 2
     }, {
-      id: 'f6e08a6462a4711e079225465f315c8a',
+      id: '0ab5303b62ab4be409b07f41359f38ad',
       count: 2
     }]
   }, {
@@ -28,14 +30,15 @@ export default {
     image: 'cloud://cloud1-3g1ptrnzda536c06.636c-cloud1-3g1ptrnzda536c06-1300751264/早餐2.png',
     price: 1,
     oldPrice: 2,
+    amount: 0.5,
     products: [{
-      id: 'f6e08a6462a4711f0792254a6956fd3e',
+      id: '0ab5303b62ab4be409b07f4226e78967',
       count: 3
     }, {
-      id: 'f6e08a6462a4711f0792254b360090f6',
+      id: '0ab5303b62ab4be409b07f434302eeff',
       count: 3
     }, {
-      id: 'f6e08a6462a4711f0792254c60c800c5',
+      id: '0ab5303b62ab4be409b07f44343e684a',
       count: 3
     }]
   }, {
@@ -44,17 +47,18 @@ export default {
     image: 'cloud://cloud1-3g1ptrnzda536c06.636c-cloud1-3g1ptrnzda536c06-1300751264/早餐2.png',
     price: 1,
     oldPrice: 2,
+    amount: 0.5,
     products: [{
-      id: 'f6e08a6462a4711f0792254e7df28624',
+      id: '0ab5303b62ab4be409b07f4650fed29a',
       count: 4
     }, {
-      id: 'f6e08a6462a4711f079225515f6941b1',
+      id: '0ab5303b62ab4be409b07f4a203fa97e',
       count: 4
     }, {
-      id: 'f6e08a6462a4711f079225531f3bf200',
+      id: '0ab5303b62ab4be409b07f4b00813133',
       count: 4
     }, {
-      id: 'f6e08a6462a4711f07922556633f4b92',
+      id: '0ab5303b62ab4be409b07f5033315f1a',
       count: 4
     }]
   }, {
@@ -63,20 +67,21 @@ export default {
     image: 'cloud://cloud1-3g1ptrnzda536c06.636c-cloud1-3g1ptrnzda536c06-1300751264/早餐2.png',
     price: 1,
     oldPrice: 2,
+    amount: 0.5,
     products: [{
-      id: 'f6e08a6462a4711f0792255713e55ebc',
+      id: '0ab5303b62ab4be509b07f542ee3965d',
       count: 5
     }, {
-      id: 'f6e08a6462a4711f0792255a648a3616',
+      id: '0ab5303b62ab4be509b07f55684174b1',
       count: 5
     }, {
-      id: 'f6e08a6462a4711f0792255b1f9f06eb',
+      id: '0ab5303b62ab4be509b07f581305fe5c',
       count: 5
     }, {
-      id: 'f6e08a6462a4711f0792255c26db246b',
+      id: '0ab5303b62ab4be509b07f5a58e61c6f',
       count: 5
     }, {
-      id: 'f6e08a6462a4711f0792255e3ceb6a8e',
+      id: '0ab5303b62ab4be509b07f5d643ac95d',
       count: 5
     }]
   }]

@@ -89,7 +89,7 @@ Page({
   // 获取套餐list
   async getPackageList(e) {
     const res = await ajax.request('product/getPackageList', {
-      storeId: 'f6797f72feae4d74d1fa497ca3b47f82',
+      storeId: 'a02bad2e027d4a31b27c7a48ea4f9449',
       pageNo: 1,
       pageSize: 10
     })

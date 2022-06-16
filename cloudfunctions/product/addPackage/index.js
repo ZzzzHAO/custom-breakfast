@@ -52,20 +52,23 @@ exports.main = async (event, context) => {
                 products: package.products, // 套餐商品组合
                 onSale: false, // 是否上架
                 createTime: db.serverDate(), // 录入时间
-                store: storeId, // 门店id
+                storeId, // 门店id
                 _openid: OPENID // 上架者
               }
             })
-            if (index === packages.length - 1) {
-              await transaction.commit()
-              return {
-                success: true,
-                data: {}
+          } else {
+            return {
+              success: false,
+              error: {
+                message: '套餐内商品信息有误'
               }
             }
-          } else {
-            await transaction.rollback()
           }
+        }
+        await transaction.commit()
+        return {
+          success: true,
+          data: {}
         }
       } else {
         return {

@@ -42,10 +42,10 @@ exports.main = async (event, context) => {
     }).update({
       data: {
         orderStatus: chStatus, // 支付状态翻转
-        payTime: db.serverDate() // 支付时间
       }
     })
     await transaction.commit()
+    // TODO 失败处理
     return {
       errcode: 0
     }
