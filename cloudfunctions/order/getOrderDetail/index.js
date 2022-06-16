@@ -8,15 +8,22 @@ const db = cloud.database({
   throwOnNotFound: false,
 })
 const _ = db.command
-// 获取订单详情
+// 获取父订单详情
 exports.main = async (event, context) => {
-  const { orderNo } = event
+  const {
+    orderNo
+  } = event
   if (orderNo) {
     try {
       let orderDetail = await db.collection('wx-order').doc(orderNo).get()
       orderDetail = orderDetail.data
       if (orderDetail) {
-        const { createTime, payTime, orderStatus, orderAmount } = orderDetail
+        const {
+          createTime,
+          payTime,
+          orderStatus,
+          orderAmount
+        } = orderDetail
         // 查询并返回对应子订单信息
         let orderRes = await db.collection('order').where({
           outTradeNo: orderNo
@@ -24,7 +31,13 @@ exports.main = async (event, context) => {
         orderRes = orderRes.data
         if (orderRes.length) {
           orderRes = orderRes.map(item => {
-            const { code, distributeDate, distributeStatus, orderAmount, product } = item
+            const {
+              code,
+              distributeDate,
+              distributeStatus,
+              orderAmount,
+              product
+            } = item
             return {
               code, // 取餐码
               distributeDate, // 配送日期
@@ -60,7 +73,7 @@ exports.main = async (event, context) => {
           return {
             success: false,
             error: {
-              message: '未查到其子订单信息'
+              message: '未查到其子订单信息' + orderNo
             }
           }
         }

@@ -1,4 +1,5 @@
 const cloud = require('wx-server-sdk');
+const getOrderDetail = require('../getOrderDetail')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
@@ -7,38 +8,45 @@ cloud.init({
 const db = cloud.database({
   throwOnNotFound: false,
 })
-// 获取套餐list
+// 用户获取自己的订单列表
 exports.main = async (event, context) => {
   const {
     pageNo,
     pageSize
   } = event
   try {
+    const openid = cloud.getWXContext().OPENID // 用户openid
     let orderRes = await db.collection('wx-order').where({
-      _openid: cloud.getWXContext().OPENID
-    }).skip(pageSize * (pageNo - 1))
+        userInfo: {
+          openid
+        }
+      }).skip(pageSize * (pageNo - 1))
       .limit(pageSize) // 限制返回数量为 10 条
       .get()
     orderRes = orderRes.data
+    let orderList = []
     if (orderRes.length) {
-      orderRes.forEach(async item => {
-        const outTradeNo = item._id
-        const childOrder = await db.collection('order').where({
-          outTradeNo
-        }).get()
-        item.orders = childOrder.data
+      const tasks = []
+      orderRes.forEach(async (item) => {
+        const orderNo = item._id
+        const promise = getOrderDetail.main({
+          orderNo
+        })
+        tasks.push(promise)
       })
+      orderList = await Promise.all(tasks)
+      orderList = orderList.map(item => item.data.detail)
       return {
         success: true,
         data: {
-          orderList: orderRes
+          orderList
         }
       }
     } else {
       return {
-        success: false,
-        error: {
-          message: '未查到门店内套餐'
+        success: true,
+        data: {
+          orderList
         }
       }
     }
