@@ -17,7 +17,7 @@ exports.main = async (event, context) => {
   } = event
   try {
     let packageRes = await db.collection('package').where({
-      store: storeId || '6d85a2b962a0adae0981cf6e396616d2'
+      storeId
     }).skip(pageSize * (pageNo - 1))
       .limit(pageSize) // 限制返回数量为 10 条
       .get()
@@ -56,7 +56,7 @@ exports.main = async (event, context) => {
       return {
         success: false,
         error: {
-          message: '未查到门店内套餐'
+          message: '未查到门店内上架套餐'
         }
       }
     }

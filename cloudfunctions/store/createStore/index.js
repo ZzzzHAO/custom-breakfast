@@ -31,7 +31,7 @@ exports.main = async (event, context) => {
     let userRes = await db.collection('user').where({
       _openid: OPENID
     }).get()
-    userRes = userRes.data
+    userRes = userRes.data && userRes.data[0]
     if (userRes) {
       phone = userRes.phone
     } else {
@@ -67,6 +67,7 @@ exports.main = async (event, context) => {
     const storeId = uuid()
     await transaction.collection('store').add({
       data: {
+        _id: storeId,
         _openid: OPENID,
         createTime: db.serverDate(),
         manager: [OPENID],

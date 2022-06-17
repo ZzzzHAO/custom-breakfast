@@ -120,9 +120,9 @@ exports.main = async (event, context) => {
       packageRes = packageRes.map(item => item.data) // 商品信息列表
       // 是否都找到
       if (packageRes.every(item => item)) {
-        const storeId = packageRes[0].store // 门店号
+        const storeId = packageRes[0].storeId // 门店号
         // 所有套餐是否属于同一家store
-        if (packageRes.every(item => item.store === storeId)) {
+        if (packageRes.every(item => item.storeId === storeId)) {
           // 如果一致 获取店铺信息
           let storeRes = await db.collection('store').doc(storeId).get()
           storeRes = storeRes.data

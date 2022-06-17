@@ -102,8 +102,7 @@ Page({
   },
   switchPackageSaleStatus(e) {
     ajax.request('product/switchPackageSaleStatus', {
-      onSale: true, // 上架
-      packages: ['ca780ad562a4743006daa0d378179ec5', 'ca780ad562a4743006daa0d934111f89', 'ca780ad562a4743006daa0df500976b2', 'ca780ad562a4743006daa0e523cc5842', 'ca780ad562a4743006daa0e84c332b31']
+      onSale: true // 上架
     }).then(res => {
       console.log(res)
     })
@@ -115,8 +114,8 @@ Page({
         name: '晨光烧饼',
         address: '浦驰路188弄',
         logo: '',
-        openTime: new Date(),
-        closeTime: new Date(),
+        openTime: '上午8:00',
+        closeTime: '晚上8:00',
       }).then(res => {
         console.log(res)
       })

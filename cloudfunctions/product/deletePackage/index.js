@@ -27,7 +27,7 @@ exports.main = async (event, context) => {
         const storeId = storeRes._id
         const packageRes = await db.collection('package').where({
           _id: _.in(packages),
-          store: storeId
+          storeId
         }).get()
         // 是否找到全部商品
         if (packageRes.data && packageRes.data.length === packages.length) {
@@ -36,7 +36,7 @@ exports.main = async (event, context) => {
             await db.runTransaction(async transaction => {
               await transaction.collection('package').where({
                 _id: _.in(packages),
-                store: storeId
+                storeId
               }).remove()
             })
             return {
