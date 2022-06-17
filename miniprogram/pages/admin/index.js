@@ -15,11 +15,8 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
-    ajax.request('order/getOrderDetail', {}).then(res => {
-      console.log(res)
-    })
-  },
+  onLoad(options) {},
+  
   uploadBanner(e) {
     ajax.request('config/banner/setBanner', {
       banner: [{
@@ -36,7 +33,7 @@ Page({
         name: '轮播图3',
         image: 'cloud://cloud1-3g1ptrnzda536c06.636c-cloud1-3g1ptrnzda536c06-1300751264/banner.jpg',
         jumpUrl: '',
-        validateTiem: new Date(),
+        validateTiem: moment(new Date()).add(1, 'd').toDate(),
       }]
     }).then(res => {
       console.log(res)
@@ -213,6 +210,7 @@ Page({
   },
   getUserInfo(e) {
     ajax.request('user/getUserInfo').then(res => {
+      console.log(res)
       let isNewCustomer = true
       if (res.userInfo) {
         isNewCustomer = false

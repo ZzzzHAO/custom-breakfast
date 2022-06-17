@@ -10,6 +10,7 @@ const db = cloud.database({
 // 获取banner
 exports.main = async (event, context) => {
   try {
+    // TODO 取生效时间范围内的banner
     const bannerRes = await db.collection('banner').get()
     return {
       success: true,
