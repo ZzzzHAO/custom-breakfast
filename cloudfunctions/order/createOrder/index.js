@@ -236,6 +236,7 @@ exports.main = async (event, context) => {
                 return {
                   success: true,
                   data: {
+                    outTradeNo,
                     ...res.payment
                   }
                 }

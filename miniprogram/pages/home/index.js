@@ -1,6 +1,9 @@
 // pages/home/index.js
 import ajax from '../../common/ajax'
-import { px2rpx } from '../../common/util'
+import {
+  px2rpx,
+  loop
+} from '../../common/util'
 const moment = require('moment')
 const DAY_ENUM = {
   1: '周一',
@@ -27,9 +30,6 @@ Page({
       name: '预约一周',
       refresh: false,
     }], // 首页标签数组
-    amountStr: '', // 按钮金额文案
-    singleAmountStr: '', // 单天金额文案 缓存
-    weekAmountStr: '', // 一周金额文案 缓存
     isNewCustomer: true,
     currentTab: 1, // 当前tab
     renderedList: [], // 已渲染tab
@@ -38,7 +38,10 @@ Page({
     weekPackages: [], // 清空周套餐数组
     weekAmount: 0, // 周套餐价格
     scrollEnable: false, // 是否可滚动
-    popupStyle: '' // 菜单样式
+    popupStyle: '', // 菜单样式
+    showDetail: false, // 是否展示订单详情
+    showConfirm: false, // 是否展示订单确认
+    discountStr: '' // 优惠文案
   },
 
   /**
@@ -61,9 +64,10 @@ Page({
     }, 900)
   },
 
-  init() {
-    this.getUserInfo() // 获取用户信息
+  async init() {
     this.getBanner() // 获取轮播图
+    this.getUserInfo() // 获取用户信息
+    await this.getStoreList() // 获取门店列表
     this.renderTab(this.data.currentTab) // 获取套餐列表
   },
   // 获取banner
@@ -87,9 +91,17 @@ Page({
     })
   },
   // 获取套餐list
+  async getStoreList(e) {
+    const res = await ajax.request('store/getStoreList')
+    const store = res.storeList && res.storeList[0]
+    this.setData({
+      storeInfo: store
+    })
+  },
+  // 获取套餐list
   async getPackageList(e) {
     const res = await ajax.request('product/getPackageList', {
-      storeId: 'a02bad2e027d4a31b27c7a48ea4f9449',
+      storeId: this.data.storeInfo.id,
       pageNo: 1,
       pageSize: 10
     })
@@ -130,18 +142,19 @@ Page({
       });
     }
   },
+  // tab change事件
   tabChange(e) {
     const tabId = e.detail.name;
     // 设为当前tab
     this.setData({
       currentTab: tabId,
-      amountStr: tabId === 1 ? this.data.singleAmountStr : this.data.weekAmountStr,
     });
     // 如未渲染过 则render
     if (!this.data.renderedList.includes(tabId)) {
       this.renderTab(tabId);
     }
   },
+  // 渲染tab页
   async renderTab(tabId, isRefresh) {
     // 将此pageId设置为已渲染
     if (!isRefresh) {
@@ -153,7 +166,6 @@ Page({
     if (tabId === 1) {
       this.setData({
         isLoading: true,
-        amountStr: '', // 文案清空
         checkedItem: {}, // 清空勾选项
       });
       const packages = await this.getPackageList()
@@ -163,7 +175,6 @@ Page({
     } else if (tabId === 2) {
       this.setData({
         isLoading: true,
-        amountStr: '', // 文案清空
         weekPackages: [], // 清空周套餐数组
         weekAmount: 0
       });
@@ -183,23 +194,29 @@ Page({
         dateArr = dateArr.filter(item => item.day !== 0 && item.day !== 6)
         dateArr = dateArr.slice(0, length)
         let amount = 0
+        let oldAmount = 0
         for (let i = 0; i < length; i++) {
           dateArr[i].package = packages[i]
           amount += packages[i].price
+          oldAmount += packages[i].oldPrice
         }
-        const amountStr = `    ${amount / 100}元`
+        const discount = (oldAmount - amount) / 100
         this.setData({
           weekPackages: dateArr,
           weekAmount: amount,
-          weekAmountStr: amountStr,
-          amountStr,
+          discountStr: discount ? `已优惠 ¥${discount}` : ''
         })
       }
     }
   },
+  // 一周套餐 向上移动
   moveUp(e) {
-    const { index } = e.currentTarget.dataset
-    let { weekPackages } = this.data
+    const {
+      index
+    } = e.currentTarget.dataset
+    let {
+      weekPackages
+    } = this.data
     if (index !== 0) {
       const currentPackage = weekPackages[index].package
       const lastPackage = weekPackages[index - 1].package
@@ -226,35 +243,43 @@ Page({
   // 勾选套餐
   check(e) {
     const checkedItem = e.currentTarget.dataset.package
-    const amountStr = `    ${checkedItem.oldPrice / 100}元`
     this.setData({
       checkedItem,
-      singleAmountStr: amountStr,
-      amountStr,
+    })
+  },
+  // 隐藏订单确认弹窗
+  confirmClose() {
+    this.setData({
+      showConfirm: false
+    })
+  },
+  // 开关订单确认弹窗detail
+  toogleDetail(e) {
+    this.setData({
+      showDetail: !this.data.showDetail
     })
   },
   // 支付
-  pay(e) {
-    const { currentTab, checkedItem, weekPackages, weekAmount, isNewCustomer } = this.data
-    const params = {}
-    if (isNewCustomer) {
-      const code = e.detail.code
-      if (code) {
-        params.code = e.detail.code
-      } else {
-        wx.showToast({
-          title: '授权失败',
-          icon: 'none'
-        })
-        return;
-      }
+  goConfirm(e) {
+    const {
+      currentTab,
+      checkedItem,
+      weekPackages,
+      weekAmount,
+      isNewCustomer
+    } = this.data
+    const params = {
+      ip: '',
+      type: currentTab
     }
     // 预约明天
     if (currentTab === 1) {
       if (checkedItem._id) {
         params.packages = [{
           id: checkedItem._id,
-          date: moment(new Date()).add(1, 'd').format('YYYY-MM-DD')
+          date: moment(new Date()).add(1, 'd').format('YYYY-MM-DD'),
+          name: checkedItem.name,
+          amount: checkedItem.oldPrice
         }]
         params.amount = checkedItem.oldPrice
       } else {
@@ -270,7 +295,9 @@ Page({
         params.packages = weekPackages.map(item => {
           return {
             id: item.package._id,
-            date: item.date
+            date: item.date,
+            name: item.package.name,
+            amount: item.package.price
           }
         })
         params.amount = weekAmount
@@ -282,19 +309,96 @@ Page({
         return
       }
     }
+    if (isNewCustomer) {
+      const code = e.detail.code
+      if (code) {
+        params.code = e.detail.code
+      } else {
+        wx.showToast({
+          title: '授权失败',
+          icon: 'none'
+        })
+        return;
+      }
+    }
+    const self = this
     wx.getLocalIPAddress({
       success(res) {
         params.ip = res.localip // ip地址
-        ajax.request('order/createOrder', params).then(res => {
-          wx.requestPayment({
-            ...res,
-            success(res) {
-              console.log('pay success', res)
-            },
-          })
+      },
+      complete() {
+        self.setData({
+          showConfirm: true,
+          showDetail: false, // 默认不展开
+          orderParams: params
         })
       }
     })
+  },
+  // 支付
+  pay() {
+    const {
+      orderParams,
+    } = this.data
+    const self = this
+    ajax.request('order/createOrder', orderParams).then(res => {
+      const outTradeNo = res.outTradeNo
+      wx.requestPayment({
+        ...res,
+        success(payRes) {
+          self.loopPayStatus(outTradeNo)
+        },
+        fail(payRes) {
+          if (payRes.errMsg !== 'requestPayment:fail cancel') {
+            wx.showToast({
+              title: '支付失败(100001)',
+              icon: 'none'
+            })
+          }
+        }
+      })
+    })
+  },
+  // 轮训支付结果
+  loopPayStatus(outTradeNo) {
+    const loopInterval = [0, 500, 1000, 1000]
+    loop((done, fail, order) => {
+      setTimeout(async () => {
+        const result = await ajax.request('order/getOrderDetail', {
+          orderNo: outTradeNo
+        })
+        if (result.detail.orderStatus !== 1) { // 不为已创建 则表示支付状态已经翻转
+          done(() => {
+            if (result.detail.orderStatus === 2) { // 支付成功
+              wx.showToast({
+                title: '支付成功',
+                icon: 'none'
+              })
+              this.setData({
+                showConfirm: false
+              })
+            } else if (result.detail.orderStatus === 3) { // 支付失败
+              wx.showToast({
+                title: '支付失败(100003)',
+                icon: 'none'
+              })
+            } else {
+              wx.showToast({
+                title: '支付失败(100004)', // 支付异常
+                icon: 'none'
+              })
+            }
+          })
+        } else {
+          fail(() => {
+            wx.showToast({
+              title: '支付失败(100002)',
+              icon: 'none'
+            })
+          })
+        }
+      }, loopInterval[order])
+    })(4)
   },
   // 关闭菜单
   openMenu(e) {

@@ -76,17 +76,26 @@
           </view>
         </view>
       </scroll-view>
-      <button class="btn" wx:if="{{isNewCustomer}}" open-type="getPhoneNumber" bindgetphonenumber="pay">立即预约1{{amountStr}}</button>
-      <button class="btn" wx:else bindtap="pay">立即预约{{amountStr}}</button>
+      <button class="btn" wx:if="{{isNewCustomer}}" open-type="getPhoneNumber" bindgetphonenumber="goConfirm">立即预约</button>
+      <button class="btn" wx:else bindtap="goConfirm">立即预约</button>
     </van-tab>
   </van-tabs>
 </view>
-<!-- <view style="{{wrapStyle}}">
-  <van-popup show="{{ showMenu }}" closeable position="left" z-index="{{100}}" overlay-style="{{overlayStyle}}" custom-class="popup" custom-style="{{popupStyle}}" bind:close="closeMenu">
-    <view class="menu-list">
-      <van-cell-group title="分组1">
-        <van-cell title="单元格" value="内容" />
-      </van-cell-group>
-    </view>
-  </van-popup>
-</view> -->
+<van-popup show="{{ showConfirm }}" bind:close="confirmClose" round>
+  <view class="confirm-wrap">
+    <view class="title">订单确认</view>
+    <van-cell-group>
+      <van-cell title="取餐地址" value="{{storeInfo.address}}" />
+      <van-cell title="订单详情" value="{{ orderParams.type === 1 ? '明天' : '一周' }}套餐" is-link bindtap="toogleDetail" />
+      <view class="detail" wx:if="{{showDetail}}">
+        <view class="row" wx:for="{{orderParams.packages}}">
+          <view>{{item.date}}</view>
+          <view>{{item.name}} * 1</view>
+          <view>¥{{item.amount/100}}</view>
+        </view>
+      </view>
+      <van-cell center title="支付金额" label="{{ discountStr }}" value="¥{{orderParams.amount/100}}" />
+    </van-cell-group>
+    <view class="pay-btn" bindtap="pay">支付</view>
+  </view>
+</van-popup>

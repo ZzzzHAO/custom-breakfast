@@ -10,8 +10,8 @@ const db = cloud.database({
 // 获取店铺list
 exports.main = async (event, context) => {
   const {
-    pageNo,
-    pageSize
+    pageNo = 1,
+      pageSize = 10
   } = event
   try {
     const storeRes = await db.collection('store').skip(pageSize * (pageNo - 1))
@@ -20,7 +20,14 @@ exports.main = async (event, context) => {
     return {
       success: true,
       data: {
-        storeList: storeRes.data
+        storeList: storeRes.data.map(item => {
+          return {
+            id: item._id,
+            name: item.name,
+            address: item.address,
+            openTime: item.openTime
+          }
+        })
       }
     }
   } catch (e) {
