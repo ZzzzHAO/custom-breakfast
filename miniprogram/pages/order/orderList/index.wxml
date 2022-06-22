@@ -1,0 +1,58 @@
+<!--pages/order/orderList/index.wxml-->
+<view class="order-list-wrap">
+  <van-tabs color="#00BEE6" bind:change="tabChange" animated ellipsis lazy-render sticky>
+    <van-tab wx:for="{{tabs}}" wx:for-item="tab" wx:key="id" title="{{tab.name}}" name="{{tab.id}}">
+      <!-- tab标签 内容区域 -->
+      <scroll-view scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" style="{{scrollStyle}}" enhanced="{{true}}" show-scrollbar="{{false}}">
+        <!-- 有数据时 -->
+        <view class="order-list" wx:if="{{orderList.length}}">
+          <view class="order" wx:for="{{orderList}}">
+            <view class="header">
+              <view class="order-no">{{item.orderNo}}</view>
+              <view class="order-status">{{item.orderStatus}}</view>
+            </view>
+            <view class="package-list">
+              <view class="package" wx:for="{{item.orders}}" wx:for-item="order">
+                <view class="img-wrap">
+                  <image class="img" src="{{order.product.image}}" />
+                </view>
+                <view class="content">
+                  <view class="title">
+                    <view class="package-name">{{order.product.name}}</view>
+                  </view>
+                  <view class="specs">
+                    <view class="spec" wx:for="{{order.product.products}}" wx:for-item="product">
+                      {{product.name}} * {{product.count}}
+                    </view>
+                  </view>
+                  <view class="amount">
+                    <view class="price-wrap">
+                      <view class="price">
+                        <text class="symbol">¥</text>
+                        {{order.orderAmount/100}}
+                      </view>
+                    </view>
+                  </view>
+                  <view class="distribute">
+                    已取餐
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="footer">
+              <view class="price-wrap">
+                <view class="price">
+                  实付款
+                  <text class="symbol">¥</text>
+                  {{item.orderAmount/100}}
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <!-- 无数据时 -->
+        <data-empty wx:else type="order" text="暂无订单信息"></data-empty>
+      </scroll-view>
+    </van-tab>
+  </van-tabs>
+</view>

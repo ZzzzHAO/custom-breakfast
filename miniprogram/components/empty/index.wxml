@@ -1,0 +1,7 @@
+<view class="empty-mod">
+  <view class="content-box">
+    <image class="empty-mod-pic" src="{{currnetObj.img}}" />
+    <view class="empty-mod-info" wx:if="{{!hideText}}">{{currnetObj.text}}</view>
+    <slot></slot>
+  </view>
+</view>

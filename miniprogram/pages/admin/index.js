@@ -111,8 +111,7 @@ Page({
         name: '晨光烧饼',
         address: '浦驰路188弄',
         logo: '',
-        openTime: '上午8:00',
-        closeTime: '晚上8:00',
+        takeUpTime: '上午8:00-上午10：00', // 取餐时间
       }).then(res => {
         console.log(res)
       })

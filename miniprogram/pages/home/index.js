@@ -33,15 +33,14 @@ Page({
     isNewCustomer: true,
     currentTab: 1, // 当前tab
     renderedList: [], // 已渲染tab
-    showMenu: false, // 是否展示菜单
     checkedItem: {}, // 清空勾选项
     weekPackages: [], // 清空周套餐数组
     weekAmount: 0, // 周套餐价格
-    scrollEnable: false, // 是否可滚动
     popupStyle: '', // 菜单样式
     showDetail: false, // 是否展示订单详情
     showConfirm: false, // 是否展示订单确认
-    discountStr: '' // 优惠文案
+    discountStr: '', // 优惠文案
+    takeTime: '' // 取餐时间
   },
 
   /**
@@ -57,11 +56,6 @@ Page({
       scrollStyle: `height: calc(100vh - ${bannerHeight} - ${tabsHeight} - ${headerHeight} - ${safeHeight})`,
       wrapStyle: `padding-top: ${headerHeight}`,
     });
-    setTimeout(() => {
-      this.setData({
-        scrollEnable: true
-      })
-    }, 900)
   },
 
   async init() {
@@ -95,7 +89,8 @@ Page({
     const res = await ajax.request('store/getStoreList')
     const store = res.storeList && res.storeList[0]
     this.setData({
-      storeInfo: store
+      storeInfo: store,
+      takeUpTime: store.takeUpTime
     })
   },
   // 获取套餐list
@@ -400,16 +395,10 @@ Page({
       }, loopInterval[order])
     })(4)
   },
-  // 关闭菜单
-  openMenu(e) {
-    this.setData({
-      showMenu: true
+  // 去订单列表
+  goOrderList(e) {
+    wx.navigateTo({
+      url: '/pages/order/orderList/index',
     })
   },
-  // 关闭菜单
-  closeMenu(e) {
-    this.setData({
-      showMenu: false
-    })
-  }
 })

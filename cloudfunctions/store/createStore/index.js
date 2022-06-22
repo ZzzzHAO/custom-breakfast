@@ -18,8 +18,7 @@ exports.main = async (event, context) => {
     name,
     address,
     logo,
-    openTime,
-    closeTime,
+    takeUpTime,
     code
   } = event
   try {
@@ -74,7 +73,7 @@ exports.main = async (event, context) => {
         name,
         address,
         logo,
-        openTime,
+        takeUpTime,
         closeTime
       }
     })

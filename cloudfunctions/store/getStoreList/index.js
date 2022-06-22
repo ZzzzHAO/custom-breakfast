@@ -25,7 +25,7 @@ exports.main = async (event, context) => {
             id: item._id,
             name: item.name,
             address: item.address,
-            openTime: item.openTime
+            takeUpTime: item.takeUpTime
           }
         })
       }

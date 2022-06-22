@@ -2,14 +2,14 @@
 <view class="home-wrap" style="{{wrapStyle}}">
   <!-- 自定义头部 -->
   <view style="position:fixed;top:0">
-    <custom-nav showBack="{{false}}" title="明儿吃啥" bind:clickPerson="openMenu" showPerson></custom-nav>
+    <custom-nav showBack="{{false}}" title="明儿吃啥" bind:clickPerson="goOrderList" showPerson></custom-nav>
   </view>
   <banner data="{{banner}}" />
   <!-- 首页tab标签 -->
   <van-tabs color="#00BEE6" bind:change="tabChange" animated ellipsis lazy-render sticky>
     <van-tab wx:for="{{tabs}}" wx:for-item="tab" wx:key="id" title="{{tab.name}}" name="{{tab.id}}">
       <!-- tab标签 内容区域 -->
-      <scroll-view scroll-y="{{scrollEnable}}" class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" style="{{scrollStyle}}" enhanced="{{true}}" show-scrollbar="{{true}}">
+      <scroll-view scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" style="{{scrollStyle}}" enhanced="{{true}}" show-scrollbar="{{false}}">
         <van-radio-group wx:if="{{tab.id === 1}}" class="package-list" value="{{ checkedItem._id }}" bind:change="onChange">
           <view class="package" wx:for="{{packages}}" wx:key="_id" bind:tap="check" data-package="{{item}}">
             <van-radio checked-color="#00BEE6" custom-class="radio" name="{{item._id}}"></van-radio>
@@ -86,12 +86,18 @@
     <view class="title">订单确认</view>
     <van-cell-group>
       <van-cell title="取餐地址" value="{{storeInfo.address}}" />
-      <van-cell title="订单详情" value="{{ orderParams.type === 1 ? '明天' : '一周' }}套餐" is-link bindtap="toogleDetail" />
+      <van-cell title="取餐时间" value="预约日期 {{storeInfo.takeUpTime}}" value-class="vlaue" center />
+      <van-cell title="订单详情" value="{{ orderParams.type === 1 ? '明天' : '一周' }}套餐" is-link arrow-direction="{{showDetail ? 'up' : 'down'}}" bindtap="toogleDetail" />
       <view class="detail" wx:if="{{showDetail}}">
+        <view class="row" style="color: #333;">
+          <view class="column">预约日期</view>
+          <view class="column">商品名称*数量</view>
+          <view class="column">价格</view>
+        </view>
         <view class="row" wx:for="{{orderParams.packages}}">
-          <view>{{item.date}}</view>
-          <view>{{item.name}} * 1</view>
-          <view>¥{{item.amount/100}}</view>
+          <view class="column">{{item.date}}</view>
+          <view class="column">{{item.name}} * 1</view>
+          <view class="column">¥{{item.amount/100}}</view>
         </view>
       </view>
       <van-cell center title="支付金额" label="{{ discountStr }}" value="¥{{orderParams.amount/100}}" />

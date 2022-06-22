@@ -22,6 +22,11 @@ const DISTRIBUTE_STATUS = {
   NO: 0, // 待配送
   YES: 1 // 已配送
 }
+
+const ORDER_TYPE = {
+  DAY: 1, // 单天订单
+  WEEK: 2 // 一周订单
+}
 module.exports = {
   PA_ORDER_STATUS,
   CH_ORDER_STATUS,

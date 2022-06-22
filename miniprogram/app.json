@@ -1,28 +1,29 @@
 {
-  "pages": [
-    "pages/home/index",
-    "pages/index/index",
-    "pages/getOpenId/index",
-    "pages/getMiniProgramCode/index",
-    "pages/deployService/index",
-    "pages/createCollection/index",
-    "pages/uploadFile/index",
-    "pages/selectRecord/index",
-    "pages/updateRecord/index",
-    "pages/updateRecordResult/index",
-    "pages/updateRecordSuccess/index",
-    "pages/sumRecord/index",
-    "pages/sumRecordResult/index",
-    "pages/mine/index",
-    "pages/admin/index",
-    "pages/getOrder/index"
-  ],
-  "window": {
-    "backgroundColor": "#F6F6F6",
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#ffffff",
-    "navigationBarTitleText": "明儿吃啥",
-    "navigationBarTextStyle": "black"
-  },
-  "sitemapLocation": "sitemap.json"
+    "pages": [
+        "pages/home/index",
+        "pages/index/index",
+        "pages/getOpenId/index",
+        "pages/getMiniProgramCode/index",
+        "pages/deployService/index",
+        "pages/createCollection/index",
+        "pages/uploadFile/index",
+        "pages/selectRecord/index",
+        "pages/updateRecord/index",
+        "pages/updateRecordResult/index",
+        "pages/updateRecordSuccess/index",
+        "pages/sumRecord/index",
+        "pages/sumRecordResult/index",
+        "pages/mine/index",
+        "pages/admin/index",
+        "pages/getOrder/index",
+        "pages/order/orderList/index"
+    ],
+    "window": {
+        "backgroundColor": "#F6F6F6",
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTitleText": "明儿吃啥",
+        "navigationBarTextStyle": "black"
+    },
+    "sitemapLocation": "sitemap.json"
 }

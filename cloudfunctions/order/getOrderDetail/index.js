@@ -22,7 +22,8 @@ exports.main = async (event, context) => {
           createTime,
           payTime,
           orderStatus,
-          orderAmount
+          orderAmount,
+          storeInfo
         } = orderDetail
         // 查询并返回对应子订单信息
         let orderRes = await db.collection('order').where({
@@ -65,7 +66,8 @@ exports.main = async (event, context) => {
                 payTime, // 订单支付时间
                 orders: orderRes, // 子订单信息
                 orderStatus, // 订单状态
-                orderAmount // 支付金额
+                orderAmount, // 支付金额
+                storeInfo // 店铺信息
               }
             }
           }
