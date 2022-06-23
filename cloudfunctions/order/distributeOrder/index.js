@@ -1,5 +1,4 @@
 const cloud = require('wx-server-sdk');
-const getOrderDetail = require('../getOrderDetail')
 
 const {
   PA_ORDER_STATUS,

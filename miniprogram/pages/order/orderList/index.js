@@ -55,7 +55,10 @@ Page({
     const {
       page
     } = this.data
-    ajax.request('order/getOrderList', page).then(res => {
+    ajax.request('order/getOrderList', {
+      ...page,
+      type: 1
+    }).then(res => {
       const {
         orderList
       } = res

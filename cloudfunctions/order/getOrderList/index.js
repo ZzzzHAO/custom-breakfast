@@ -1,5 +1,8 @@
 const cloud = require('wx-server-sdk');
 const getOrderDetail = require('../getOrderDetail')
+const {
+  PA_ORDER_STATUS,
+} = require('../const')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
@@ -13,13 +16,19 @@ const _ = db.command
 // 用户获取自己的订单列表
 exports.main = async (event, context) => {
   const {
-    pageNo,
-    pageSize
+    type = 1,
+      pageNo,
+      pageSize
   } = event
   try {
     const openid = cloud.getWXContext().OPENID // 用户openid
+    let orderStatus = {
+      1: _.or(_.eq(PA_ORDER_STATUS.PAY_SUCCESS), _.eq(PA_ORDER_STATUS.DEAL_DONE)),
+      2: _.eq(PA_ORDER_STATUS.PAY_SUCCESS),
+      3: _.eq(PA_ORDER_STATUS.DEAL_DONE)
+    } [type]
     let orderRes = await db.collection('wx-order').where({
-        orderStatus: _.eq(2), // 只返回支付成功的订单
+        orderStatus,
         userInfo: {
           openid
         }
