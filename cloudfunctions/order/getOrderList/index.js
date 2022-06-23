@@ -17,8 +17,8 @@ const _ = db.command
 exports.main = async (event, context) => {
   const {
     type = 1,
-      pageNo,
-      pageSize
+    pageNo,
+    pageSize
   } = event
   try {
     const openid = cloud.getWXContext().OPENID // 用户openid
@@ -26,13 +26,15 @@ exports.main = async (event, context) => {
       1: _.or(_.eq(PA_ORDER_STATUS.PAY_SUCCESS), _.eq(PA_ORDER_STATUS.DEAL_DONE)),
       2: _.eq(PA_ORDER_STATUS.PAY_SUCCESS),
       3: _.eq(PA_ORDER_STATUS.DEAL_DONE)
-    } [type]
-    let orderRes = await db.collection('wx-order').where({
-        orderStatus,
-        userInfo: {
-          openid
-        }
-      }).skip(pageSize * (pageNo - 1))
+    }[type]
+    const filter = {
+      orderStatus,
+      userInfo: {
+        openid
+      }
+    }
+    let orderCount = await db.collection('wx-order').where(filter).count()
+    let orderRes = await db.collection('wx-order').where(filter).skip(pageSize * (pageNo - 1))
       .limit(pageSize) // 限制返回数量为 10 条
       .get()
     orderRes = orderRes.data
@@ -51,6 +53,7 @@ exports.main = async (event, context) => {
       return {
         success: true,
         data: {
+          total: orderCount.total,
           orderList
         }
       }

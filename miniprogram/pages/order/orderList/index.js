@@ -24,20 +24,32 @@ Page({
       id: 1,
       name: '全部',
       refresh: false,
+      page: {
+        pageSize: 10,
+        pageNo: 1
+      },
     }, {
-      id: 3,
+      id: 2,
       name: '待取餐',
       refresh: false,
+      page: {
+        pageSize: 10,
+        pageNo: 1
+      },
     }, {
-      id: 4,
+      id: 3,
       name: '已完成',
       refresh: false,
+      page: {
+        pageSize: 10,
+        pageNo: 1
+      },
     }], // 首页标签数组
     orderList: [],
-    page: {
-      pageSize: 10,
-      pageNo: 1
-    }
+    allList: [], // TODO 放入tabs里
+    undoneList: [],
+    doneList: [],
+    currentTabIndex: 0 // 当前tab
   },
 
   /**
@@ -51,31 +63,47 @@ Page({
     });
     this.getOrderList()
   },
+
+  tabChange(e) {
+    this.setData({
+      currentTabIndex: e.detail.index
+    })
+    this.getOrderList()
+  },
+
   async getOrderList() {
     const {
-      page
+      currentTabIndex,
+      tabs,
     } = this.data
+    const currentTab = tabs[currentTabIndex]
     ajax.request('order/getOrderList', {
-      ...page,
-      type: 1
+      ...currentTab.page,
+      type: currentTab.id
     }).then(res => {
-      const {
-        orderList
+      let {
+        orderList,
+        total
       } = res
-      console.log(orderList)
+      orderList = orderList.map(item => {
+        return {
+          ...item,
+          orderStatus: PA_ORDER_STATUS[item.orderStatus],
+          orders: item.orders.map(order => {
+            return {
+              ...order,
+              distributeDate: moment(order.distributeDate).format('YYYY-MM-DD')
+            }
+          })
+        }
+      })
+      const key = {
+        0: 'allList',
+        1: 'undoneList',
+        2: 'doneList'
+      }[currentTabIndex]
       this.setData({
-        orderList: orderList.map(item => {
-          return {
-            ...item,
-            orderStatus: PA_ORDER_STATUS[item.orderStatus],
-            orders: item.orders.map(order => {
-              return {
-                ...order,
-                distributeDate: moment(order.distributeDate).format('YYYY-MM-DD')
-              }
-            })
-          }
-        })
+        [key]: this.data[key].concat(orderList)
       })
     })
   }
