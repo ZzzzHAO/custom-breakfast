@@ -16,8 +16,12 @@
           height: 60rpx;
           line-height: 60rpx;
 
-          .order-no {
-            font-weight: 500;
+          .title {
+            font-weight: bold;
+          }
+          .status {
+            color: #00BEE6;
+            font-size: 28rpx;
           }
         }
 
@@ -78,6 +82,8 @@
               .specs {
                 display: flex;
                 flex-wrap: wrap;
+                width: 450rpx;
+                margin-bottom: 10rpx;
 
                 .spec {
                   height: 40rpx;
@@ -120,18 +126,10 @@
                   }
                 }
               }
-
-              .distribute {
-                position: absolute;
-                bottom: 0;
-                right: 0;
-                padding: 5rpx 10rpx;
-                border-radius: 10rpx;
-                color: #fff;
-                background-color: #00BEE6;
-                font-family: PingFangSC-Medium;
-                font-weight: 500;
-                font-size: 24rpx;
+              .distribute-info {
+                .tag {
+                  margin-right: 12rpx;
+                }
               }
             }
           }

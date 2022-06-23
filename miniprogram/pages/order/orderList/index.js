@@ -2,8 +2,18 @@
 import ajax from '../../../common/ajax'
 import {
   px2rpx,
-  loop
 } from '../../../common/util'
+const moment = require('moment')
+const PA_ORDER_STATUS = {
+  1: '待付款',
+  2: '买家已付款',
+  3: '支付失败',
+  4: '退款中',
+  5: '退款成功',
+  6: '退款失败',
+  7: '部分退款',
+  8: '交易完成',
+}
 Page({
 
   /**
@@ -15,20 +25,12 @@ Page({
       name: '全部',
       refresh: false,
     }, {
-      id: 2,
-      name: '待付款',
-      refresh: false,
-    }, {
       id: 3,
       name: '待取餐',
       refresh: false,
     }, {
       id: 4,
       name: '已完成',
-      refresh: false,
-    }, {
-      id: 5,
-      name: '已取消',
       refresh: false,
     }], // 首页标签数组
     orderList: [],
@@ -59,7 +61,18 @@ Page({
       } = res
       console.log(orderList)
       this.setData({
-        orderList
+        orderList: orderList.map(item => {
+          return {
+            ...item,
+            orderStatus: PA_ORDER_STATUS[item.orderStatus],
+            orders: item.orders.map(order => {
+              return {
+                ...order,
+                distributeDate: moment(order.distributeDate).format('YYYY-MM-DD')
+              }
+            })
+          }
+        })
       })
     })
   }

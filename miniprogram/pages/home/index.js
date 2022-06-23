@@ -277,6 +277,7 @@ Page({
           amount: checkedItem.oldPrice
         }]
         params.amount = checkedItem.oldPrice
+        params.type = 1
       } else {
         wx.showToast({
           title: '请选择套餐',
@@ -296,6 +297,7 @@ Page({
           }
         })
         params.amount = weekAmount
+        params.type = 2
       } else {
         wx.showToast({
           title: '请选择套餐',

@@ -61,10 +61,11 @@ const createSeq = async function (storeId) {
 // 录入商品
 exports.main = async (event, context) => {
   let {
-    amount,
-    packages,
-    ip = '127.0.0.1',
-    code
+    amount, // 前端订单金额
+    orderType, // 订单类型 1 单天 2 一周
+    packages, // 预约套餐
+    ip = '127.0.0.1', // 客户端ip
+    code // 手机code
   } = event
   try {
     const {
@@ -224,6 +225,7 @@ exports.main = async (event, context) => {
                     orders, // 子订单号数组
                     createTime: db.serverDate(), // 创建时间
                     orderStatus: PA_ORDER_STATUS.CREATE_SUCCESS, // 已创建状态
+                    orderType,
                     createResult: res, // 微信订单 创建成功信息
                     orderAmount: price, // 支付金额
                     // 用户信息

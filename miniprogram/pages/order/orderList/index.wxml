@@ -8,8 +8,8 @@
         <view class="order-list" wx:if="{{orderList.length}}">
           <view class="order" wx:for="{{orderList}}">
             <view class="header">
-              <view class="order-no">{{item.orderNo}}</view>
-              <view class="order-status">{{item.orderStatus}}</view>
+              <view class="title">{{item.orderType===1?'单天套餐':'一周套餐'}}</view>
+              <view class="status">{{item.orderStatus}}</view>
             </view>
             <view class="package-list">
               <view class="package" wx:for="{{item.orders}}" wx:for-item="order">
@@ -33,8 +33,10 @@
                       </view>
                     </view>
                   </view>
-                  <view class="distribute">
-                    已取餐
+                  <view class="distribute-info">
+                    <van-tag class="tag" color="#00BEE6" type="danger" size="medium">{{order.distributeDate}}</van-tag>
+                    <van-tag class="tag" color="#00BEE6" type="danger" size="medium" plain="{{order.distributeStatus ? false : true}}">{{order.distributeStatus?'已取餐':'待取餐'}}</van-tag>
+                    <van-tag class="tag" wx:if="{{!order.distributeStatus}}" color="#00BEE6" type="danger" size="medium" plain="{{order.distributeStatus ? false : true}}">取餐码：{{order.code}}</van-tag>
                   </view>
                 </view>
               </view>

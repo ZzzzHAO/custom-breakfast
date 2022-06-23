@@ -2,7 +2,8 @@
   "usingComponents": {
     "van-tab": "@vant/weapp/tab/index",
     "van-tabs": "@vant/weapp/tabs/index",
-    "data-empty": "../../../components/empty/index"
+    "data-empty": "../../../components/empty/index",
+    "van-tag": "@vant/weapp/tag/index"
   },
   "disableScroll": true
 }

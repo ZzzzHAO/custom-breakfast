@@ -23,6 +23,7 @@ exports.main = async (event, context) => {
           payTime,
           orderStatus,
           orderAmount,
+          orderType,
           storeInfo
         } = orderDetail
         // 查询并返回对应子订单信息
@@ -62,6 +63,7 @@ exports.main = async (event, context) => {
             data: {
               detail: {
                 orderNo, // 订单号
+                orderType, // 订单类型
                 createTime, // 订单创建时间
                 payTime, // 订单支付时间
                 orders: orderRes, // 子订单信息
