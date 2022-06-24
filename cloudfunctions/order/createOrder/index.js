@@ -9,17 +9,6 @@ const {
   uuid
 } = require('../util')
 
-const DAY_ENUM = {
-  1: '周一',
-  2: '周二',
-  3: '周三',
-  4: '周四',
-  5: '周五',
-  6: '周六',
-  0: '周日',
-}
-
-
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 });
@@ -139,17 +128,6 @@ exports.main = async (event, context) => {
             }, 0)
             // 支付金额是否与前端金额一致
             if (price === amount) {
-              // 周几 字段
-              packages = packages.map(item => {
-                const day = moment(item.date).day()
-                return {
-                  ...item,
-                  dayStr: DAY_ENUM[day]
-                }
-              })
-              let body = `${storeRes.name}：`
-              body += packages.map(item => item.dayStr).join('、')
-              body += '套餐组合'
               // 获取套餐内商品快照
               packageRes = await cloud.callFunction({
                 name: 'product',
@@ -176,7 +154,7 @@ exports.main = async (event, context) => {
               const outTradeNo = uuid()
               // 调用微信统一下单
               const res = await cloud.cloudPay.unifiedOrder({
-                body, // 商品名称
+                body: `${storeRes.name}：${orderType === 1 ? '单天套餐':'一周套餐'}`, // 商品名称
                 outTradeNo, // 商户订单号
                 spbillCreateIp: ip, // 终端ip地址
                 subMchId: "1626802696", // 商户号

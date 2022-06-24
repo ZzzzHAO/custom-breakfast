@@ -40,7 +40,8 @@ Page({
     showDetail: false, // 是否展示订单详情
     showConfirm: false, // 是否展示订单确认
     discountStr: '', // 优惠文案
-    takeTime: '' // 取餐时间
+    takeTime: '', // 取餐时间
+    dateArr: [] // 未来7天日期数组 （去除周六周日）
   },
 
   /**
@@ -56,6 +57,22 @@ Page({
       scrollStyle: `height: calc(100vh - ${bannerHeight} - ${tabsHeight} - ${headerHeight} - ${safeHeight})`,
       wrapStyle: `padding-top: ${headerHeight}`,
     });
+    // 未来七天初始化
+    let dateArr = []
+    for (let i = 0; i < 7; i++) {
+      const dateObj = {}
+      const next = i + 1
+      dateObj.day = moment(new Date()).add(next, 'd').days()
+      dateObj.dayStr = DAY_ENUM[moment(new Date()).add(next, 'd').days()]
+      dateObj.date = moment(new Date()).add(next, 'd').format('YYYY-MM-DD')
+      dateObj.dateStr = moment(new Date()).add(next, 'd').format('MM-DD')
+      dateArr.push(dateObj)
+    }
+    dateArr = dateArr.filter(item => item.day !== 0 && item.day !== 6) // 过滤 周六周日
+    this.setData({
+      dateArr,
+      'tabs[0].name': `预约 ${dateArr[0].dateStr}`
+    })
   },
 
   async init() {
@@ -158,6 +175,7 @@ Page({
         currentTab: tabId, // 当前page
       })
     }
+
     if (tabId === 1) {
       this.setData({
         isLoading: true,
@@ -176,18 +194,7 @@ Page({
       let packages = await this.getPackageList()
       const length = packages.length
       if (length) {
-        let dateArr = []
-        for (let i = 0; i < 7; i++) {
-          const dateObj = {}
-          const next = i + 1
-          dateObj.day = moment(new Date()).add(next, 'd').days()
-          dateObj.dayStr = DAY_ENUM[moment(new Date()).add(next, 'd').days()]
-          dateObj.date = moment(new Date()).add(next, 'd').format('YYYY-MM-DD')
-          dateObj.dateStr = moment(new Date()).add(next, 'd').format('MM-DD')
-          dateArr.push(dateObj)
-        }
-        dateArr = dateArr.filter(item => item.day !== 0 && item.day !== 6)
-        dateArr = dateArr.slice(0, length)
+        const dateArr = this.data.dateArr.slice(0, length)
         let amount = 0
         let oldAmount = 0
         for (let i = 0; i < length; i++) {
@@ -272,7 +279,7 @@ Page({
       if (checkedItem._id) {
         params.packages = [{
           id: checkedItem._id,
-          date: moment(new Date()).add(1, 'd').format('YYYY-MM-DD'),
+          date: this.data.dateArr[0].date,
           name: checkedItem.name,
           amount: checkedItem.oldPrice
         }]
@@ -326,7 +333,6 @@ Page({
           ip = '127.0.0.1'
         }
         params.ip = ip // ip地址
-        console.log(params)
       },
       complete() {
         self.setData({
@@ -334,7 +340,6 @@ Page({
           showDetail: false, // 默认不展开
           orderParams: params
         })
-        console.log(self.data.orderParams)
       }
     })
   },

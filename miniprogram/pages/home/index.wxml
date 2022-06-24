@@ -86,17 +86,18 @@
     <view class="title">订单确认</view>
     <van-cell-group>
       <van-cell title="取餐地址" value="{{storeInfo.address}}" />
-      <van-cell title="取餐时间" value="预约日期 {{storeInfo.takeUpTime}}" value-class="vlaue" center />
-      <van-cell title="订单详情" value="{{ orderParams.type === 1 ? '明天' : '一周' }}套餐" is-link arrow-direction="{{showDetail ? 'up' : 'down'}}" bindtap="toogleDetail" />
+      <van-cell title="取餐日期" value="{{orderParams.type === 1 ?  dateArr[0].date + '（' + dateArr[0].dayStr + '）' : '套餐预约日期'}}" value-class="vlaue" center />
+      <van-cell title="取餐时间" value="{{storeInfo.takeUpTime}}" value-class="vlaue" center />
+      <van-cell title="订单详情" value="{{ orderParams.type === 1 ? '单天' : '一周' }}套餐" is-link arrow-direction="{{showDetail ? 'up' : 'down'}}" bindtap="toogleDetail" />
       <view class="detail" wx:if="{{showDetail}}">
         <view class="row" style="color: #333;">
           <view class="column">预约日期</view>
-          <view class="column">商品名称*数量</view>
+          <view class="column">商品名称</view>
           <view class="column">价格</view>
         </view>
         <view class="row" wx:for="{{orderParams.packages}}">
           <view class="column">{{item.date}}</view>
-          <view class="column">{{item.name}} * 1</view>
+          <view class="column">{{item.name}}</view>
           <view class="column">¥{{item.amount/100}}</view>
         </view>
       </view>
