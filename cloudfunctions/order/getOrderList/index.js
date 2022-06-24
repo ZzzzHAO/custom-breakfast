@@ -17,16 +17,16 @@ const _ = db.command
 exports.main = async (event, context) => {
   const {
     type = 1,
-    pageNo,
-    pageSize
+      pageNo,
+      pageSize
   } = event
   try {
     const openid = cloud.getWXContext().OPENID // 用户openid
     let orderStatus = {
-      1: _.or(_.eq(PA_ORDER_STATUS.PAY_SUCCESS), _.eq(PA_ORDER_STATUS.DEAL_DONE)),
-      2: _.eq(PA_ORDER_STATUS.PAY_SUCCESS),
-      3: _.eq(PA_ORDER_STATUS.DEAL_DONE)
-    }[type]
+      1: _.or(_.eq(PA_ORDER_STATUS.PAY_SUCCESS), _.eq(PA_ORDER_STATUS.DEAL_DONE)), // 全部
+      2: _.eq(PA_ORDER_STATUS.PAY_SUCCESS), // 待取餐
+      3: _.eq(PA_ORDER_STATUS.DEAL_DONE) // 已完成
+    } [type]
     const filter = {
       orderStatus,
       userInfo: {

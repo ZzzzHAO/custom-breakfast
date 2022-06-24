@@ -23,32 +23,40 @@ Page({
     tabs: [{
       id: 1,
       name: '全部',
+      loading: false, // 是否加载中
       refresh: false,
+      inited: false, // 数据是否已初始化
+      list: [],
+      total: Infinity,
       page: {
         pageSize: 10,
-        pageNo: 1
+        pageNo: 0
       },
     }, {
       id: 2,
       name: '待取餐',
+      loading: false,
       refresh: false,
+      inited: false, // 数据是否已初始化
+      list: [],
+      total: Infinity,
       page: {
         pageSize: 10,
-        pageNo: 1
+        pageNo: 0
       },
     }, {
       id: 3,
       name: '已完成',
+      loading: false,
       refresh: false,
+      inited: false, // 数据是否已初始化
+      list: [],
+      total: Infinity,
       page: {
         pageSize: 10,
-        pageNo: 1
+        pageNo: 0
       },
     }], // 首页标签数组
-    orderList: [],
-    allList: [], // TODO 放入tabs里
-    undoneList: [],
-    doneList: [],
     currentTabIndex: 0 // 当前tab
   },
 
@@ -65,46 +73,117 @@ Page({
   },
 
   tabChange(e) {
+    const currentTabIndex = e.detail.index
     this.setData({
-      currentTabIndex: e.detail.index
+      currentTabIndex
     })
-    this.getOrderList()
+    if (!this.data.tabs[currentTabIndex].inited) { // 未初始化
+      this.getOrderList()
+    }
   },
 
-  async getOrderList() {
+  async getOrderList(refresh) {
     const {
       currentTabIndex,
       tabs,
     } = this.data
     const currentTab = tabs[currentTabIndex]
-    ajax.request('order/getOrderList', {
-      ...currentTab.page,
-      type: currentTab.id
-    }).then(res => {
-      let {
-        orderList,
-        total
-      } = res
-      orderList = orderList.map(item => {
-        return {
-          ...item,
-          orderStatus: PA_ORDER_STATUS[item.orderStatus],
-          orders: item.orders.map(order => {
-            return {
-              ...order,
-              distributeDate: moment(order.distributeDate).format('YYYY-MM-DD')
+    // 判断是否全部加载
+    if ((currentTab.list.length < currentTab.total) || refresh) {
+      if (!currentTab.loading) {
+        // loading状态
+        this.setData({
+          tabs: tabs.map((item, index) => {
+            if (index === currentTabIndex) {
+              return {
+                ...item,
+                loading: true
+              }
+            } else {
+              return item
             }
           })
-        }
-      })
-      const key = {
-        0: 'allList',
-        1: 'undoneList',
-        2: 'doneList'
-      }[currentTabIndex]
+        })
+        // 请求订单数据
+        const pageNo = refresh ? 1 : this.data.tabs[currentTabIndex].page.pageNo + 1
+        const pageSize = this.data.tabs[currentTabIndex].page.pageSize
+        const res = await ajax.request('order/getOrderList', {
+          pageNo,
+          pageSize,
+          type: currentTab.id
+        })
+        let {
+          orderList,
+          total
+        } = res
+        orderList = orderList.map(item => {
+          return {
+            ...item,
+            orderStatus: PA_ORDER_STATUS[item.orderStatus], // 翻译订单状态
+            orders: item.orders.map(order => {
+              return {
+                ...order,
+                distributeDate: moment(order.distributeDate).format('YYYY-MM-DD') // 格式化配送时间
+              }
+            })
+          }
+        })
+        this.setData({
+          tabs: this.data.tabs.map((item, index) => {
+            if (index === currentTabIndex) {
+              return {
+                ...item,
+                inited: true, // 初始化完成
+                total,
+                loading: false,
+                list: refresh ? orderList : [...item.list, ...orderList],
+                page: {
+                  ...item.page,
+                  pageNo
+                }
+              }
+            } else {
+              return item
+            }
+          })
+        })
+      }
+    }
+  },
+
+  async refresh() {
+    const {
+      currentTabIndex,
+      tabs
+    } = this.data
+
+    if (!tabs[currentTabIndex].refresh) {
       this.setData({
-        [key]: this.data[key].concat(orderList)
+        tabs: tabs.map((item, index) => {
+          if (index === currentTabIndex) {
+            return {
+              ...item,
+              refresh: true
+            }
+          } else {
+            return item
+          }
+        })
       })
-    })
+      // 刷新请求
+      await this.getOrderList(true)
+      this.setData({
+        tabs: this.data.tabs.map((item, index) => {
+          if (index === currentTabIndex) {
+            return {
+              ...item,
+              refresh: false
+            }
+          } else {
+            return item
+          }
+        })
+      })
+    }
   }
 })

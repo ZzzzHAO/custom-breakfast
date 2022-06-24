@@ -3,10 +3,10 @@
   <van-tabs color="#00BEE6" bind:change="tabChange" animated ellipsis lazy-render sticky>
     <van-tab wx:for="{{tabs}}" wx:for-item="tab" wx:key="id" title="{{tab.name}}" name="{{tab.id}}">
       <!-- tab标签 内容区域 -->
-      <scroll-view scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" style="{{scrollStyle}}" enhanced="{{true}}" show-scrollbar="{{false}}">
+      <scroll-view scroll-y class="body" refresher-enabled data-id="{{tab.id}}" bindscrolltolower="getOrderList" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" style="{{scrollStyle}}" enhanced="{{true}}" show-scrollbar="{{false}}">
         <!-- 有数据时 -->
-        <view class="order-list" wx:if="{{allList.length}}">
-          <view class="order" wx:for="{{allList}}">
+        <view class="order-list" wx:if="{{tab.list.length}}">
+          <view class="order" wx:for="{{tab.list}}">
             <view class="header">
               <view class="title">{{item.orderType===1?'单天套餐':'一周套餐'}}</view>
               <view class="status">{{item.orderStatus}}</view>
