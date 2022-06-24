@@ -321,7 +321,12 @@ Page({
     const self = this
     wx.getLocalIPAddress({
       success(res) {
-        params.ip = res.localip // ip地址
+        let ip = res.localip
+        if (ip === 'unknown') {
+          ip = '127.0.0.1'
+        }
+        params.ip = ip // ip地址
+        console.log(params)
       },
       complete() {
         self.setData({
@@ -329,6 +334,7 @@ Page({
           showDetail: false, // 默认不展开
           orderParams: params
         })
+        console.log(self.data.orderParams)
       }
     })
   },

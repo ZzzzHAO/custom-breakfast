@@ -89,7 +89,7 @@ Page({
     } = this.data
     const currentTab = tabs[currentTabIndex]
     // 判断是否全部加载
-    if ((currentTab.list.length < currentTab.total) || refresh) {
+    if ((currentTab.list.length < currentTab.total) || refresh === true) {
       if (!currentTab.loading) {
         // loading状态
         this.setData({

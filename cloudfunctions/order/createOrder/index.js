@@ -64,9 +64,12 @@ exports.main = async (event, context) => {
     amount, // 前端订单金额
     orderType, // 订单类型 1 单天 2 一周
     packages, // 预约套餐
-    ip = '127.0.0.1', // 客户端ip
+    ip, // 客户端ip
     code // 手机code
   } = event
+  if (!ip || ip === 'unknown') {
+    ip = '127.0.0.1'
+  }
   try {
     const {
       OPENID
@@ -246,7 +249,9 @@ exports.main = async (event, context) => {
                 return {
                   success: false,
                   error: {
-                    message: `统一下单失败`
+                    ip,
+                    message: `统一下单失败`,
+                    ...res
                   }
                 }
               }
