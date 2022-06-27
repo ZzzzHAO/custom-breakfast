@@ -29,7 +29,7 @@
                 </view>
                 <view class="footer">
                   <view class="price-wrap">
-                    <view class="price">
+                    <view class="new-price">
                       <text class="symbol">¥</text>
                       {{item.oldPrice/100}}
                     </view>
@@ -46,15 +46,17 @@
               <view class="date">{{item.dateStr}}</view>
             </view>
             <view class="package-wrap">
-              <view class="arrow" wx:if="{{index !== 0}}">
-                <van-icon name="ascending" size="25px" custom-class="arrow-up" data-index="{{index}}" bindtap="moveUp" color="#00BEE6" />
-              </view>
+              <!-- <view class="arrow" wx:if="{{index !== 0}}">
+                <van-icon name="exchange" size="40rpx" custom-class="arrow-up" data-index="{{index}}" bindtap="moveUp" color="#999" />
+              </view> -->
               <view class="img-wrap">
                 <image class="img" src="{{item.package.image}}" />
               </view>
               <view class="content">
                 <view class="title">
-                  <view class="package-name">{{item.package.name}}</view>
+                  <view class="package-name" data-date="{{item.dateStr}}" bindtap="openChangePopup">{{item.package.name}}
+                    <van-icon color="#333333" name="arrow-down" />
+                  </view>
                   <view class="package-desc">{{item.package.desc}}</view>
                 </view>
                 <view class="specs">
@@ -64,11 +66,14 @@
                 </view>
                 <view class="footer">
                   <view class="price-wrap">
-                    <view class="price">
+                    <view class="new-price">
                       <text class="symbol">¥</text>
                       {{item.package.price/100}}
                     </view>
-                    <view wx:if="{{item.package.oldPrice !== undefined}}" class="old-price">¥{{item.package.oldPrice/100}}</view>
+                    <view class="old-price" wx:if="{{item.package.oldPrice !== undefined}}">
+                      <text class="symbol">¥</text>
+                      {{item.package.oldPrice/100}}
+                    </view>
                   </view>
                 </view>
               </view>
@@ -104,5 +109,29 @@
       <van-cell center title="支付金额" label="{{ discountStr }}" value="¥{{orderParams.amount/100}}" />
     </van-cell-group>
     <view class="pay-btn" bindtap="pay">支付</view>
+  </view>
+</van-popup>
+<van-popup show="{{ showChagenPopup }}" bind:close="changePopupClose" closeable position="bottom">
+  <view class="change-wrap">
+    <view class="header">
+      <view class="image-wrap">
+        <image class="img" src="{{currentSelectPackage.image}}" />
+      </view>
+      <view class="price-wrap">
+        <view class="new-price">
+          <view class="symbol">¥</view>
+          <view class="price">{{currentSelectPackage.price/100}}</view>
+        </view>
+        <view class="old-price">
+          <view class="symbol">¥</view>
+          <view class="price">{{currentSelectPackage.oldPrice/100}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="desc">{{currentSelectPackage.desc}}</view>
+    <view class="content">
+      <view wx:for="{{packages}}" data-package="{{item}}" bindtap="choosePackage" class="package {{currentSelectPackage.name === item.name ? 'active':''}}">{{item.name}}</view>
+    </view>
+    <view class="btn" bindtap="changePackage">确认</view>
   </view>
 </van-popup>

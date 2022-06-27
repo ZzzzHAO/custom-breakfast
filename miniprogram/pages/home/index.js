@@ -41,7 +41,8 @@ Page({
     showConfirm: false, // 是否展示订单确认
     discountStr: '', // 优惠文案
     takeTime: '', // 取餐时间
-    dateArr: [] // 未来7天日期数组 （去除周六周日）
+    dateArr: [], // 未来7天日期数组 （去除周六周日）
+    showChagenPopup: false, // 是否展示选择套餐弹窗
   },
 
   /**
@@ -118,6 +119,9 @@ Page({
       pageSize: 10
     })
     const packages = res.packageList || []
+    this.setData({
+      packages
+    })
     return packages
   },
   // 下啦刷新
@@ -181,10 +185,7 @@ Page({
         isLoading: true,
         checkedItem: {}, // 清空勾选项
       });
-      const packages = await this.getPackageList()
-      this.setData({
-        packages,
-      })
+      await this.getPackageList()
     } else if (tabId === 2) {
       this.setData({
         isLoading: true,
@@ -414,4 +415,53 @@ Page({
       url: '/pages/order/orderList/index',
     })
   },
+  // 关闭修改弹窗
+  changePopupClose(e) {
+    this.setData({
+      showChagenPopup: false
+    })
+  },
+  // 打开修改弹窗
+  openChangePopup(e) {
+    const date = e.currentTarget.dataset.date
+    const current = this.data.weekPackages.find(item => item.dateStr === date)
+    const currentSelectPackage = current.package
+    const currentSelectDate = current.dateStr
+    this.setData({
+      showChagenPopup: true,
+      currentSelectPackage,
+      currentSelectDate
+    })
+  },
+  // 选择要改为哪种套餐
+  choosePackage(e) {
+    const currentSelectPackage = e.currentTarget.dataset.package
+    this.setData({
+      currentSelectPackage
+    })
+  },
+  // 确认修改
+  changePackage(e) {
+    const {
+      weekPackages,
+      packageChangeTo,
+      currentSelectDate,
+      currentSelectPackage
+    } = this.data
+    const newWeekPackages = weekPackages.map(item => {
+      console.log(item.dateStr)
+      if (item.dateStr === currentSelectDate) {
+        return {
+          ...item,
+          package: currentSelectPackage
+        }
+      } else {
+        return item
+      }
+    })
+    this.setData({
+      showChagenPopup: false,
+      weekPackages: newWeekPackages
+    })
+  }
 })
