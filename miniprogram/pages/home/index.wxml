@@ -78,8 +78,8 @@
           </view>
         </view>
       </scroll-view>
-      <button class="btn" wx:if="{{isNewCustomer}}" open-type="getPhoneNumber" bindgetphonenumber="goConfirm">立即预约</button>
-      <button class="btn" wx:else bindtap="goConfirm">立即预约</button>
+      <button class="btn" disabled="{{currentTab === 1 && !checkedItem._id}}" wx:if="{{isNewCustomer}}" open-type="getPhoneNumber" bindgetphonenumber="goConfirm">立即预约</button>
+      <button class="btn" disabled="{{currentTab === 1 && !checkedItem._id}}" wx:else bindtap="goConfirm">立即预约</button>
     </van-tab>
   </van-tabs>
 </view>
@@ -137,6 +137,6 @@
     <view class="package-list">
       <view wx:for="{{packages}}" data-package="{{item}}" bindtap="choosePackage" class="package {{currentSelectPackage.name === item.name ? 'active':''}}">{{item.name}}</view>
     </view>
-    <view class="btn" bindtap="changePackage">确认</view>
+    <view class="change-btn" bindtap="changePackage">确认</view>
   </view>
 </van-popup>

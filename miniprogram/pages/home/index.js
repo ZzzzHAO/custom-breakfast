@@ -256,42 +256,26 @@ Page({
     }
     // 预约明天
     if (currentTab === 1) {
-      if (checkedItem._id) {
-        params.packages = [{
-          id: checkedItem._id,
-          date: this.data.dateArr[0].date,
-          name: checkedItem.name,
-          amount: checkedItem.oldPrice
-        }]
-        params.amount = checkedItem.oldPrice
-        params.type = 1
-      } else {
-        wx.showToast({
-          title: '请选择套餐',
-          icon: 'none'
-        })
-        return
-      }
+      params.packages = [{
+        id: checkedItem._id,
+        date: this.data.dateArr[0].date,
+        name: checkedItem.name,
+        amount: checkedItem.oldPrice
+      }]
+      params.amount = checkedItem.oldPrice
+      params.type = 1
     } else {
       // 预约一周
-      if (weekPackages.length) {
-        params.packages = weekPackages.map(item => {
-          return {
-            id: item.package._id,
-            date: item.date,
-            name: item.package.name,
-            amount: item.package.price
-          }
-        })
-        params.amount = weekAmount
-        params.type = 2
-      } else {
-        wx.showToast({
-          title: '请选择套餐',
-          icon: 'none'
-        })
-        return
-      }
+      params.packages = weekPackages.map(item => {
+        return {
+          id: item.package._id,
+          date: item.date,
+          name: item.package.name,
+          amount: item.package.price
+        }
+      })
+      params.amount = weekAmount
+      params.type = 2
     }
     if (isNewCustomer) {
       const code = e.detail.code
