@@ -360,7 +360,12 @@ Page({
             if (result.detail.orderStatus === 2) { // 支付成功
               wx.showToast({
                 title: '支付成功',
-                icon: 'none'
+                icon: 'none',
+                success() {
+                  wx.navigateTo({
+                    url: '/pages/order/orderList/index',
+                  })
+                }
               })
               this.setData({
                 showConfirm: false
