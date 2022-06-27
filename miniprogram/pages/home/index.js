@@ -197,51 +197,30 @@ Page({
       if (length) {
         const dateArr = this.data.dateArr.slice(0, length)
         let amount = 0
-        let oldAmount = 0
         for (let i = 0; i < length; i++) {
           dateArr[i].package = packages[i]
           amount += packages[i].price
-          oldAmount += packages[i].oldPrice
         }
-        const discount = (oldAmount - amount) / 100
         this.setData({
           weekPackages: dateArr,
           weekAmount: amount,
-          discountStr: discount ? `已优惠 ¥${discount}` : ''
         })
+        this.calcDiscount()
       }
     }
   },
-  // 一周套餐 向上移动
-  moveUp(e) {
+  // 计算周套餐 优惠金额
+  calcDiscount() {
     const {
-      index
-    } = e.currentTarget.dataset
-    let {
       weekPackages
     } = this.data
-    if (index !== 0) {
-      const currentPackage = weekPackages[index].package
-      const lastPackage = weekPackages[index - 1].package
-      weekPackages = weekPackages.map((v, i) => {
-        if (i === index - 1) {
-          return {
-            ...v,
-            package: currentPackage
-          }
-        } else if (i === index) {
-          return {
-            ...v,
-            package: lastPackage
-          }
-        } else {
-          return v
-        }
-      })
-    }
+    const discountAmount = weekPackages.reduce((acc, cur) => {
+      return acc + (cur.package.oldPrice - cur.package.price)
+    }, 0) || 0
     this.setData({
-      weekPackages
+      discountStr: discountAmount ? `已优惠 ¥${discountAmount/100}` : ''
     })
+
   },
   // 勾选套餐
   check(e) {
@@ -463,5 +442,6 @@ Page({
       showChagenPopup: false,
       weekPackages: newWeekPackages
     })
+    this.calcDiscount() // 计算优惠金额
   }
 })

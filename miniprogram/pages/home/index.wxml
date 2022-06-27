@@ -46,9 +46,6 @@
               <view class="date">{{item.dateStr}}</view>
             </view>
             <view class="package-wrap">
-              <!-- <view class="arrow" wx:if="{{index !== 0}}">
-                <van-icon name="exchange" size="40rpx" custom-class="arrow-up" data-index="{{index}}" bindtap="moveUp" color="#999" />
-              </view> -->
               <view class="img-wrap">
                 <image class="img" src="{{item.package.image}}" />
               </view>
