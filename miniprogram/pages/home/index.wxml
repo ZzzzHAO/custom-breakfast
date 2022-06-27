@@ -117,19 +117,27 @@
       <view class="image-wrap">
         <image class="img" src="{{currentSelectPackage.image}}" />
       </view>
-      <view class="price-wrap">
-        <view class="new-price">
-          <view class="symbol">¥</view>
-          <view class="price">{{currentSelectPackage.price/100}}</view>
+      <view class="content">
+        <view class="price-wrap">
+          <view class="new-price">
+            <view class="symbol">¥</view>
+            <view class="price">{{currentSelectPackage.price/100}}</view>
+          </view>
+          <view class="old-price">
+            <view class="symbol">¥</view>
+            <view class="price">{{currentSelectPackage.oldPrice/100}}</view>
+          </view>
         </view>
-        <view class="old-price">
-          <view class="symbol">¥</view>
-          <view class="price">{{currentSelectPackage.oldPrice/100}}</view>
+        <view class="specs">
+          <view class="spec" wx:for="{{currentSelectPackage.products}}" wx:for-item="product">
+            {{product.name}} * {{product.count}}
+          </view>
         </view>
       </view>
     </view>
     <view class="desc">{{currentSelectPackage.desc}}</view>
-    <view class="content">
+    <van-divider />
+    <view class="package-list">
       <view wx:for="{{packages}}" data-package="{{item}}" bindtap="choosePackage" class="package {{currentSelectPackage.name === item.name ? 'active':''}}">{{item.name}}</view>
     </view>
     <view class="btn" bindtap="changePackage">确认</view>
