@@ -103,7 +103,7 @@
           <view class="column">¥{{item.amount/100}}</view>
         </view>
       </view>
-      <van-cell center title="支付金额" label="{{ discountStr }}" value="¥{{orderParams.amount/100}}" />
+      <van-cell center title="支付金额" label="{{ currentTab === 2 && discountStr ? discountStr : '' }}" value="¥{{orderParams.amount/100}}" />
     </van-cell-group>
     <view class="pay-btn" bindtap="pay">支付</view>
   </view>
