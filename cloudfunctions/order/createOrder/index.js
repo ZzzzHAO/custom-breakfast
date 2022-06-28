@@ -24,7 +24,7 @@ const createSeq = async function (storeId) {
     pad = 4; // 默认4位取餐号
   // 当天的订单数量
   const totalRes = await db.collection('order').where({
-    distributeDate: _.and(_.gt(moment(db.serverDate()).startOf('day').toDate()), _.lt(moment(db.serverDate()).endOf('day').toDate())),
+    distributeDate: moment(db.serverDate()).format('YYYY-MM-DD'),
     'storeInfo.storeId': storeId
   }).count()
   const {
@@ -188,7 +188,7 @@ exports.main = async (event, context) => {
                       outTradeNo, // 父订单号
                       orderStatus: CH_ORDER_STATUS.CREATE_SUCCESS, // 已创建
                       distributeStatus: DISTRIBUTE_STATUS.NO, // 待配送
-                      distributeDate: moment(package.date).toDate(), // 配送日期
+                      distributeDate: moment(package.date).format('YYYY-MM-DD'), // 配送日期
                       orderAmount: isWeek ? package.detail.price : package.detail.oldPrice, // 子订单金额 如果是预约一周则为优惠价 price，否则为原价 oldPrice
                       product: package.detail, // 子订单商品 套餐快照
                       userInfo, // 用户信息

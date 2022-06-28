@@ -1,18 +1,33 @@
 <!--pages/queryOrder/index.wxml-->
 <view class="get-order-wrap">
-  <view class="input-wrap">
-    <input class="input" bindinput="input" type="number" placeholder="请输入取餐码" always-embed placeholder-class="placeholder" maxlength="4" focus="{{focus}}" value="{{code}}" />
-    <van-icon bindtap="clear" class="clear" color="#ddd" size="60rpx" name="clear" />
+  <view class="header">
+    <van-cell-group inset>
+      <van-cell value-class="cell-value" title="取餐日期" is-link value="{{currentDateStr}}" bindtap="openDatePicker" />
+    </van-cell-group>
+    <view class="input-wrap">
+      <input class="input" bindinput="input" type="number" placeholder="请输入取餐码" always-embed placeholder-class="placeholder" maxlength="{{4}}" focus="{{focus}}" value="{{code}}" />
+      <van-icon bindtap="clear" class="clear" color="#ddd" size="60rpx" name="clear" />
+    </view>
   </view>
   <scroll-view class="scroll-wrap">
-    <view class="order-wrap">
-      <view>套餐名称：套餐一</view>
-      <view>订单号：CH2034793827489327</view>
-      <view>配送日期：2022-05-17</view>
-      <view>客户手机号：13248322521</view>
-      <view>订单状态：已支付</view>
-      <view>配送状态：已配送</view>
-      <view>包子*1</view>
+    <view wx:if="{{orderInfo}}" class="order-wrap">
+      <van-cell-group inset>
+        <van-cell value-class="cell-value" title="订单号" is-link value="{{orderInfo.orderNo}}" />
+        <van-cell value-class="cell-value" title="商品名称" value="{{orderInfo.name}}" />
+        <van-cell value-class="cell-value" title="取餐日期" value="{{orderInfo.distributeDate}}" />
+        <van-cell value-class="cell-value" title="客户手机号" is-link value="{{orderInfo.phoneMask}}" data-phone="{{orderInfo.phone}}" bindtap="callPhone" />
+        <van-cell value-class="cell-value" title="订单状态">
+          <van-tag size="medium" plain type="{{orderInfo.status === 2 ? 'success' : 'warning'}}">{{orderInfo.statusStr}}</van-tag>
+        </van-cell>
+        <van-cell value-class="cell-value" title="配送状态">
+          <van-tag size="medium" plain type="{{orderInfo.distributeStatus === 1 ? 'success' : 'warning'}}">{{orderInfo.distributeStatusStr}}</van-tag>
+        </van-cell>
+      </van-cell-group>
     </view>
+    <data-empty wx:else type="order" text="暂无订单信息"></data-empty>
   </scroll-view>
+  <view bindtap="distribute" wx:if="{{orderInfo && orderInfo.status === 2 && orderInfo.distributeStatus === 0}}" class="distribute-btn">配送完成</view>
 </view>
+<van-popup round wx:if="{{showDatePicker}}" show="{{true}}" position="bottom" bind:close="hideDatePicker">
+  <van-datetime-picker show-toolbar type="date" toolbar-class="toolbar" bind:cancel="hideDatePicker" bind:confirm="handleDatePicker" value-key="label" formatter="{{dateFormatter}}" value="{{currentDate}}" />
+</van-popup>

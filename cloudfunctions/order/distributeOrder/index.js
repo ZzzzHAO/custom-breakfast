@@ -29,6 +29,7 @@ exports.main = async (event, context) => {
     orderRes = orderRes.data
     if (userRes) {
       if (orderRes) {
+        // 用户是否是该订单门店的 负责人
         if (userRes.store.includes(orderRes.storeInfo.storeId)) {
           const transaction = await db.startTransaction()
           await transaction.collection('order').doc(orderNo).update({
@@ -38,7 +39,6 @@ exports.main = async (event, context) => {
           })
           // 父订单信息
           const paOrderRes = await db.collection('wx-order').doc(orderRes.outTradeNo).get()
-          console.log(orderRes.outTradeNo)
           const orders = paOrderRes.data && paOrderRes.data.orders
           if (orders && orders.length) {
             const tasks = []

@@ -11,8 +11,9 @@ const db = cloud.database({
 const _ = db.command
 // 通过取餐码获取子订单信息
 exports.main = async (event, context) => {
-  const {
-    code
+  let {
+    code, // 取餐码
+    date // 取餐日期
   } = event
   try {
     // 现查找当前门店
@@ -21,9 +22,10 @@ exports.main = async (event, context) => {
     }).get()
     storeRes = storeRes.data && storeRes.data[0]
     if (storeRes) {
+      date = date || db.serverDate() // 不传默认当天
       let orderRes = await db.collection('order').where({
         code, // 取餐码
-        distributeDate: _.and(_.gte(moment(db.serverDate()).startOf('day').toDate()), _.lt(moment(db.serverDate()).endOf('day').toDate())), // 当天
+        distributeDate: moment(date).format('YYYY-MM-DD'),
         storeInfo: {
           storeId: storeRes._id, // 当前门店
         }
