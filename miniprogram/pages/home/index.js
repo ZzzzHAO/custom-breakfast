@@ -432,5 +432,12 @@ Page({
       weekPackages: newWeekPackages
     })
     this.calcDiscount() // 计算优惠金额
+  },
+  // 图片预览
+  preview(e) {
+    wx.previewImage({
+      current: e.currentTarget.dataset.url, // 当前显示图片的 http 链接
+      urls: [e.currentTarget.dataset.url] // 需要预览的图片 http 链接列表
+    })
   }
 })

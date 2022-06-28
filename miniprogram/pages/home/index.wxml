@@ -15,7 +15,7 @@
             <van-radio checked-color="#00BEE6" custom-class="radio" name="{{item._id}}"></van-radio>
             <view class="package-wrap">
               <view class="img-wrap">
-                <image class="img" src="{{item.image}}" />
+                <image class="img" catchtap="preview" data-url="{{item.image}}" src="{{item.image}}" />
               </view>
               <view class="content">
                 <view class="title">
@@ -47,7 +47,7 @@
             </view>
             <view class="package-wrap">
               <view class="img-wrap">
-                <image class="img" src="{{item.package.image}}" />
+                <image class="img" catchtap="preview" data-url="{{item.package.image}}" src="{{item.package.image}}" />
               </view>
               <view class="content">
                 <view class="title">
@@ -112,7 +112,7 @@
   <view class="change-wrap">
     <view class="header">
       <view class="image-wrap">
-        <image class="img" src="{{currentSelectPackage.image}}" />
+        <image class="img" catchtap="preview" data-url="{{currentSelectPackage.image}}" src="{{currentSelectPackage.image}}" />
       </view>
       <view class="content">
         <view class="price-wrap">
