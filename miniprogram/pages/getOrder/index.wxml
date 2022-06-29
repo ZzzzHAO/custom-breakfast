@@ -26,6 +26,7 @@
     </view>
     <data-empty wx:else type="order" text="暂无订单信息"></data-empty>
   </scroll-view>
+  <!-- 已支付、待配送才可以配送 -->
   <view bindtap="distribute" wx:if="{{orderInfo && orderInfo.status === 2 && orderInfo.distributeStatus === 0}}" class="distribute-btn">配送完成</view>
 </view>
 <van-popup round wx:if="{{showDatePicker}}" show="{{true}}" position="bottom" bind:close="hideDatePicker">

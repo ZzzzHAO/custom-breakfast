@@ -8,7 +8,7 @@
         <view class="order-list" wx:if="{{tab.list.length}}">
           <view class="order" wx:for="{{tab.list}}">
             <view class="header">
-              <view class="title">{{item.orderType===1?'单天套餐':'一周套餐'}}</view>
+              <view class="title">{{item.orderType === 1 ? '单天套餐' : '一周套餐'}}</view>
               <view class="status">{{item.orderStatus}}</view>
             </view>
             <view class="package-list">

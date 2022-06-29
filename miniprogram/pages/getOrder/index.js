@@ -2,7 +2,7 @@
 import ajax from '../../common/ajax'
 const moment = require('moment')
 const CH_ORDER_STATUS = {
-  1: '已创建',
+  1: '待支付',
   2: '支付成功',
   3: '支付失败',
   4: '退款中',
@@ -77,7 +77,6 @@ Page({
           this.setData({
             orderInfo: {
               ...orderInfo,
-              distributeDate: moment(orderInfo.distributeDate).format('YYYY-MM-DD'),
               statusStr: CH_ORDER_STATUS[orderInfo.status],
               distributeStatusStr: DISTRIBUTE_STATUS[orderInfo.distributeStatus],
               phoneMask: `${orderInfo.phone.substr(0,3)}****${orderInfo.phone.substr(-4)}`
@@ -132,10 +131,13 @@ Page({
   },
   // 时间选择器确认事件
   handleDatePicker(val) {
-    // const date = new Date(val.detail);
     this.setData({
+      currentDate: val.detail,
       currentDateStr: moment(val.detail).format('YYYY-MM-DD'),
       showDatePicker: false,
     })
+    if (this.data.code && this.data.code.length === 4) {
+      this.getOrderByCode()
+    }
   },
 })

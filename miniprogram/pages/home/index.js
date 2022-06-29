@@ -252,7 +252,7 @@ Page({
     } = this.data
     const params = {
       ip: '',
-      type: currentTab
+      orderType: currentTab
     }
     // 预约明天
     if (currentTab === 1) {
@@ -263,7 +263,7 @@ Page({
         amount: checkedItem.oldPrice
       }]
       params.amount = checkedItem.oldPrice
-      params.type = 1
+      params.orderType = 1
     } else {
       // 预约一周
       params.packages = weekPackages.map(item => {
@@ -275,7 +275,7 @@ Page({
         }
       })
       params.amount = weekAmount
-      params.type = 2
+      params.orderType = 2
     }
     if (isNewCustomer) {
       const code = e.detail.code

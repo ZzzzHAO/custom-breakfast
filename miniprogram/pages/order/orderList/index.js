@@ -120,12 +120,6 @@ Page({
           return {
             ...item,
             orderStatus: PA_ORDER_STATUS[item.orderStatus], // 翻译订单状态
-            orders: item.orders.map(order => {
-              return {
-                ...order,
-                distributeDate: moment(order.distributeDate).format('YYYY-MM-DD') // 格式化配送时间
-              }
-            })
           }
         })
         this.setData({
