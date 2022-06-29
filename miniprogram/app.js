@@ -1,4 +1,5 @@
 // app.js
+import "./common/overrideWX.js";
 App({
   globalData: {
     navPos: {}, // 获取导航数据
