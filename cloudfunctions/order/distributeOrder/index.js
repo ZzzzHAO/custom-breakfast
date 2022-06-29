@@ -43,21 +43,33 @@ exports.main = async (event, context) => {
             })
             // 父订单信息
             const paOrderRes = await db.collection('wx-order').doc(orderRes.outTradeNo).get()
-            const orders = paOrderRes.data && paOrderRes.data.orders
-            if (orders && orders.length) {
-              const tasks = []
-              orders.forEach(item => {
-                const promise = db.collection('order').doc(item).get()
-                tasks.push(promise)
+            const orderType = paOrderRes.data && paOrderRes.data.orderType
+            // 单天订单还是一周订单
+            if (orderType === 1) { // 如果是单天订单 直接翻转父订单状态
+              await transaction.collection('wx-order').doc(orderRes.outTradeNo).update({
+                data: {
+                  orderStatus: PA_ORDER_STATUS.DEAL_DONE
+                }
               })
-              let result = await Promise.all(tasks)
-              result = result.map(item => item.data.distributeStatus)
-              if (result.every(item => item === 1)) { // 当所有子订单都配送完成时 翻转父订单的订单状态为 交易完成
-                await transaction.collection('wx-order').doc(orderRes.outTradeNo).update({
-                  data: {
-                    orderStatus: PA_ORDER_STATUS.DEAL_DONE
-                  }
+            } else {
+              let orders = paOrderRes.data && paOrderRes.data.orders // 所有子订单号数组
+              const index = orders.findIndex(item => item === orderNo)
+              orders.splice(index, 1) // 去除当前订单：因为当前订单还在transaction中 distributeStatus还未变更
+              if (orders && orders.length) {
+                const tasks = []
+                orders.forEach(item => {
+                  const promise = db.collection('order').doc(item).get()
+                  tasks.push(promise)
                 })
+                let result = await Promise.all(tasks)
+                result = result.map(item => item.data.distributeStatus)
+                if (result.every(item => item === 1)) { // 当除了orderNo的订单以外的 所有子订单 都配送完成时 翻转父订单的订单状态为 交易完成
+                  await transaction.collection('wx-order').doc(orderRes.outTradeNo).update({
+                    data: {
+                      orderStatus: PA_ORDER_STATUS.DEAL_DONE
+                    }
+                  })
+                }
               }
             }
             await transaction.commit()

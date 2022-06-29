@@ -43,6 +43,7 @@ const ajax = {
                 title: msg,
               })
             }
+            reject(res.result.error)
           }
         },
         fail(error) {
