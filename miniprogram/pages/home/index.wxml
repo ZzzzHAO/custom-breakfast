@@ -9,7 +9,7 @@
   <van-tabs color="#00BEE6" bind:change="tabChange" animated ellipsis lazy-render sticky>
     <van-tab wx:for="{{tabs}}" wx:for-item="tab" wx:key="id" title="{{tab.name}}" name="{{tab.id}}">
       <!-- tab标签 内容区域 -->
-      <scroll-view scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" style="{{scrollStyle}}" enhanced="{{true}}" show-scrollbar="{{false}}">
+      <scroll-view scroll-y class="body" refresher-enabled data-id="{{tab.id}}" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" style="{{scrollStyle}}">
         <van-radio-group wx:if="{{tab.id === 1}}" class="package-list" value="{{ checkedItem._id }}" bind:change="onChange">
           <view class="package" wx:for="{{packages}}" wx:key="_id" bind:tap="check" data-package="{{item}}">
             <van-radio checked-color="#00BEE6" custom-class="radio" name="{{item._id}}"></van-radio>
