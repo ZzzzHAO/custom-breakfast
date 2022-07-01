@@ -48,7 +48,8 @@ exports.main = async (event, context) => {
             if (orderType === 1) { // 如果是单天订单 直接翻转父订单状态
               await transaction.collection('wx-order').doc(orderRes.outTradeNo).update({
                 data: {
-                  orderStatus: PA_ORDER_STATUS.DEAL_DONE
+                  orderStatus: PA_ORDER_STATUS.DEAL_DONE,
+                  dealTime: db.serverDate()
                 }
               })
             } else {
@@ -66,7 +67,8 @@ exports.main = async (event, context) => {
                 if (result.every(item => item === 1)) { // 当除了orderNo的订单以外的 所有子订单 都配送完成时 翻转父订单的订单状态为 交易完成
                   await transaction.collection('wx-order').doc(orderRes.outTradeNo).update({
                     data: {
-                      orderStatus: PA_ORDER_STATUS.DEAL_DONE
+                      orderStatus: PA_ORDER_STATUS.DEAL_DONE,
+                      dealTime: db.serverDate()
                     }
                   })
                 }

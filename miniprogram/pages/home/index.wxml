@@ -133,7 +133,7 @@
       </view>
     </view>
     <view class="desc">{{currentSelectPackage.desc}}</view>
-    <van-divider contentPosition="center">请选择 {{currentSelectDate}} 要预约的商品</van-divider>
+    <van-divider contentPosition="center">请选择 {{currentSelectDate}}（{{currentSelectDay}}）要预约的商品</van-divider>
     <view class="package-list">
       <view wx:for="{{packages}}" data-package="{{item}}" bindtap="choosePackage" class="package {{currentSelectPackage.name === item.name ? 'active':''}}">{{item.name}}</view>
     </view>

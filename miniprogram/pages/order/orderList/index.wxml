@@ -6,49 +6,42 @@
       <scroll-view scroll-y class="body" refresher-enabled data-id="{{tab.id}}" bindscrolltolower="getOrderList" refresher-triggered="{{tab.refresh}}" bindrefresherrefresh="refresh" style="{{scrollStyle}}">
         <!-- 有数据时 -->
         <view class="order-list" wx:if="{{tab.list.length}}">
-          <view class="order" wx:for="{{tab.list}}">
+          <view class="order" wx:for="{{tab.list}}" wx:key="index">
             <view class="header">
               <view class="title">{{item.orderType === 1 ? '单天套餐' : '一周套餐'}}</view>
               <view class="status">{{item.orderStatus}}</view>
             </view>
             <view class="package-list">
-              <view class="package" wx:for="{{item.orders}}" wx:for-item="order">
-                <view class="img-wrap">
-                  <image class="img" src="{{order.product.image}}" />
-                </view>
-                <view class="content">
-                  <view class="title">
-                    <view class="package-name">{{order.product.name}}</view>
+              <view wx:for="{{item.orders}}" wx:key="index" wx:for-item="order" data-no="{{item.orderNo}}" bindtap="goDetail">
+                <view class="package">
+                  <view class="img-wrap">
+                    <image class="img" src="{{order.product.image}}" />
                   </view>
-                  <view class="specs">
-                    <view class="spec" wx:for="{{order.product.products}}" wx:for-item="product">
-                      {{product.name}} * {{product.count}}
+                  <view class="content">
+                    <view class="title">
+                      <view class="package-name">{{order.product.name}}</view>
                     </view>
-                  </view>
-                  <view class="amount">
-                    <view class="price-wrap">
-                      <view class="price">
-                        <text class="symbol">¥</text>
-                        {{order.orderAmount/100}}
+                    <view class="specs">
+                      <view class="spec" wx:for="{{order.product.products}}" wx:key="index" wx:for-item="product">
+                        {{product.name}} * {{product.count}}
                       </view>
                     </view>
-                  </view>
-                  <view class="distribute-info">
-                    <van-tag class="tag" color="#00BEE6" type="danger" size="medium">{{order.distributeDate}}</van-tag>
-                    <van-tag class="tag" color="#00BEE6" type="danger" size="medium" plain="{{order.distributeStatus ? false : true}}">{{order.distributeStatus?'已取餐':'待取餐'}}</van-tag>
-                    <van-tag class="tag" wx:if="{{!order.distributeStatus}}" color="#00BEE6" type="danger" size="medium" plain="{{order.distributeStatus ? false : true}}">取餐码：{{order.code}}</van-tag>
+                    <view class="amount">
+                      <pirce value="{{order.orderAmount/100}}" bold />
+                    </view>
+                    <view class="distribute-info">
+                      <van-tag class="tag" color="#00BEE6" type="danger" size="medium">{{order.distributeDate}}</van-tag>
+                      <van-tag class="tag" color="#00BEE6" type="danger" size="medium" plain="{{order.distributeStatus ? false : true}}">{{order.distributeStatus?'已取餐':'待取餐'}}</van-tag>
+                      <van-tag class="tag" wx:if="{{!order.distributeStatus}}" color="#00BEE6" type="danger" size="medium" plain="{{order.distributeStatus ? false : true}}">取餐码：{{order.code}}</van-tag>
+                    </view>
                   </view>
                 </view>
+                <van-divider />
               </view>
             </view>
             <view class="footer">
-              <view class="price-wrap">
-                <view class="price">
-                  实付款
-                  <text class="symbol">¥</text>
-                  {{item.orderAmount/100}}
-                </view>
-              </view>
+              <text class="title" space="nbsp">实付款 </text>
+              <pirce value="{{item.payAmount/100}}" size="large" bold />
             </view>
           </view>
         </view>

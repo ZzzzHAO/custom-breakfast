@@ -1,0 +1,138 @@
+/* pages/order/orderDetail/index.wxss */
+.order-detail-wrap {
+  padding: 24rpx 0;
+  height: calc(100vh - env(safe-area-inset-bottom));
+
+  .order {
+    width: 95vw;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 24rpx;
+    margin-bottom: 24rpx;
+    border-radius: 10rpx;
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      height: 60rpx;
+      line-height: 60rpx;
+
+      .title {
+        font-weight: bold;
+      }
+
+      .status {
+        color: #00BEE6;
+        font-size: 28rpx;
+      }
+    }
+
+    .package-list {
+      .package {
+        display: flex;
+        align-items: center;
+        position: relative;
+        background: #fff;
+        border-radius: 16rpx;
+        margin-top: 16rpx;
+
+        .arrow {
+          display: flex;
+          position: absolute;
+          right: 10rpx;
+          top: 10rpx;
+        }
+
+        .img-wrap {
+          position: relative;
+
+          .img {
+            width: 120rpx;
+            height: 120rpx;
+            border-radius: 8rpx;
+          }
+        }
+
+        .content {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          flex-grow: 1;
+          margin-left: 20rpx;
+
+          .title {
+            margin-bottom: 10rpx;
+
+            .package-name {
+              font-family: PingFangSC-Medium;
+              font-weight: 500;
+              font-size: 28rpx;
+              color: #333333;
+              word-break: break-all;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 2;
+              overflow: hidden;
+            }
+
+            .package-desc {
+              font-size: 24rpx;
+              color: #999;
+            }
+          }
+
+          .specs {
+            display: flex;
+            flex-wrap: wrap;
+            width: 450rpx;
+            margin-bottom: 10rpx;
+
+            .spec {
+              height: 40rpx;
+              margin-right: 10rpx;
+              margin-bottom: 10rpx;
+              padding: 0 10rpx;
+              line-height: 40rpx;
+              color: #666;
+              background-color: #f0f0f0;
+              text-align: center;
+              border-radius: 10rpx;
+              font-size: 20rpx;
+            }
+          }
+
+          .amount {
+            position: absolute;
+            right: 0;
+            top: 0;
+          }
+
+          .distribute-info {
+            .tag {
+              margin-right: 12rpx;
+            }
+          }
+        }
+      }
+    }
+
+    .footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 20rpx;
+
+      .title {
+        font-family: PingFangSC-Semibold;
+        font-weight: 600;
+        font-size: 30rpx;
+        color: #333;
+        text-align: center;
+      }
+    }
+  }
+
+  .card-info {
+    margin-bottom: 24rpx;
+  }
+}

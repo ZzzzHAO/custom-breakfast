@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "van-tag": "@vant/weapp/tag/index",
+    "price": "../../../components/price/index",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
+    "van-divider": "@vant/weapp/divider/index"
+  },
+  "disableScroll": true
+}

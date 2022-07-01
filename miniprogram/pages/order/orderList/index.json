@@ -3,7 +3,9 @@
     "van-tab": "@vant/weapp/tab/index",
     "van-tabs": "@vant/weapp/tabs/index",
     "data-empty": "../../../components/empty/index",
-    "van-tag": "@vant/weapp/tag/index"
+    "van-tag": "@vant/weapp/tag/index",
+    "pirce": "../../../components/price/index",
+    "van-divider": "@vant/weapp/divider/index"
   },
   "disableScroll": true
 }

@@ -3,7 +3,6 @@ import ajax from '../../../common/ajax'
 import {
   px2rpx,
 } from '../../../common/util'
-const moment = require('moment')
 const PA_ORDER_STATUS = {
   1: '待付款',
   2: '买家已付款',
@@ -116,6 +115,7 @@ Page({
           orderList,
           total
         } = res
+        console.log(orderList)
         orderList = orderList.map(item => {
           return {
             ...item,
@@ -145,6 +145,7 @@ Page({
     }
   },
 
+  // 下拉刷新
   async refresh() {
     const {
       currentTabIndex,
@@ -179,5 +180,15 @@ Page({
         })
       })
     }
+  },
+
+  // 跳转详情
+  goDetail(e) {
+    const {
+      no
+    } = e.currentTarget.dataset
+    wx.navigateTo({
+      url: `/pages/order/orderDetail/index?orderNo=${no}`,
+    })
   }
 })

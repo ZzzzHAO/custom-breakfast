@@ -1,0 +1,57 @@
+<!--pages/order/orderDetail/index.wxml-->
+<scroll-view scroll-y class="order-detail-wrap">
+  <view class="order">
+    <view class="header">
+      <view class="title">{{orderInfo.orderType === 1 ? '单天套餐' : '一周套餐'}}</view>
+      <view class="status">{{orderInfo.orderStatus}}</view>
+    </view>
+    <view class="package-list">
+      <view wx:for="{{orderInfo.orders}}" wx:key="index" wx:for-item="order">
+        <view class="package">
+          <view class="img-wrap">
+            <image class="img" src="{{order.product.image}}" />
+          </view>
+          <view class="content">
+            <view class="title">
+              <view class="package-name">{{order.product.name}}</view>
+            </view>
+            <view class="specs">
+              <view class="spec" wx:for="{{order.product.products}}" wx:key="index" wx:for-item="product">
+                {{product.name}} * {{product.count}}
+              </view>
+            </view>
+            <view class="amount">
+              <price value="{{order.payAmount/100}}" bold />
+              <price wx:if="{{order.discountAmount > 0}}" value="{{order.orderAmount/100}}" color="#bbb" />
+            </view>
+            <view class="distribute-info">
+              <van-tag class="tag" color="#00BEE6" type="danger" size="medium">{{order.distributeDate}}</van-tag>
+              <van-tag class="tag" color="#00BEE6" type="danger" size="medium" plain="{{order.distributeStatus ? false : true}}">{{order.distributeStatus?'已取餐':'待取餐'}}</van-tag>
+              <van-tag class="tag" wx:if="{{!order.distributeStatus}}" color="#00BEE6" type="danger" size="medium" plain="{{order.distributeStatus ? false : true}}">取餐码：{{order.code}}</van-tag>
+            </view>
+          </view>
+        </view>
+        <van-divider wx:if="{{ index!== orderInfo.orders.length -1 }}" />
+      </view>
+    </view>
+  </view>
+  <van-cell-group inset custom-class="card-info">
+    <van-cell title="商品总价">
+      <price value="{{orderInfo.orderAmount/100}}" bold />
+    </van-cell>
+    <van-cell title="优惠金额">
+      <price value="{{orderInfo.discountAmount/100}}" color="#00BEE6" bold discount />
+    </van-cell>
+    <van-cell title="实付款">
+      <price value="{{orderInfo.payAmount/100}}" bold color="#00BEE6" size="large" />
+    </van-cell>
+  </van-cell-group>
+  <van-cell-group inset>
+    <van-cell title="订单编号" value="{{orderInfo.orderNo}}"></van-cell>
+    <van-cell title="取餐人手机号" value="{{orderInfo.phone}}"></van-cell>
+    <van-cell title="取餐地址" value="{{orderInfo.storeInfo.address}}"></van-cell>
+    <van-cell title="创建时间" value="{{orderInfo.createTime}}"></van-cell>
+    <van-cell title="付款时间" value="{{orderInfo.payTime}}"></van-cell>
+    <van-cell wx:if="{{orderInfo.orderStatus === 8}}" title="成交时间" value="{{orderInfo.dealTime}}"></van-cell>
+  </van-cell-group>
+</scroll-view>

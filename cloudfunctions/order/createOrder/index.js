@@ -51,6 +51,7 @@ const createSeq = async function (storeId) {
 exports.main = async (event, context) => {
   let {
     amount, // 前端订单金额
+    discount, // 订单优惠金额
     orderType, // 订单类型 1 单天 2 一周
     packages, // 预约套餐
     ip, // 客户端ip
@@ -122,12 +123,23 @@ exports.main = async (event, context) => {
           // 是否已下架
           const onSale = packageRes.every(item => item.onSale)
           if (onSale) {
-            // 需支付金额 如果是一天单点 则取oldPrice原价，否则取优惠价price
-            const price = packageRes.map(item => isWeek ? item.price : item.oldPrice).reduce((acc, cur) => {
+            // 支付金额 如果是一天单点 则取oldPrice原价，否则取优惠价price
+            const payAmount = packageRes.map(item => isWeek ? item.price : item.oldPrice).reduce((acc, cur) => {
               return acc + cur
             }, 0)
-            // 支付金额是否与前端金额一致
-            if (price === amount) {
+            // 订单金额
+            const orderAmount = packageRes.map(item => item.oldPrice).reduce((acc, cur) => {
+              return acc + cur
+            }, 0)
+            // 优惠金额
+            let discountAmount = 0
+            if (isWeek) {
+              discountAmount = packageRes.reduce((acc, cur) => {
+                return acc + (cur.oldPrice - cur.price)
+              }, 0) || 0
+            }
+            // 支付金额 优惠金额 是否与前端金额一致 
+            if (payAmount === amount && discount === discountAmount) {
               // 获取套餐内商品快照
               packageRes = await cloud.callFunction({
                 name: 'product',
@@ -158,7 +170,7 @@ exports.main = async (event, context) => {
                 outTradeNo, // 商户订单号
                 spbillCreateIp: ip, // 终端ip地址
                 subMchId: "1626802696", // 商户号
-                totalFee: price, // 支付金额
+                totalFee: payAmount, // 支付金额
                 envId: 'cloud1-3g1ptrnzda536c06', // 云函数环境id
                 functionName: "pay_cb" // 支付回调 云函数name
               })
@@ -172,7 +184,8 @@ exports.main = async (event, context) => {
                 }
                 const storeInfo = {
                   storeId, // 门店Id
-                  storeName: storeRes.name
+                  storeName: storeRes.name,
+                  address: storeRes.address
                 }
                 const orders = [] // 子订单缓存数组
                 // 新建子订单
@@ -189,7 +202,9 @@ exports.main = async (event, context) => {
                       orderStatus: CH_ORDER_STATUS.CREATE_SUCCESS, // 已创建
                       distributeStatus: DISTRIBUTE_STATUS.NO, // 待配送
                       distributeDate: moment(package.date).format('YYYY-MM-DD'), // 配送日期
-                      orderAmount: isWeek ? package.detail.price : package.detail.oldPrice, // 子订单金额 如果是预约一周则为优惠价 price，否则为原价 oldPrice
+                      orderAmount: package.detail.oldPrice, // 订单金额
+                      payAmount: isWeek ? package.detail.price : package.detail.oldPrice, // 子订单金额 如果是预约一周则为优惠价 price，否则为原价 oldPrice
+                      discountAmount: isWeek ? package.detail.oldPrice - package.detail.price : 0, // 优惠金额
                       product: package.detail, // 子订单商品 套餐快照
                       userInfo, // 用户信息
                       storeInfo, // 门店信息
@@ -208,7 +223,9 @@ exports.main = async (event, context) => {
                     orderStatus: PA_ORDER_STATUS.CREATE_SUCCESS, // 已创建状态
                     orderType,
                     createResult: res, // 微信订单 创建成功信息
-                    orderAmount: price, // 支付金额
+                    payAmount, // 支付金额
+                    orderAmount, // 订单金额
+                    discountAmount, // 优惠金额
                     // 用户信息
                     userInfo,
                     // 门店信息

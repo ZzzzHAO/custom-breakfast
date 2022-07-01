@@ -2,7 +2,7 @@
 <view class="get-order-wrap">
   <view class="header">
     <van-cell-group inset>
-      <van-cell value-class="cell-value" title="取餐日期" is-link value="{{currentDateStr}}" bindtap="openDatePicker" />
+      <van-cell title="取餐日期" is-link value="{{currentDateStr}}" bindtap="openDatePicker" />
     </van-cell-group>
     <view class="input-wrap">
       <input class="input" bindinput="input" type="number" placeholder="请输入取餐码" always-embed placeholder-class="placeholder" maxlength="{{4}}" focus="{{focus}}" value="{{code}}" />
@@ -12,14 +12,14 @@
   <scroll-view class="scroll-wrap">
     <view wx:if="{{orderInfo}}" class="order-wrap">
       <van-cell-group inset>
-        <van-cell value-class="cell-value" title="订单号" is-link value="{{orderInfo.orderNo}}" />
-        <van-cell value-class="cell-value" title="商品名称" value="{{orderInfo.name}}" />
-        <van-cell value-class="cell-value" title="取餐日期" value="{{orderInfo.distributeDate}}" />
-        <van-cell value-class="cell-value" title="客户手机号" is-link value="{{orderInfo.phoneMask}}" data-phone="{{orderInfo.phone}}" bindtap="callPhone" />
-        <van-cell value-class="cell-value" title="订单状态">
+        <van-cell title="订单号" is-link value="{{orderInfo.orderNo}}" />
+        <van-cell title="商品名称" value="{{orderInfo.name}}" />
+        <van-cell title="取餐日期" value="{{orderInfo.distributeDate}}" />
+        <van-cell title="客户手机号" is-link value="{{orderInfo.phoneMask}}" data-phone="{{orderInfo.phone}}" bindtap="callPhone" />
+        <van-cell title="订单状态">
           <van-tag size="medium" plain type="{{orderInfo.status === 2 ? 'success' : 'warning'}}">{{orderInfo.statusStr}}</van-tag>
         </van-cell>
-        <van-cell value-class="cell-value" title="配送状态">
+        <van-cell title="配送状态">
           <van-tag size="medium" plain type="{{orderInfo.distributeStatus === 1 ? 'success' : 'warning'}}">{{orderInfo.distributeStatusStr}}</van-tag>
         </van-cell>
       </van-cell-group>

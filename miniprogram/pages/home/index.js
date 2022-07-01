@@ -218,6 +218,7 @@ Page({
       return acc + (cur.package.oldPrice - cur.package.price)
     }, 0) || 0
     this.setData({
+      discountAmount,
       discountStr: discountAmount ? `已优惠 ¥${discountAmount/100}` : ''
     })
 
@@ -264,6 +265,7 @@ Page({
       }]
       params.amount = checkedItem.oldPrice
       params.orderType = 1
+      params.discount = 0
     } else {
       // 预约一周
       params.packages = weekPackages.map(item => {
@@ -276,6 +278,7 @@ Page({
       })
       params.amount = weekAmount
       params.orderType = 2
+      params.discount = this.data.discountAmount
     }
     if (isNewCustomer) {
       const code = e.detail.code
@@ -395,10 +398,12 @@ Page({
     const current = this.data.weekPackages.find(item => item.dateStr === date)
     const currentSelectPackage = current.package
     const currentSelectDate = current.dateStr
+    const currentSelectDay = current.dayStr
     this.setData({
       showChagenPopup: true,
       currentSelectPackage,
-      currentSelectDate
+      currentSelectDate,
+      currentSelectDay
     })
   },
   // 选择要改为哪种套餐

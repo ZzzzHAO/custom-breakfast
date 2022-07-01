@@ -39,6 +39,13 @@
                     "query": "",
                     "launchMode": "default",
                     "scene": null
+                },
+                {
+                    "name": "订单详情",
+                    "pathName": "pages/order/orderDetail/index",
+                    "query": "orderNo=5a425b1be93e4abdff8bd8a2cc5f047f",
+                    "launchMode": "default",
+                    "scene": null
                 }
             ]
         }

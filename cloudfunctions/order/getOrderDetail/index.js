@@ -23,8 +23,12 @@ exports.main = async (event, context) => {
           payTime,
           orderStatus,
           orderAmount,
+          discountAmount,
+          payAmount,
           orderType,
-          storeInfo
+          storeInfo,
+          userInfo,
+          discount
         } = orderDetail
         // 查询并返回对应子订单信息
         let orderRes = await db.collection('order').where({
@@ -38,14 +42,20 @@ exports.main = async (event, context) => {
               distributeDate,
               distributeStatus,
               orderAmount,
+              payAmount,
+              discountAmount,
               product
             } = item
             return {
               code, // 取餐码
               distributeDate, // 配送日期
               distributeStatus, // 配送状态
-              orderAmount, // 支付金额
+              orderAmount, // 订单金额
+              payAmount, // 支付金额
+              discountAmount, // 优惠金额
               product: {
+                price: product.price, // 现价
+                oldPrice: product.oldPrice, // 原价
                 name: product.name, // 套餐名称
                 desc: product.desc, // 套餐描述
                 image: product.image, // 套餐图片
@@ -68,8 +78,12 @@ exports.main = async (event, context) => {
                 payTime, // 订单支付时间
                 orders: orderRes, // 子订单信息
                 orderStatus, // 订单状态
-                orderAmount, // 支付金额
-                storeInfo // 店铺信息
+                discountAmount, // 优惠金额
+                orderAmount, // 订单金额
+                payAmount, // 支付金额
+                discount, // 优惠金额
+                storeInfo, // 店铺信息
+                phone: `${userInfo.phone.substr(0,3)}****${userInfo.phone.substr(-4)}` // 收货人手机号
               }
             }
           }
