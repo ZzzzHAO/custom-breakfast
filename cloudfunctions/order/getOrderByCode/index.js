@@ -37,7 +37,7 @@ exports.main = async (event, context) => {
           data: {
             orderList: orderRes.map(item => {
               return {
-                orderNo: item._id, // 订单号
+                orderNo: item.outTradeNo, // 订单号
                 name: item.product.name, // 套餐名称
                 product: item.product.products.map(v => {
                   return {

@@ -12,7 +12,7 @@
   <scroll-view class="scroll-wrap">
     <view wx:if="{{orderInfo}}" class="order-wrap">
       <van-cell-group inset>
-        <van-cell title="订单号" is-link value="{{orderInfo.orderNo}}" />
+        <van-cell title="订单编号" is-link value="{{orderInfo.orderNo}}" data-no="{{orderInfo.orderNo}}" bindtap="goDetail" />
         <van-cell title="商品名称" value="{{orderInfo.name}}" />
         <van-cell title="取餐日期" value="{{orderInfo.distributeDate}}" />
         <van-cell title="客户手机号" is-link value="{{orderInfo.phoneMask}}" data-phone="{{orderInfo.phone}}" bindtap="callPhone" />

@@ -140,4 +140,12 @@ Page({
       this.getOrderByCode()
     }
   },
+  goDetail(e) {
+    const {
+      no
+    } = e.currentTarget.dataset
+    wx.navigateTo({
+      url: `/pages/order/orderDetail/index?orderNo=${no}`,
+    })
+  }
 })
