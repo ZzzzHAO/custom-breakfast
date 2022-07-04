@@ -73,28 +73,10 @@ exports.main = async (event, context) => {
     if (userRes) {
       phone = userRes.phone
     } else {
-      // 新用户
-      if (code) {
-        // 获取用户手机号
-        const phoneRes = await cloud.openapi.phonenumber.getPhoneNumber({
-          code
-        })
-        phone = phoneRes.phoneInfo && phoneRes.phoneInfo.phoneNumber // 下单人手机号
-        // 新增用户
-        await cloud.callFunction({
-          name: 'user',
-          data: {
-            _path: 'createUser',
-            phone,
-            openid: OPENID
-          }
-        })
-      } else {
-        return {
-          success: false,
-          error: {
-            message: '获取用户信息失败'
-          }
+      return {
+        success: false,
+        error: {
+          message: '获取用户信息失败'
         }
       }
     }

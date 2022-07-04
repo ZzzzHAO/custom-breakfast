@@ -242,6 +242,25 @@ Page({
       showDetail: !this.data.showDetail
     })
   },
+  // 注册新用户
+  reqister(e) {
+    const code = e.detail.code
+    if (code) {
+      ajax.request('user/createUser', {
+        code
+      }).then(res => {
+        this.setData({
+          isNewCustomer: false
+        })
+      })
+    } else {
+      wx.showToast({
+        title: '授权失败',
+        icon: 'none'
+      })
+      return;
+    }
+  },
   // 支付
   goConfirm(e) {
     const {
