@@ -252,6 +252,8 @@ Page({
         this.setData({
           isNewCustomer: false
         })
+        // 支付弹窗
+        this.goConfirm()
       })
     } else {
       wx.showToast({
@@ -267,8 +269,7 @@ Page({
       currentTab,
       checkedItem,
       weekPackages,
-      weekAmount,
-      isNewCustomer
+      weekAmount
     } = this.data
     const params = {
       ip: '',
@@ -298,18 +299,6 @@ Page({
       params.amount = weekAmount
       params.orderType = 2
       params.discount = this.data.discountAmount
-    }
-    if (isNewCustomer) {
-      const code = e.detail.code
-      if (code) {
-        params.code = e.detail.code
-      } else {
-        wx.showToast({
-          title: '授权失败',
-          icon: 'none'
-        })
-        return;
-      }
     }
     const self = this
     wx.getLocalIPAddress({

@@ -43,7 +43,7 @@ exports.main = async (event, context) => {
         return {
           success: false,
           error: {
-            message: '入参异常'
+            message: '参数异常'
           }
         }
       }
@@ -51,7 +51,7 @@ exports.main = async (event, context) => {
       return {
         success: false,
         error: {
-          message: '您已完成注册'
+          message: '您已注册'
         }
       }
     }

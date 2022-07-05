@@ -78,7 +78,7 @@
           </view>
         </view>
       </scroll-view>
-      <button class="btn" disabled="{{currentTab === 1 && !checkedItem._id}}" wx:if="{{isNewCustomer}}" open-type="getPhoneNumber" bindgetphonenumber="goConfirm">立即预约</button>
+      <button class="btn" disabled="{{currentTab === 1 && !checkedItem._id}}" wx:if="{{isNewCustomer}}" open-type="getPhoneNumber" bindgetphonenumber="reqister">立即预约</button>
       <button class="btn" disabled="{{currentTab === 1 && !checkedItem._id}}" wx:else bindtap="goConfirm">立即预约</button>
     </van-tab>
   </van-tabs>
