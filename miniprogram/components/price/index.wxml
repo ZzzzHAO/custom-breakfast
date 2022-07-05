@@ -1,7 +1,7 @@
 <!--components/amount/index.wxml-->
 <view class="pirce-wrap {{size}}" style="{{priceStyle}}" wx:if="{{priceString.length}}">
-  <text wx:if="{{discount}}" class="discount" space="nbsp">- </text>
-  <text class="symbol" space="nbsp">{{symbol}} </text>
+  <text wx:if="{{discount}}" class="discount" space="nbsp">－</text>
+  <text class="symbol" space="nbsp">{{symbol}}</text>
   <text class="int">{{int}}</text>
   <text class="dot">.</text>
   <text class="float">{{float}}</text>

@@ -23,7 +23,7 @@
                   <view class="package-desc">{{item.desc}}</view>
                 </view>
                 <view class="specs">
-                  <view class="spec" wx:for="{{item.products}}" wx:for-item="product">
+                  <view class="spec" wx:for="{{item.products}}" wx:for-item="product" wx:key="index">
                     {{product.name}} * {{product.count}}
                   </view>
                 </view>
@@ -57,7 +57,7 @@
                   <view class="package-desc">{{item.package.desc}}</view>
                 </view>
                 <view class="specs">
-                  <view class="spec" wx:for="{{item.package.products}}" wx:for-item="product">
+                  <view class="spec" wx:for="{{item.package.products}}" wx:key="index" wx:for-item="product">
                     {{product.name}} * {{product.count}}
                   </view>
                 </view>
@@ -97,7 +97,7 @@
           <view class="column">商品名称</view>
           <view class="column">价格</view>
         </view>
-        <view class="row" wx:for="{{orderParams.packages}}">
+        <view class="row" wx:for="{{orderParams.packages}}" wx:key="index">
           <view class="column">{{item.date}}</view>
           <view class="column">{{item.name}}</view>
           <view class="column">¥{{item.amount/100}}</view>
@@ -126,7 +126,7 @@
           </view>
         </view>
         <view class="specs">
-          <view class="spec" wx:for="{{currentSelectPackage.products}}" wx:for-item="product">
+          <view class="spec" wx:for="{{currentSelectPackage.products}}" wx:for-item="product" wx:key="index">
             {{product.name}} * {{product.count}}
           </view>
         </view>
@@ -135,7 +135,7 @@
     <view class="desc">{{currentSelectPackage.desc}}</view>
     <van-divider contentPosition="center">请选择 {{currentSelectDate}}（{{currentSelectDay}}）要预约的商品</van-divider>
     <view class="package-list">
-      <view wx:for="{{packages}}" data-package="{{item}}" bindtap="choosePackage" class="package {{currentSelectPackage.name === item.name ? 'active':''}}">{{item.name}}</view>
+      <view wx:for="{{packages}}" wx:key="index" data-package="{{item}}" bindtap="choosePackage" class="package {{currentSelectPackage.name === item.name ? 'active':''}}">{{item.name}}</view>
     </view>
     <view class="change-btn" bindtap="changePackage">确认</view>
   </view>
