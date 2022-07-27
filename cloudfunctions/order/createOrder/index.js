@@ -55,7 +55,6 @@ exports.main = async (event, context) => {
     orderType, // 订单类型 1 单天 2 一周
     packages, // 预约套餐
     ip, // 客户端ip
-    code // 手机code
   } = event
   if (!ip || ip === 'unknown') {
     ip = '127.0.0.1'

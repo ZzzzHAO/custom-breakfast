@@ -1,0 +1,15 @@
+<!--pages/store/createStore/index.wxml-->
+<view class="create-store">
+  <view class="filed-wrap">
+    <van-cell-group>
+      <van-field model:value="{{ storeName }}" required clearable label="商户名称" placeholder="请输入商户名称" />
+      <van-field model:value="{{ address }}" label="门店地址" placeholder="请输入商户门店地址" />
+      <van-field model:value="{{ takeAddress }}" required label="取餐地址" placeholder="请输入取餐地址" />
+      <van-field model:value="{{ takeUpTime }}" required label="取餐时间" placeholder="请输入取餐时间" />
+    </van-cell-group>
+  </view>
+  <view class="footer">
+    <button class="btn" wx:if="{{isNewCustomer}}" open-type="getPhoneNumber" bindgetphonenumber="reqister">创建商户</button>
+    <button class="btn" wx:else bindtap="goConfirm">创建商户</button>
+  </view>
+</view>
